@@ -13,19 +13,24 @@ export async function getUserByEmail(email: User["email"]) {
   return prisma.user.findUnique({ where: { email } });
 }
 
-export async function createUser(email: User["email"], password: string) {
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  return prisma.user.create({
-    data: {
-      email,
-      password: {
-        create: {
-          hash: hashedPassword,
+type UserCreateInput = Omit<User, "createdAt" | "updatedAt" | "id">;
+export async function createUser(user: UserCreateInput & { password: string }) {
+  const hashedPassword = await bcrypt.hash(user.password, 10);
+  try {
+    return await prisma.user.create({
+      data: {
+        ...user,
+        password: {
+          create: {
+            hash: hashedPassword,
+          },
         },
       },
-    },
-  });
+    });
+  } catch (err) {
+    if (err instanceof Error) console.log(err.message)
+    return null;
+  }
 }
 
 export async function deleteUserByEmail(email: User["email"]) {
