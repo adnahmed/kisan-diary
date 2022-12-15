@@ -1,9 +1,13 @@
 import type { ActionFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { z } from "zod";
-import { makeDomainFunction } from "domain-functions";
+import {
+  inputFromForm,
+  inputFromFormData,
+  makeDomainFunction,
+} from "domain-functions";
 import { createUserSession, getUserId } from "~/session.server";
-import { createUser, getUserByEmail } from "~/models/user.server";
+import { createUser, getUserByEmail, User } from "~/models/user.server";
 import Form from "../../components/form/form";
 
 const ParamsSchema = z.object({
@@ -18,7 +22,7 @@ const ParamsSchema = z.object({
   rememberMe: z.boolean(),
 });
 
-const mutation = makeDomainFunction(ParamsSchema)(async (values) => {
+const createUserMutation = makeDomainFunction(ParamsSchema)(async (values) => {
   const existingUser = await getUserByEmail(values.email);
   if (existingUser) {
     return json(
@@ -33,26 +37,34 @@ const mutation = makeDomainFunction(ParamsSchema)(async (values) => {
       { status: 400 }
     );
   }
-  const user = await createUser(values.email, values.password);
+  const { rememberMe, repeatPassword, ...createUserValues } = values;
+  const user = await createUser({ ...createUserValues, role: "farmer" });
+  if (!user) throw new Error("Error occurred while creating User");
   return { userId: user.id, remember: values.rememberMe };
 });
 
-const formAction = ({ request, schema, mutation, successPath }) =>
-  createUserSession({
+const formAction = async ({ request, schema, mutation, successPath }) => {
+  return createUserSession({
     request,
     userId: mutation.userId,
     remember: mutation.remember,
     redirectTo: successPath,
   });
-
-export const action: ActionFunction = async ({ request }) =>
-  formAction({
+};
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const values = inputFromFormData(formData);
+  const mutation = await createUserMutation({
+    ...values,
+    rememberMe: values.rememberMe === "on",
+  });
+  return await formAction({
     request,
     schema: ParamsSchema,
     mutation,
     successPath: "/",
   });
-
+};
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
   if (userId) return redirect("/");

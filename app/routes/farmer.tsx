@@ -1,7 +1,7 @@
 import { useState } from "react";
 import onChangeInput from "~/helpers/onChangeInput";
 
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import GlowyButton from "~/components/glowy_button";
 import { Crop } from "~/models/Data/Crop";
 import useCropsStore from "~/models/Data/StoreHooks/useCropsStore";
@@ -77,7 +77,7 @@ export default function Dashboard(props: DashboardProps) {
           </b>
         </div>
         {crops.map((crop) => (
-          <div id="dashboard-table" style={{ display: "flex" }}>
+          <div key={crop.id} id="dashboard-table" style={{ display: "flex" }}>
             <div
               id="dashboard-table-row"
               style={{
@@ -99,12 +99,15 @@ export default function Dashboard(props: DashboardProps) {
                   maxHeight: "200px",
                 }}
                 alt={crop.fullName + " Image"}
-                src={crop.fullName.toLowerCase()}
+                src={"assets/" + crop.fullName.toLowerCase() + ".jpg"}
               />
             </div>
           </div>
         ))}
       </div>
+      <Form method="post" action="/logout">
+        <button type="submit">Logout</button>
+      </Form>
     </div>
   );
 }

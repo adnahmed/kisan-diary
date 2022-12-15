@@ -1,4 +1,5 @@
 import { Form, Formik } from "formik";
+import { Form as RemixForm } from "@remix-run/react";
 import { FC, useEffect, useState } from "react";
 import {
   ExclamationTriangleIcon,
@@ -8,6 +9,7 @@ import {
 import styled from "styled-components";
 import { Link } from "@remix-run/react";
 import { Crop } from "~/models/Data/Crop";
+import TextInputFormik from "~/components/form/input/TextInputFormik";
 
 interface AdministratorDashboardProps {}
 
@@ -140,8 +142,8 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
           }}
         >
           <Form>
-            <TextInputFromik name="fullName" label="Full Name" />
-            <TextInputFromik name="landOccupied" label="Land Occupied" />
+            <TextInputFormik name="fullName" label="Full Name" />
+            <TextInputFormik name="landOccupied" label="Land Occupied" />
             <button type="submit">Add</button>
           </Form>
         </Formik>
@@ -239,6 +241,9 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
           </VCard>
         )}
       </VCard>
+      <RemixForm method="post" action="/logout">
+        <button type="submit">Logout</button>
+      </RemixForm>
     </div>
   );
 };

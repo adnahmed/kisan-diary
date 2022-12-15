@@ -34,13 +34,6 @@ export async function action({ request }: ActionArgs) {
     );
   }
 
-  if (password.length < 8) {
-    return json(
-      { errors: { password: "Password is too short", email: null } },
-      { status: 400 }
-    );
-  }
-
   const user = await verifyLogin(email, password);
 
   if (!user) {
@@ -66,7 +59,7 @@ export const meta: MetaFunction = () => {
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/notes";
+  const redirectTo = searchParams.get("redirectTo") || "/";
   const actionData = useActionData<typeof action>();
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
