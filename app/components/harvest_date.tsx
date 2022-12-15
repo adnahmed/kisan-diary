@@ -1,12 +1,11 @@
-import {Outlet} from "react-router-dom";
+import { Outlet } from "@remix-run/react";
+
 export interface HarvestDateProps {}
 export default function HarvestDate(props: HarvestDateProps) {
-    return (
-        <div>
-            <p>
-                Harvesting Date: {new Date().toLocaleDateString()}
-            </p>
-            <Outlet/>
-        </div>
-    )
+  return (
+    <div>
+      <p>Harvesting Date: {new Date().toLocaleDateString()}</p>
+      <Outlet />
+    </div>
+  );
 }
