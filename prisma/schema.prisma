@@ -8,30 +8,92 @@ generator client {
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
+  id        String @id @default(cuid())
+  email     String @unique
   firstName String
-  lastName String
-  role    Role 
+  lastName  String
+  role      Role
   // TODO: use @db for value size limit
   // TODO: Make Country ENUM for validation
-  address String
-  city    String
-  country String
+  address   String
+  city      String
+  country   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   password Password?
+  Farm     Farm[]
 }
 
 enum Role {
   admin
   farmer
 }
+
 model Password {
   hash String
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
+}
+
+model Farm {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  user              User               @relation(fields: [owner], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  owner             String             @unique
+  total_land        Int
+  pictures          String[]
+  land_type         LandType
+  crops             Crop[]
+  irrigation_source IrrigationSource[]
+  MachineryOnFarms  MachineryOnFarms[]
+}
+
+model Crop {
+  id      String  @id @default(cuid())
+  name    String
+  picture String
+  Farm    Farm?   @relation(fields: [farmId], references: [id])
+  farmId  String?
+}
+
+enum IrrigationSource {
+  TubeWell
+  Canal
+}
+
+model City {
+  id      String  @id @default(cuid())
+  name    String
+  country Country @relation(fields: [from], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  from    String
+}
+
+model Country {
+  id   String @id @default(cuid())
+  name String @unique
+  City City[]
+}
+
+model MachineryOnFarms {
+  machinery  Machinery @relation(fields: [machId], references: [id])
+  machId     String
+  farm       Farm      @relation(fields: [farmId], references: [id])
+  farmId     String
+  assignedAt DateTime  @default(now())
+
+  @@id([machId, farmId])
+}
+
+model Machinery {
+  id               String             @id @default(cuid())
+  name             String
+  MachineryOnFarms MachineryOnFarms[]
+}
+
+enum LandType {
+  Nehri
+  Behri
 }
