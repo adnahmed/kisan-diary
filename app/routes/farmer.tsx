@@ -27,7 +27,6 @@ async function getFarmWithCrops(user: User) {
 }
 export async function loader({ request }) {
   const session = await getSession(request);
-  // TODO: Check cookie value and redirect
   const user = await getUser(request);
   if (!session.has("NO_FARM"))
     try {
@@ -38,7 +37,6 @@ export async function loader({ request }) {
         crops: farm?.crops,
       };
     } catch (err) {
-      // Couldn't find farm.
       return redirect("farm_information");
     }
   return { user };

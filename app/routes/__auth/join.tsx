@@ -8,7 +8,8 @@ import {
 } from "domain-functions";
 import { createUserSession, getUserId } from "~/session.server";
 import { createUser, getUserByEmail, User } from "~/models/user.server";
-import Form from "../../components/form/form";
+import Form from "~/components/form/form";
+import styles from "~/styles/routes/join.css";
 
 const ParamsSchema = z.object({
   firstName: z.string(),
@@ -70,4 +71,15 @@ export const meta: MetaFunction = () => {
   };
 };
 
-export default () => <Form schema={ParamsSchema} />;
+export default () => (
+  <>
+    <div className="grid grid-cols-12 bg-auto bg-[rgb(54,135,41)] text-white">
+      <span className="col-start-4 col-end-6 text-4xl text-clip">
+        Registeration
+      </span>
+      <div className="col-start-4 col-end-10 ">
+        <Form schema={ParamsSchema} />
+      </div>
+    </div>
+  </>
+);

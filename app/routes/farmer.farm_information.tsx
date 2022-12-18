@@ -41,31 +41,33 @@ const cropInformationMutation = makeDomainFunction(CropInformationSchema)(
     return values;
   }
 );
-const farmInformationMutation = makeDomainFunction(FarmInformationSchema)(
-  async (values, { userId }) => {
-    try {
-      const farm = await prisma.farm.create({
-        data: {
-          name: values.name,
-          total_land: values.totalLandSize,
-          land_type: LandType[values.landType],
-          // machinery_available: values.machineryAvailable,
-          irrigation_source: IrrigationSource[values.irrigationSource],
-          pictures: [],
-          user: {
-            connect: {
-              id: userId,
-            },
+const UserIdSchema = z.object({ userId: z.string() });
+const farmInformationMutation = makeDomainFunction(
+  FarmInformationSchema,
+  UserIdSchema
+)(async (values, { userId }) => {
+  try {
+    const farm = await prisma.farm.create({
+      data: {
+        name: values.name,
+        total_land: values.totalLandSize,
+        land_type: LandType[values.landType],
+        // machinery_available: values.machineryAvailable,
+        irrigation_source: IrrigationSource[values.irrigationSource],
+        pictures: [],
+        user: {
+          connect: {
+            id: userId,
           },
         },
-      });
-      return farm;
-    } catch (err) {
-      if (err instanceof Error) console.log(err.message);
-      return err;
-    }
+      },
+    });
+    return farm;
+  } catch (err) {
+    if (err instanceof Error) console.log(err.message);
+    return err;
   }
-);
+});
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await getSession(request);

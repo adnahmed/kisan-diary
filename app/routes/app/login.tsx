@@ -1,23 +1,16 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import * as React from "react";
+import { useSearchParams, useActionData, Link, Form } from "@remix-run/react";
+import React from "react";
 
 import { verifyLogin } from "~/models/user.server";
-import { createUserSession, getUserId } from "~/session.server";
+import { createUserSession, getUserId, getUser } from "~/session.server";
 import { safeRedirect, validateEmail } from "~/utils";
-
-export async function loader({ request }: LoaderArgs) {
-  const userId = await getUserId(request);
-  if (userId) return redirect("/");
-  return json({});
-}
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
-  const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
   const remember = formData.get("remember");
 
   if (!validateEmail(email)) {
@@ -47,15 +40,9 @@ export async function action({ request }: ActionArgs) {
     request,
     userId: user.id,
     remember: remember === "on" ? true : false,
-    redirectTo,
+    redirectTo: safeRedirect(`/${user.role}`, "/"),
   });
 }
-
-export const meta: MetaFunction = () => {
-  return {
-    title: "Login",
-  };
-};
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
@@ -73,9 +60,9 @@ export default function LoginPage() {
   }, [actionData]);
 
   return (
-    <div className="flex min-h-full flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
-        <Form method="post" className="space-y-6" noValidate>
+    <div className="flex min-h-full flex-col justify-center from-blue-500 from-blue-400 ">
+      <div className="mx-auto w-full max-w-md px-8 m-4 p-6 bg-green-200 backdrop-blur rounded-md">
+        <Form method="post" action="login" className="space-y-6" noValidate>
           <div>
             <label
               htmlFor="email"

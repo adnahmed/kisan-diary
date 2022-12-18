@@ -10,6 +10,9 @@ import styled from "styled-components";
 import { Link } from "@remix-run/react";
 import { Crop } from "~/models/Data/Crop";
 import TextInputFormik from "~/components/form/input/TextInputFormik";
+import styles from "~/styles/routes/admin.css";
+import { LinksFunction } from "@remix-run/server-runtime";
+export const links: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
 
 interface AdministratorDashboardProps {}
 
@@ -154,7 +157,7 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
         <div>
           {showAllCrops &&
             cropList.map((c) => (
-              <div>
+              <div key={c.fullName}>
                 <span>{c.fullName}</span>
                 <button onClick={() => deleteCrop(c.id)}>Delete</button>
                 <button onClick={() => setShowCropForm(true)}>View</button>{" "}

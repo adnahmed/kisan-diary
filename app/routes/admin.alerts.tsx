@@ -4,7 +4,8 @@ import capitalize from "lodash/capitalize";
 import { FC, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Emoji from "react-emojis";
-import { Formik } from "formik";
+import { ActionFunction } from "@remix-run/server-runtime";
+import { $path } from "remix-routes";
 
 interface ManageAlertsProps {}
 export async function loader() {
@@ -13,10 +14,10 @@ export async function loader() {
     years: [1991, 1992, 1993],
   };
 }
-export async function action({ request }) {
+export const action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
-  console.log(data);
-}
+  return null;
+};
 const ManageAlerts: FC<ManageAlertsProps> = () => {
   const [showFilterTabs, setShowFilterTabs] = useState(false);
   const data = useLoaderData<typeof loader>();

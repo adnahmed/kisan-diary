@@ -4,7 +4,6 @@ import compression from "compression";
 import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
 import prom from "express-prometheus-middleware";
-
 const app = express();
 const metricsApp = express();
 app.use(
@@ -82,21 +81,21 @@ app.all(
   MODE === "production"
     ? createRequestHandler({ build: require(BUILD_DIR) })
     : (...args) => {
-        purgeRequireCache();
-        const requestHandler = createRequestHandler({
-          build: require(BUILD_DIR),
-          mode: MODE,
-        });
-        return requestHandler(...args);
-      }
+      purgeRequireCache();
+      const requestHandler = createRequestHandler({
+        build: require(BUILD_DIR),
+        mode: MODE,
+      });
+      return requestHandler(...args);
+    }
 );
 
-const port = process.env.PORT || 3000;
+const port = process.env.port || 3000;
 
 app.listen(port, () => {
   // require the built app so we're ready when the first request comes in
   require(BUILD_DIR);
-  console.log(`✅ app ready: http://localhost:${port}`);
+  console.log(`✅ app ready: http://localhost:3000`);
 });
 
 
