@@ -6,6 +6,13 @@ import React from "react";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId, getUser } from "~/session.server";
 import { safeRedirect, validateEmail } from "~/utils";
+import { $path } from "remix-routes";
+
+export async function loader({ request }: LoaderArgs) {
+  const user = await getUserId(request);
+  if (user) return redirect("/");
+  return null;
+}
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -40,7 +47,7 @@ export async function action({ request }: ActionArgs) {
     request,
     userId: user.id,
     remember: remember === "on" ? true : false,
-    redirectTo: safeRedirect(`/${user.role}`, "/"),
+    redirectTo: safeRedirect($path(`/${user.role}`), "/"),
   });
 }
 
@@ -62,7 +69,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-full flex-col justify-center from-blue-500 from-blue-400 ">
       <div className="mx-auto w-full max-w-md px-8 m-4 p-6 bg-green-200 backdrop-blur rounded-md">
-        <Form method="post" action="login" className="space-y-6" noValidate>
+        <Form method="post" className="space-y-6" noValidate>
           <div>
             <label
               htmlFor="email"
