@@ -1,0 +1,29 @@
+.dashboard {
+  display: grid;
+  gap: 2em;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.crops {
+  grid-column: 1/7;
+}
+
+.farmers {
+  grid-column: 7 / 13;
+  grid-row-start: 1;
+}
+
+.manage_alerts {
+  grid-column: 11/13;
+  grid-row-start: 2;
+}
+
+.messages {
+  grid-column: 9 / 13;
+  grid-row-start: 3;
+}
+
+.selected_farmer {
+  grid-column: 1 / 7;
+  grid-row-start: 3;
+}
