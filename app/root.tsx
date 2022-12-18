@@ -19,6 +19,10 @@ import remixImageStyles from "remix-image/remix-image.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import globalStyles from "./styles/global.css";
 import { useContext, useEffect } from "react";
+import roboto300 from "@fontsource/roboto/300.css";
+import roboto400 from "@fontsource/roboto/400.css";
+import roboto500 from "@fontsource/roboto/500.css";
+import roboto700 from "@fontsource/roboto/700.css";
 
 export const links: LinksFunction = () => {
   return [
@@ -37,6 +41,22 @@ export const links: LinksFunction = () => {
     {
       rel: "stylesheet",
       href: remixImageStyles,
+    },
+    {
+      rel: "stylesheet",
+      href: roboto300,
+    },
+    {
+      rel: "stylesheet",
+      href: roboto400,
+    },
+    {
+      rel: "stylesheet",
+      href: roboto500,
+    },
+    {
+      rel: "stylesheet",
+      href: roboto700,
     },
   ];
 };
