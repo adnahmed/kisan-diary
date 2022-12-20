@@ -2,17 +2,23 @@
   display: grid;
   grid-template-columns: repeat(1fr, 12);
 }
-
+.logo {
+  max-width: 20%;
+}
 .header {
   display: flex;
   box-shadow: 3ex;
-  background-color: rgb(54, 135, 41);
+  background-color: #368729;
   background-repeat: repeat;
   background-size: cover;
   color: white;
   position: sticky;
   top: 0em;
   z-index: 1;
+}
+.nav {
+  display: flex;
+  color: white;
 }
 
 .menu {
@@ -60,11 +66,18 @@
 
 footer > * {
   background-color: rgb(54, 135, 41);
+  position: relative;
+  bottom: 0em;
   color: white;
   margin-left: 0.1em;
   margin-right: 0.1em;
 }
 footer {
   position: sticky;
+  margin-top: 100%;
   bottom: 0em;
+}
+
+.layout > * {
+  border: 2px black solid;
 }

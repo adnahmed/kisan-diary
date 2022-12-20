@@ -1,4 +1,9 @@
-.scrollbar {
-  scrollbar-color: rgb(54, 135, 41);
-  background-color: #feffe6;
+* {
+  margin: 0;
+}
+html {
+  margin: 0.1em;
+}
+
+main {
 }

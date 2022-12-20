@@ -34,7 +34,7 @@ export async function getUserId(
 
 export async function getUser(request: Request) {
   const userId = await getUserId(request);
-  if (userId === undefined) return null;
+  if (userId === undefined) return undefined;
 
   const user = await getUserById(userId);
   if (user) return user;
@@ -89,7 +89,7 @@ export async function createUserSession({
 
 export async function logout(request: Request) {
   const session = await getSession(request);
-  return redirect("/", {
+  return redirect("/app", {
     headers: {
       "Set-Cookie": await sessionStorage.destroySession(session),
     },

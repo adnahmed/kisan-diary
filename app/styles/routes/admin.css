@@ -1,3 +1,6 @@
+.heading {
+  grid-column: 1/13;
+}
 .dashboard {
   display: grid;
   gap: 2em;
@@ -6,24 +9,25 @@
 
 .crops {
   grid-column: 1/7;
+  grid-row-start: 2;
 }
 
 .farmers {
   grid-column: 7 / 13;
-  grid-row-start: 1;
+  grid-row-start: 2;
 }
 
 .manage_alerts {
   grid-column: 11/13;
-  grid-row-start: 2;
+  grid-row-start: 3;
 }
 
 .messages {
   grid-column: 9 / 13;
-  grid-row-start: 3;
+  grid-row-start: 4;
 }
 
 .selected_farmer {
   grid-column: 1 / 7;
-  grid-row-start: 3;
+  grid-row-start: 4;
 }

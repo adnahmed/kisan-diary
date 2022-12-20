@@ -15,6 +15,7 @@ import { z } from "zod";
 import Form from "~/components/form/form";
 import { inputFromFormData } from "domain-functions";
 import { Farm, User } from "@prisma/client";
+
 async function getFarmWithCrops(user: User) {
   return await prisma.farm.findUnique({
     where: {
@@ -56,21 +57,7 @@ export default function Dashboard(props: DashboardProps) {
   const { farm, user, crops } = useLoaderData<typeof loader>();
   const [showNewCropForm, setShowNewCropForm] = useState(false);
   return (
-    <div className="dashboard">
-      {farm !== undefined ? (
-        <div>{farm.name}</div>
-      ) : (
-        <div>
-          <span>
-            You haven't set any Farm Information but you will still recieve
-            alerts and recommendations based on your region.
-          </span>
-          <span>
-            To add crops and access other functionality,{" "}
-            <NavLink to="farm_information">Fill Now</NavLink>
-          </span>
-        </div>
-      )}
+    <main>
       {crops && (
         <div>
           {!showNewCropForm && (
@@ -125,9 +112,6 @@ export default function Dashboard(props: DashboardProps) {
           </div>
         </div>
       )}
-      <RemixForm method="post" action="/logout">
-        <button type="submit">Logout</button>
-      </RemixForm>
-    </div>
+    </main>
   );
 }

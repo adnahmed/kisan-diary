@@ -2,6 +2,7 @@ import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useSearchParams, useActionData, Link, Form } from "@remix-run/react";
 import React from "react";
+import { Link as ChakraLink } from "@chakra-ui/react";
 
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId, getUser } from "~/session.server";
@@ -47,7 +48,7 @@ export async function action({ request }: ActionArgs) {
     request,
     userId: user.id,
     remember: remember === "on" ? true : false,
-    redirectTo: safeRedirect($path(`/${user.role}`), "/"),
+    redirectTo: safeRedirect($path(`/app/${user.role}`), "/"),
   });
 }
 
@@ -65,7 +66,6 @@ export default function LoginPage() {
       passwordRef.current?.focus();
     }
   }, [actionData]);
-
   return (
     <div className="flex min-h-full flex-col justify-center from-blue-500 from-blue-400 ">
       <div className="mx-auto w-full max-w-md px-8 m-4 p-6 bg-green-200 backdrop-blur rounded-md">
@@ -98,32 +98,37 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <div className="mt-1">
-              <input
-                id="password"
-                ref={passwordRef}
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                aria-invalid={actionData?.errors?.password ? true : undefined}
-                aria-describedby="password-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-              />
-              {actionData?.errors?.password && (
-                <div className="pt-1 text-red-700" id="password-error">
-                  {actionData.errors.password}
-                </div>
-              )}
-            </div>
-          </div>
+          <div className="grid">
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="password"
+                  ref={passwordRef}
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  aria-invalid={actionData?.errors?.password ? true : undefined}
+                  aria-describedby="password-error"
+                  className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                />
 
+                {actionData?.errors?.password && (
+                  <div className="pt-1 text-red-700" id="password-error">
+                    {actionData.errors.password}
+                  </div>
+                )}
+              </div>
+            </div>
+            <ChakraLink className="justify-self-end" href="forgot_password">
+              Forgot Password?
+            </ChakraLink>
+          </div>
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
             type="submit"
@@ -132,7 +137,7 @@ export default function LoginPage() {
             Log in
           </button>
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <input
                 id="remember"
                 name="remember"

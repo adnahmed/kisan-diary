@@ -1,62 +1,64 @@
-import type { ActionFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunction,
+  LinksFunction,
+  LoaderArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { z } from "zod";
-import {
-  inputFromForm,
-  inputFromFormData,
-  makeDomainFunction,
-} from "domain-functions";
+import { InputError, makeDomainFunction } from "domain-functions";
 import { createUserSession, getUserId } from "~/session.server";
 import { createUser, getUserByEmail, User } from "~/models/user.server";
 import Form from "~/components/form/form";
+import { performMutation } from "remix-forms";
 import styles from "~/styles/routes/join.css";
-
-const ParamsSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email(),
-  password: z.string(),
-  repeatPassword: z.string(),
-  address: z.string(),
-  city: z.string(),
-  country: z.string(),
+import { Link, UseNumberInputProps } from "@chakra-ui/react";
+import cleanString from "~/helpers/cleanString";
+const schemaObject = {
+  firstName: z.preprocess(cleanString, z.string()),
+  lastName: z.preprocess(cleanString, z.string()),
+  email: z.preprocess(cleanString, z.string().email()),
+  password: z.preprocess(cleanString, z.string()),
+  repeatPassword: z.preprocess(cleanString, z.string()),
+  address: z.preprocess(cleanString, z.string()),
+  region: z.preprocess(cleanString, z.string()),
   rememberMe: z.boolean(),
-});
+};
+const schema = z.object(schemaObject);
 
-const createUserMutation = makeDomainFunction(ParamsSchema)(async (values) => {
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: styles }];
+};
+
+const mutation = makeDomainFunction(schema)(async (values) => {
   const existingUser = await getUserByEmail(values.email);
-  if (existingUser) {
-    return json(
-      {
-        errors: {
-          email: "A user already exists with this email",
-          password: null,
-          firstName: null,
-          lastName: null,
-        },
-      },
-      { status: 400 }
-    );
-  }
-  const { rememberMe, repeatPassword, ...createUserValues } = values;
-  const user = await createUser({ ...createUserValues, role: "farmer" });
-  if (!user) throw new Error("Error occurred while creating User");
-  return { userId: user.id, remember: values.rememberMe };
+  if (existingUser)
+    throw new InputError("A user already exists with this email", "email");
+  let { rememberMe, repeatPassword, region, ...userInput } = values;
+
+  const user = await createUser({
+    ...userInput,
+    role: "farmer",
+    regionName: region,
+  });
+  return { userId: user.id, remember: values.rememberMe, role: user.role };
 });
 
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const values = inputFromFormData(formData);
-  const mutation = await createUserMutation({
-    ...values,
-    rememberMe: values.rememberMe === "on",
-  });
-  return await createUserSession({
+  const result = await performMutation({
     request,
-    userId: mutation.userId,
-    remember: mutation.remember,
-    redirectTo: "/",
+    schema,
+    mutation,
   });
+
+  if (result.success)
+    return await createUserSession({
+      request,
+      userId: result.data.userId,
+      remember: result.data.remember,
+      redirectTo: `/app/${result.data.role}`,
+    });
+  else return json(result, 400);
 };
 
 export async function loader({ request }: LoaderArgs) {
@@ -73,12 +75,12 @@ export const meta: MetaFunction = () => {
 
 export default () => (
   <>
-    <div className="grid grid-cols-12 bg-auto bg-[rgb(54,135,41)] text-white">
-      <span className="col-start-4 col-end-6 text-4xl text-clip">
+    <div className="grid grid-cols-12 bg-auto bg-[rgb(54,135,41)] h-screen join text-white">
+      <span className="col-start-1 col-end-13 text-4xl content-center place-self-center text-center flex justify-center">
         Registeration
       </span>
-      <div className="col-start-4 col-end-10 ">
-        <Form schema={ParamsSchema} />
+      <div className="col-start-4 col-end-10 row-start-2">
+        <Form schema={schema} />
       </div>
     </div>
   </>

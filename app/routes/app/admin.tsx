@@ -1,18 +1,43 @@
-import { Form, Formik } from "formik";
-import { Form as RemixForm } from "@remix-run/react";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
+import { AddIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Center,
+  Divider,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Heading,
+  IconButton,
+  Image,
+  Stack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import {
   ExclamationTriangleIcon,
   EnvelopeIcon,
   XMarkIcon,
+  SpeakerWaveIcon,
 } from "@heroicons/react/24/solid";
 import styled from "styled-components";
-import { Link } from "@remix-run/react";
+import { Link, Outlet, useMatches } from "@remix-run/react";
 import { Crop } from "~/models/Data/Crop";
-import TextInputFormik from "~/components/form/input/TextInputFormik";
 import styles from "~/styles/routes/admin.css";
 import { LinksFunction, LoaderArgs } from "@remix-run/server-runtime";
 import { getUser } from "~/session.server";
+import { matches } from "lodash";
 export const links: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
 
 interface AdministratorDashboardProps {}
@@ -26,16 +51,16 @@ export async function loader({ request }: LoaderArgs) {
 const Line = styled.div`
   border: 0.1em black solid;
 `;
-const Card = styled.div`
+const CardOwn = styled.div`
   display: flex;
   border: 0.1em black solid;
   border-radius: 0.3em;
   margin: 0.2em;
 `;
-const VCard = styled(Card)`
+const VCard = styled(CardOwn)`
   flex-direction: column;
 `;
-const HCard = styled(Card)`
+const HCard = styled(CardOwn)`
   flex-direction: row;
   justify-content: space-around;
   & > * {
@@ -118,12 +143,6 @@ const ALL_MESSAGES: Message[] = [
 
 //  - Administrator adds recommended crops based on Land Description and Season.
 const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
-  const [cropList, setCropsList] = useState<Crop[]>([]);
-  const [showAllCrops, setShowAllCrops] = useState(false);
-  const [showCropForm, setShowCropForm] = useState(false);
-  const deleteCrop = (id: string) => {
-    setCropsList(cropList.filter((c) => c.id !== id));
-  };
   const [showFarmer, setShowFarmer] = useState(false);
   const [currentFarmer, setCurrentFarmer] = useState<Farmer | undefined>(
     undefined
@@ -133,45 +152,82 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
     setShowFarmer(true);
   };
   const [showChatBox, setShowChatBox] = useState(false);
+  const {
+    isOpen: isOpenDrawer,
+    onOpen: onOpenDrawer,
+    onClose: onCloseDrawer,
+  } = useDisclosure();
+  const matches = useMatches();
+  const lastMatch = matches.slice(-1)[0];
+  const title = lastMatch && lastMatch.handle && lastMatch.handle.title;
+
+  const focusRef = useRef();
+  const btnRef = useRef(null);
   return (
     <div className="dashboard">
-      <div className="crops">
-        <span>Crops</span>
-        <Formik
-          initialValues={{
-            fullName: "",
-            landOccupied: 0,
-          }}
-          onSubmit={(values, action) => {
-            setCropsList([
-              ...cropList,
-              { id: (Math.random() * 10).toString(), ...values },
-            ]);
-            action.setSubmitting(false);
-            action.resetForm();
-          }}
-        >
-          <Form>
-            <TextInputFormik name="fullName" label="Full Name" />
-            <TextInputFormik name="landOccupied" label="Land Occupied" />
-            <button type="submit">Add</button>
-          </Form>
-        </Formik>
-        <Line />
-        <ViewList onClick={() => setShowAllCrops(!showAllCrops)}>
-          All Crops
-        </ViewList>
-        <div>
-          {showAllCrops &&
-            cropList.map((c) => (
-              <div key={c.fullName}>
-                <span>{c.fullName}</span>
-                <button onClick={() => deleteCrop(c.id)}>Delete</button>
-                <button onClick={() => setShowCropForm(true)}>View</button>{" "}
-              </div>
-            ))}
-        </div>
+      <div className="heading flex items-center p-4">
+        <IconButton
+          aria-label="Open Drawer"
+          bg="cabi"
+          color="wheat"
+          border="1px"
+          borderColor="cabi"
+          ref={btnRef}
+          icon={
+            <Center w="100%" h="100%">
+              <HamburgerIcon />
+            </Center>
+          }
+          onClick={onOpenDrawer}
+        />
+        {title || (
+          <Heading className="flex justify-around grow" size="lg">
+            Administrator Dashboard
+          </Heading>
+        )}
       </div>
+      <Drawer
+        isOpen={isOpenDrawer}
+        placement="left"
+        onClose={onCloseDrawer}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>
+            <Image
+              boxSize="150px"
+              borderRadius="full"
+              fallbackSrc="/assets/blank-profile-picture.webp"
+              alt="user_name"
+              bg="gray.100"
+              fit="scale-down"
+            />
+          </DrawerHeader>
+          <DrawerBody>
+            <Stack>
+              <Link to="crops">
+                <Button>Crops</Button>
+              </Link>
+              <Divider />
+              <div className="button manage_alerts">
+                <Button
+                  leftIcon={<SpeakerWaveIcon />}
+                  bg="cabi"
+                  color="white"
+                  border="1px"
+                  borderColor="cabi"
+                  _hover={{ bg: "wheat", color: "cabi" }}
+                >
+                  <Link to="alerts">Manage Alerts</Link>
+                </Button>
+              </div>
+            </Stack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+      <Outlet />
       <div className="farmers">
         <span>Farmers</span>
         <ViewList onClick={() => console.log("clik")}>Filter</ViewList>
@@ -207,7 +263,6 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
               <span>CurrentSeason: {currentFarmer.currentSeason}</span>
             </VCard>
           </HCard>
-          <span>Crops</span>
           <VCard>
             {currentFarmer.allCrops.map((c) => (
               <HCard key={c.id}>
@@ -225,9 +280,6 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
           </VCard>
         </div>
       )}
-      <div className="button manage_alerts">
-        <Link to="alerts">Manage Alerts</Link>
-      </div>
 
       <div className="messages">
         <HCard onClick={() => setShowChatBox(!showChatBox)}>

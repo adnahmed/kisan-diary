@@ -1,10 +1,14 @@
 import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { withEmotionCache } from "@emotion/react";
-import { cookieStorageManagerSSR, localStorageManager } from "@chakra-ui/react";
-
+import {
+  Accordion,
+  ColorModeScript,
+  cookieStorageManagerSSR,
+  localStorageManager,
+} from "@chakra-ui/react";
+import { unstable_useEnhancedEffect as useEnhancedEffect } from "@mui/material";
 import { extendTheme, ChakraProvider } from "@chakra-ui/react";
 import { ServerStyleContext, ClientStyleContext } from "./context";
-
 import {
   Links,
   LiveReload,
@@ -18,12 +22,14 @@ import {
 import remixImageStyles from "remix-image/remix-image.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import globalStyles from "./styles/global.css";
+import gridStyles from "react-grid-layout/css/styles.css";
+import resizableStyles from "react-resizable/css/styles.css";
 import { useContext, useEffect } from "react";
 import roboto300 from "@fontsource/roboto/300.css";
 import roboto400 from "@fontsource/roboto/400.css";
 import roboto500 from "@fontsource/roboto/500.css";
 import roboto700 from "@fontsource/roboto/700.css";
-
+import theme from "./styles/theme";
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: tailwindStylesheetUrl },
@@ -58,6 +64,14 @@ export const links: LinksFunction = () => {
       rel: "stylesheet",
       href: roboto700,
     },
+    {
+      rel: "stylesheet",
+      href: gridStyles,
+    },
+    {
+      rel: "stylesheet",
+      href: resizableStyles,
+    },
   ];
 };
 
@@ -81,7 +95,7 @@ const Document = withEmotionCache(
     const clientStyleData = useContext(ClientStyleContext);
 
     // Only executed on client
-    useEffect(() => {
+    useEnhancedEffect(() => {
       // re-link sheet container
       emotionCache.sheet.container = document.head;
       // re-inject tags
@@ -107,7 +121,8 @@ const Document = withEmotionCache(
             />
           ))}
         </head>
-        <body className="scrollbar">
+        <body>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           {children}
           <ScrollRestoration />
           <Scripts />
@@ -118,14 +133,6 @@ const Document = withEmotionCache(
   }
 );
 
-const colors = {
-  brand: {
-    900: "#1a365d",
-    800: "#153e75",
-    700: "#2a69ac",
-  },
-};
-const theme = extendTheme({ colors });
 export default function App() {
   const cookies = useLoaderData();
 
