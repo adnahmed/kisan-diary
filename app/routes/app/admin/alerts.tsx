@@ -1,5 +1,5 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { Form, Link, useLoaderData, useSubmit } from "@remix-run/react";
+import { Form, Link, Outlet, useLoaderData, useSubmit } from "@remix-run/react";
 import capitalize from "lodash/capitalize";
 import { FC, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
