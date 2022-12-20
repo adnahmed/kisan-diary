@@ -16,19 +16,40 @@ model User {
   // TODO: use @db for value size limit
   // TODO: Make Country ENUM for validation
   address   String
-  city      String
-  country   String
+  region    Region @relation(fields: [regionName], references: [name])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  password Password?
-  Farm     Farm[]
+  password   Password?
+  Farm       Farm[]
+  regionName String
+}
+
+model Alert {
+  id            String    @id @default(cuid())
+  region        Region    @relation(fields: [regionName], references: [name])
+  alertType     AlertType
+  details       String
+  affectedCrops Crop[]
+  imagePath     String?
+  regionName    String
+}
+
+enum AlertType {
+  alert
+  recommendation
 }
 
 enum Role {
   admin
   farmer
+}
+
+model Region {
+  name  String  @id @unique
+  User  User[]
+  Alert Alert[]
 }
 
 model Password {
@@ -53,10 +74,12 @@ model Farm {
 
 model Crop {
   id      String  @id @default(cuid())
-  name    String
+  name    String  @unique
   picture String
   Farm    Farm?   @relation(fields: [farmId], references: [id])
   farmId  String?
+  Alert   Alert?  @relation(fields: [alertId], references: [id])
+  alertId String?
 }
 
 enum IrrigationSource {

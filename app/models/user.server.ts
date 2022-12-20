@@ -16,21 +16,23 @@ export async function getUserByEmail(email: User["email"]) {
 type UserCreateInput = Omit<User, "createdAt" | "updatedAt" | "id">;
 export async function createUser(user: UserCreateInput & { password: string }) {
   const hashedPassword = await bcrypt.hash(user.password, 10);
-  try {
-    return await prisma.user.create({
-      data: {
-        ...user,
-        password: {
-          create: {
-            hash: hashedPassword,
-          },
+  const { regionName, ...UserWithoutRegionName } = user;
+  return await prisma.user.create({
+    data: {
+      ...UserWithoutRegionName,
+      region: {
+        connectOrCreate: {
+          create: { name: user.regionName },
+          where: { name: user.regionName }
+        }
+      },
+      password: {
+        create: {
+          hash: hashedPassword,
         },
       },
-    });
-  } catch (err) {
-    if (err instanceof Error) console.log(err.message)
-    return null;
-  }
+    },
+  });
 }
 
 export async function deleteUserByEmail(email: User["email"]) {
