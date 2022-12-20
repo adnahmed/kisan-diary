@@ -1,20 +1,29 @@
-import { useState } from "react";
-import onChangeInput from "~/helpers/onChangeInput";
-
-import {
-  Form as RemixForm,
-  Link,
-  NavLink,
-  useLoaderData,
-} from "@remix-run/react";
-import GlowyButton from "~/components/glowy_button";
+import { Outlet } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import { prisma } from "~/db.server";
 import { getUser, getSession } from "~/session.server";
 import { z } from "zod";
-import Form from "~/components/form/form";
 import { inputFromFormData } from "domain-functions";
-import { Farm, User } from "@prisma/client";
+import { User } from "@prisma/client";
+import { Link as RemixLink } from "@remix-run/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Heading,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import GlowyButton from "~/components/glowy_button";
+import Form from "~/components/form/form";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import CABIButton from "../../components/CABIButton";
 
 async function getFarmWithCrops(user: User) {
   return await prisma.farm.findUnique({
@@ -26,6 +35,7 @@ async function getFarmWithCrops(user: User) {
     },
   });
 }
+
 export async function loader({ request }) {
   const session = await getSession(request);
   const user = await getUser(request);
@@ -43,22 +53,11 @@ export async function loader({ request }) {
   return { user };
 }
 
-export async function action({ request }) {
-  const formData = await request.formData();
-  const values = inputFromFormData(formData);
-}
-
-const CropSchema = z.object({
-  name: z.string(),
-});
-
-export interface DashboardProps {}
-export default function Dashboard(props: DashboardProps) {
-  const { farm, user, crops } = useLoaderData<typeof loader>();
+export default function FarmerDashboard() {
   const [showNewCropForm, setShowNewCropForm] = useState(false);
   return (
     <main>
-      {crops && (
+      <div>
         <div>
           {!showNewCropForm && (
             <button onClick={() => setShowNewCropForm(!showNewCropForm)}>
@@ -68,50 +67,62 @@ export default function Dashboard(props: DashboardProps) {
             </button>
           )}
           {showNewCropForm && <Form schema={CropSchema} />}
-          <div
-            className="CropSelection"
-            style={{ display: "flex", flexDirection: "column" }}
-          >
-            <div style={{ display: "flex" }}>
-              <b style={{ flex: "1", color: "green", fontSize: "xxx-large" }}>
-                Crops
-              </b>
-            </div>
-            {crops.map((crop) => (
-              <div
-                key={crop.id}
-                id="dashboard-table"
-                style={{ display: "flex" }}
-              >
-                <div
-                  id="dashboard-table-row"
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignContent: "space-between",
-                    flex: "1",
-                    maxWidth: "300px",
-                    alignItems: "center",
-                  }}
-                >
-                  <GlowyButton>
-                    <Link to={"/crop/" + crop.fullName}>{crop.fullName}</Link>
-                  </GlowyButton>
-                  <img
-                    style={{
-                      display: "inline",
-                      borderWidth: "1px",
-                      maxHeight: "200px",
-                    }}
-                    alt={crop.fullName + " Image"}
-                    src={"assets/" + crop.fullName.toLowerCase() + ".jpg"}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
-      )}
+        <div
+          className="CropSelection"
+          style={{ display: "flex", flexDirection: "column" }}
+        >
+          <div style={{ display: "flex" }}>
+            <b style={{ flex: "0", color: "green", fontSize: "xxx-large" }}>
+              Crops
+            </b>
+          </div>
+          {/* crops.map */}
+          {[
+            { id: "0", fullName: "Potato" },
+            { id: "1", fullName: "Wheat" },
+          ].map((crop) => (
+            <div key={crop.id} id="dashboard-table" style={{ display: "flex" }}>
+              <div
+                id="dashboard-table-row"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignContent: "space-between",
+                  flex: "0",
+                  maxWidth: "299px",
+                  alignItems: "center",
+                }}
+              >
+                <GlowyButton>
+                  <Link as={RemixLink} to={`year_select?crop=${crop.fullName}`}>
+                    {crop.fullName}
+                  </Link>
+                </GlowyButton>
+                <img
+                  style={{
+                    display: "inline",
+                    borderWidth: "0px",
+                    maxHeight: "199px",
+                  }}
+                  alt={crop.fullName + " Image"}
+                  src={"assets/" + crop.fullName.toLowerCase() + ".jpg"}
+                />
+              </div>
+              <Outlet />
+            </div>
+          ))}
+        </div>
+      </div>
     </main>
   );
+}
+
+const CropSchema = z.object({
+  name: z.string(),
+});
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const values = inputFromFormData(formData);
 }

@@ -17,6 +17,7 @@ import { Form, Link, Outlet, useLoaderData } from "@remix-run/react";
 import { Image } from "remix-image";
 import { useEffect } from "react";
 import { useMatches } from "@remix-run/react";
+import { Link as ChakraLink } from "@chakra-ui/react";
 
 export const links: LinksFunction = () => [
   {
@@ -37,26 +38,27 @@ export async function loader({ request }) {
 
 function FarmerNavBar() {
   const matches = useMatches();
+  const dashboardPath = "/app/farmer/";
   const lastMatch = matches.slice(-1)[0];
-  const menu_links = [
-    "Farm Information",
-    "Crops",
-    "Manuals",
-    "Photo Gallery",
-    "Relevant Links",
+  const menu = [
+    { label: "Farm Information", href: "farm_information" },
+    { label: "Crops", href: "" },
+    { label: "Manuals", href: "manuals" },
+    { label: "Photo Gallery", href: "gallery" },
+    { label: "Relevant Links", href: "links" },
   ];
   return (
     <Box
       bg="cabi"
       className="flex items-center h-max align-middle justify-between color-white nav"
     >
-      {menu_links.map((menu) => (
+      {menu.map((menu) => (
         <Button
           variant="cabi"
-          key={menu}
-          isActive={lastMatch.pathname.split("/")[-1] === menu}
+          key={menu.href}
+          isActive={lastMatch.pathname.split("/")[-1] === menu.href}
         >
-          {menu}
+          <ChakraLink href={dashboardPath + menu.href}>{menu.label}</ChakraLink>
         </Button>
       ))}
     </Box>
