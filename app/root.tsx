@@ -24,12 +24,13 @@ import tailwindStylesheetUrl from "./styles/tailwind.css";
 import globalStyles from "./styles/global.css";
 import gridStyles from "react-grid-layout/css/styles.css";
 import resizableStyles from "react-resizable/css/styles.css";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import roboto300 from "@fontsource/roboto/300.css";
 import roboto400 from "@fontsource/roboto/400.css";
 import roboto500 from "@fontsource/roboto/500.css";
 import roboto700 from "@fontsource/roboto/700.css";
 import theme from "./styles/theme";
+import { getUser } from "./session.server";
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: tailwindStylesheetUrl },
@@ -82,7 +83,12 @@ export const meta: MetaFunction = () => ({
 });
 
 export async function loader({ request }: LoaderArgs) {
-  return request.headers.get("cookie") ?? "";
+  const cookies = request.headers.get("cookie") ?? "";
+  const user = await getUser(request);
+  return {
+    user,
+    cookies,
+  };
 }
 
 interface DocumentProps {
@@ -134,7 +140,7 @@ const Document = withEmotionCache(
 );
 
 export default function App() {
-  const cookies = useLoaderData();
+  const { cookies } = useLoaderData<typeof loader>();
 
   return (
     <Document>
