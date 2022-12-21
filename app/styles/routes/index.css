@@ -16,10 +16,6 @@
   top: 0em;
   z-index: 1;
 }
-.nav {
-  display: flex;
-  color: white;
-}
 
 .menu {
   margin-left: auto;
