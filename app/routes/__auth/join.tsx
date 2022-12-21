@@ -39,7 +39,7 @@ const mutation = makeDomainFunction(schema)(async (values) => {
   const user = await createUser({
     ...userInput,
     role: "farmer",
-    regionName: region,
+    region: region,
   });
   return { userId: user.id, remember: values.rememberMe, role: user.role };
 });

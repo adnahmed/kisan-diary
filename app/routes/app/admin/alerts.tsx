@@ -1,11 +1,11 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { Form, Link, Outlet, useLoaderData, useSubmit } from "@remix-run/react";
+import { Form, Link, useLoaderData, useSubmit } from "@remix-run/react";
 import capitalize from "lodash/capitalize";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Emoji from "react-emojis";
-import { ActionFunction } from "@remix-run/server-runtime";
-import { $path } from "remix-routes";
+import type { ActionFunction } from "@remix-run/server-runtime";
 
 interface ManageAlertsProps {}
 export async function loader() {

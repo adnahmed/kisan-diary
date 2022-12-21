@@ -1,24 +1,21 @@
-import styles from "~/styles/routes/index.css";
-import type { LinksFunction } from "@remix-run/react/dist/routeModules";
-import { getUser } from "~/session.server";
 import {
+  useDisclosure,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  useDisclosure,
-  Image as ChakraImage,
   Box,
   Button,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
-import { Form, Link, Outlet, useLoaderData } from "@remix-run/react";
-import { Image } from "remix-image";
+import { EnvelopeIcon } from "@heroicons/react/24/solid";
+import styles from "~/styles/routes/index.css";
+import { Form, Link, Outlet, useMatches } from "@remix-run/react";
+import type { LinksFunction } from "@remix-run/server-runtime";
 import { useEffect } from "react";
-import { useMatches } from "@remix-run/react";
-import { Link as ChakraLink } from "@chakra-ui/react";
-
+import { useOptionalUser } from "~/utils";
 export const links: LinksFunction = () => [
   {
     href: styles,
@@ -30,19 +27,14 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export async function loader({ request }) {
-  return {
-    user: await getUser(request),
-  };
-}
-
 function FarmerNavBar() {
   const matches = useMatches();
   const dashboardPath = "/app/farmer/";
   const lastMatch = matches.slice(-1)[0];
   const menu = [
+    { label: "Home", href: "" },
     { label: "Farm Information", href: "farm_information" },
-    { label: "Crops", href: "" },
+    { label: "Crops", href: "crops" },
     { label: "Manuals", href: "manuals" },
     { label: "Photo Gallery", href: "gallery" },
     { label: "Relevant Links", href: "links" },
@@ -50,7 +42,7 @@ function FarmerNavBar() {
   return (
     <Box
       bg="cabi"
-      className="flex items-center h-max align-middle justify-between color-white nav"
+      className="flex items-center h-max align-middle bg-[#368729] justify-between text-white p-2 rounded-md"
     >
       {menu.map((menu) => (
         <Button
@@ -61,6 +53,9 @@ function FarmerNavBar() {
           <ChakraLink href={dashboardPath + menu.href}>{menu.label}</ChakraLink>
         </Button>
       ))}
+      <Button variant="cabi" size="md">
+        Messages
+      </Button>
     </Box>
   );
 }
@@ -113,9 +108,8 @@ function AuthMenu({ isLoggedIn, onOpenLogIn }: AuthMenuProps) {
     </div>
   );
 }
-
-export default function LandingPage() {
-  const data = useLoaderData<typeof loader>();
+export default function App() {
+  const user = useOptionalUser();
   const matches = useMatches();
   const lastMatch = matches.slice(-1)[0];
   const {
@@ -128,9 +122,9 @@ export default function LandingPage() {
   }, [lastMatch, onOpenLogIn]);
   return (
     <div>
-      <Header isLoggedIn={data.user !== undefined} onOpenLogIn={onOpenLogIn} />
+      <Header isLoggedIn={user !== undefined} onOpenLogIn={onOpenLogIn} />
       <div className="content-wrapper">
-        {data.user === undefined ? (
+        {user === undefined ? (
           <div>
             <Modal
               blockScrollOnMount={false}
@@ -148,15 +142,7 @@ export default function LandingPage() {
             </Modal>
             <div className="promo-bg content">
               <div className="content-row">
-                <div className="content-card content-card-1">
-                  <Image
-                    options={{
-                      fit: "contain",
-                    }}
-                    src="/assets/index-content-row-1.jpeg"
-                    alt=""
-                  />
-                </div>
+                <div className="content-card content-card-1"></div>
                 <div className="content-card content-card-2"></div>
               </div>
               <div className="content-row">
