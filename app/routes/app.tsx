@@ -14,8 +14,10 @@ import { EnvelopeIcon } from "@heroicons/react/24/solid";
 import styles from "~/styles/routes/index.css";
 import { Form, Link, Outlet, useMatches } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/server-runtime";
+import { redirect } from "@remix-run/server-runtime";
 import { useEffect } from "react";
 import { useOptionalUser } from "~/utils";
+import { getUser } from "~/session.server";
 export const links: LinksFunction = () => [
   {
     href: styles,
@@ -26,7 +28,12 @@ export const links: LinksFunction = () => [
     href: "/public/favicon.ico",
   },
 ];
-
+export async function loader({ request }) {
+  const url = new URL(request.url);
+  const user = await getUser(request);
+  if (user && url.pathname === "/app") redirect(`/app/${user.role}`);
+  return {};
+}
 function FarmerNavBar() {
   const matches = useMatches();
   const dashboardPath = "/app/farmer/";
