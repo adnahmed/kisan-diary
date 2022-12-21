@@ -2,6 +2,7 @@ import type { Password, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "~/db.server";
+import type UserCreateInput from "~/types/UserCreateInput";
 
 export type { User } from "@prisma/client";
 
@@ -13,17 +14,16 @@ export async function getUserByEmail(email: User["email"]) {
   return prisma.user.findUnique({ where: { email } });
 }
 
-type UserCreateInput = Omit<User, "createdAt" | "updatedAt" | "id">;
 export async function createUser(user: UserCreateInput & { password: string }) {
   const hashedPassword = await bcrypt.hash(user.password, 10);
-  const { regionName, ...UserWithoutRegionName } = user;
+  const { region, ...UserWithoutRegionName } = user;
   return await prisma.user.create({
     data: {
       ...UserWithoutRegionName,
       region: {
         connectOrCreate: {
-          create: { name: user.regionName },
-          where: { name: user.regionName }
+          create: { name: user.region },
+          where: { name: user.region }
         }
       },
       password: {

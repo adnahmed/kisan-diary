@@ -50,6 +50,7 @@ model Region {
   name  String  @id @unique
   User  User[]
   Alert Alert[]
+  Farm  Farm[]
 }
 
 model Password {
@@ -62,14 +63,17 @@ model Password {
 model Farm {
   id                String             @id @default(cuid())
   name              String             @unique
+  region            Region             @relation(fields: [regionName], references: [name])
   user              User               @relation(fields: [owner], references: [id], onDelete: Cascade, onUpdate: Cascade)
   owner             String             @unique
-  total_land        Int
-  pictures          String[]
-  land_type         LandType
+  total_land        Int?
+  land_type         LandType?
+  machinery         Machinery[]
   crops             Crop[]
   irrigation_source IrrigationSource[]
-  MachineryOnFarms  MachineryOnFarms[]
+  regionName        String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 }
 
 model Crop {
@@ -100,20 +104,9 @@ model Country {
   City City[]
 }
 
-model MachineryOnFarms {
-  machinery  Machinery @relation(fields: [machId], references: [id])
-  machId     String
-  farm       Farm      @relation(fields: [farmId], references: [id])
-  farmId     String
-  assignedAt DateTime  @default(now())
-
-  @@id([machId, farmId])
-}
-
-model Machinery {
-  id               String             @id @default(cuid())
-  name             String
-  MachineryOnFarms MachineryOnFarms[]
+enum Machinery {
+  Tractor
+  Leveler
 }
 
 enum LandType {
