@@ -29,7 +29,7 @@ export default function CellRow(props: CellRowProps) {
       {props.values.map((p) => {
         switch (typeof p) {
           case "string":
-            return <Cell style={props.cellStyle} value={p} />;
+            return <Cell key={p} style={props.cellStyle} value={p} />;
           case "object":
             return p;
           default:
