@@ -11,6 +11,7 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { EnvelopeIcon } from "@heroicons/react/24/solid";
+import slugify from "slugify";
 import styles from "~/styles/routes/index.css";
 import { Form, Link, Outlet, useMatches } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/server-runtime";
@@ -31,7 +32,7 @@ export const links: LinksFunction = () => [
 export async function loader({ request }) {
   const url = new URL(request.url);
   const user = await getUser(request);
-  if (user && url.pathname === "/app") redirect(`/app/${user.role}`);
+  if (user && url.pathname === "/app") redirect(`/app/${user.role}/home`);
   return {};
 }
 function FarmerNavBar() {
@@ -39,13 +40,14 @@ function FarmerNavBar() {
   const dashboardPath = "/app/farmer/";
   const lastMatch = matches.slice(-1)[0];
   const menu = [
-    { label: "Home", href: "" },
-    { label: "Farm Information", href: "farm_information" },
-    { label: "Crops", href: "crops" },
-    { label: "Manuals", href: "manuals" },
-    { label: "Photo Gallery", href: "gallery" },
-    { label: "Relevant Links", href: "links" },
+    "Home",
+    "Farm Information",
+    "Crops",
+    "Manuals",
+    "Photo Gallery",
+    "Relevant Links",
   ];
+
   return (
     <Box
       bg="cabi"
@@ -54,10 +56,10 @@ function FarmerNavBar() {
       {menu.map((menu) => (
         <Button
           variant="cabi"
-          key={menu.href}
-          isActive={lastMatch.pathname.split("/")[-1] === menu.href}
+          key={menu}
+          isActive={lastMatch.pathname.split("/")[-1] === slugify(menu)}
         >
-          <ChakraLink href={dashboardPath + menu.href}>{menu.label}</ChakraLink>
+          <ChakraLink href={dashboardPath + slugify(menu)}>{menu}</ChakraLink>
         </Button>
       ))}
       <Button variant="cabi" size="md">
@@ -108,7 +110,7 @@ function AuthMenu({ isLoggedIn, onOpenLogIn }: AuthMenuProps) {
           </Link>
         </div>
       ) : (
-        <Form method="post" action="/logout">
+        <Form method="post" action="/logout" data-netlify="true">
           <button type="submit">Logout</button>
         </Form>
       )}

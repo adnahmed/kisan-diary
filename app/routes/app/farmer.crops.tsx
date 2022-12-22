@@ -31,6 +31,9 @@ export async function loader({ request }) {
     crops: farm?.crops,
   });
 }
+const CropSchema = z.object({
+  name: z.string(),
+});
 export default function Crops() {
   const data = useLoaderData<typeof loader>();
   const [showNewCropForm, setShowNewCropForm] = useState(false);

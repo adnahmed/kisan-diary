@@ -84,7 +84,7 @@ const CreateAlert: FC<CreateAlertProps> = (props) => {
         <Heading>Generate Alert</Heading>
       </header>
       <main className="grid-rows-2 col-start-3 col-span-7 m-11">
-        <Form encType="multipart/form-data" method="post">
+        <Form encType="multipart/form-data" method="post" data-netlify="true">
           <label className="flex items-center gap-2 m-4">
             <span>Region</span>
             <Select

@@ -1,38 +1,39 @@
-import type { FormProps, FormSchema } from 'remix-forms'
-import { createForm } from 'remix-forms'
-import Error from './error'
-import Errors from './errors'
-import Field from './field'
-import Input from './input'
-import Label from './label'
-import Select from './select'
-import SubmitButton from './submit-button'
-import Checkbox from './checkbox'
-import Radio from './radio'
+import type { FormProps, FormSchema } from "remix-forms";
+import { createForm } from "remix-forms";
+import Error from "./error";
+import Errors from "./errors";
+import Field from "./field";
+import Input from "./input";
+import Label from "./label";
+import Select from "./select";
+import SubmitButton from "./submit-button";
+import Checkbox from "./checkbox";
+import Radio from "./radio";
 
-import InputWrapper from './input-wrapper'
-import RadioGroup from './radio-group'
+import InputWrapper from "./input-wrapper";
+import RadioGroup from "./radio-group";
 
-import TextArea from './text-area'
+import TextArea from "./text-area";
 import {
   Form as RemixForm,
   useActionData,
   useSubmit,
   useTransition as useNavigation,
-} from '@remix-run/react'
+} from "@remix-run/react";
 
 const BaseForm = createForm({
   component: RemixForm,
   useNavigation,
   useSubmit,
   useActionData,
-})
+});
 
 export default function Form<Schema extends FormSchema>(
-  props: FormProps<Schema>,
+  props: FormProps<Schema>
 ) {
   return (
     <BaseForm
+      data-netlify="true"
       className="flex flex-col space-y-6"
       fieldComponent={Field}
       labelComponent={Label}
@@ -49,5 +50,5 @@ export default function Form<Schema extends FormSchema>(
       errorComponent={Error}
       {...props}
     />
-  )
+  );
 }

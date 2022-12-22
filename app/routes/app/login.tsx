@@ -48,7 +48,7 @@ export async function action({ request }: ActionArgs) {
     request,
     userId: user.id,
     remember: remember === "on" ? true : false,
-    redirectTo: safeRedirect($path(`/app/${user.role}`), "/"),
+    redirectTo: safeRedirect($path(`/app/${user.role}/home`), "/"),
   });
 }
 
@@ -69,7 +69,12 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-full flex-col justify-center from-blue-500 from-blue-400 ">
       <div className="mx-auto w-full max-w-md px-8 m-4 p-6 bg-green-200 backdrop-blur rounded-md">
-        <Form method="post" className="space-y-6" noValidate>
+        <Form
+          method="post"
+          className="space-y-6"
+          noValidate
+          data-netlify="true"
+        >
           <div>
             <label
               htmlFor="email"

@@ -52,7 +52,7 @@ const ManageAlerts: FC<ManageAlertsProps> = () => {
               <Tab>Year</Tab>
             </TabList>
             <TabPanel>
-              <Form onChange={handleChange}>
+              <Form onChange={handleChange} data-netlify="true">
                 {data.seasons.map((season) => {
                   const id = `${season}-id`;
                   return (
@@ -71,7 +71,7 @@ const ManageAlerts: FC<ManageAlertsProps> = () => {
               </Form>
             </TabPanel>
             <TabPanel>
-              <Form onChange={handleChange}>
+              <Form onChange={handleChange} data-netlify="true">
                 {data.years.map((year) => {
                   const id = `${year}-id`;
                   return (
