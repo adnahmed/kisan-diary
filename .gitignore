@@ -15,8 +15,5 @@ node_modules
 /cypress/videos
 /postgres-data
 
-# Local Netlify folder
-.netlify
-
 # typescript build files
 dist/
