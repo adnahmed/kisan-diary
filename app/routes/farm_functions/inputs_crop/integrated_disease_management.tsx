@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import type { FC } from "react";
 import CellRow from "~/components/CellRow";
 
 export interface IntegratedDiseaseManagementProps {}

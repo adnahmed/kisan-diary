@@ -14,6 +14,7 @@ import { performMutation } from "remix-forms";
 import styles from "~/styles/routes/join.css";
 import { Link, UseNumberInputProps } from "@chakra-ui/react";
 import cleanString from "~/helpers/cleanString";
+import { useCatch } from "@remix-run/react";
 const schemaObject = {
   firstName: z.preprocess(cleanString, z.string()),
   lastName: z.preprocess(cleanString, z.string()),
@@ -60,7 +61,29 @@ export const action: ActionFunction = async ({ request }) => {
     });
   else return json(result, 400);
 };
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <div>
+      <h1>Error</h1>
+      <p>{error.message}</p>
+      <p>The stack trace is:</p>
+      <pre>{error.stack}</pre>
+    </div>
+  );
+}
+export function CatchBoundary() {
+  const caught = useCatch();
 
+  return (
+    <div>
+      <h1>Caught</h1>
+      <p>Status: {caught.status}</p>
+      <pre>
+        <code>{JSON.stringify(caught.data, null, 2)}</code>
+      </pre>
+    </div>
+  );
+}
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
