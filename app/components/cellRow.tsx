@@ -2,7 +2,7 @@
 A stub interface, use react-props here.
 */
 import React from "react";
-import Cell from "./cell";
+import Cell from "./Cell";
 
 const cellRowStyle = (isVertical: boolean | undefined, cells: number) => {
   return isVertical
