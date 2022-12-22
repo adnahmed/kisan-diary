@@ -1,5 +1,6 @@
-import React, { FC } from "react";
-import CellRow from "~/components/CellRow";
+import type { FC } from "react";
+import React from "react";
+import CellRow from "~/components/cell-row";
 import IntegratedDiseaseManagement from "./integrated_disease_management";
 import IntegratedPestManagement from "./integrated_pest_management";
 import IntegratedWeedManagement from "./integrated_weed_management";

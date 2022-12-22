@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { Link, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
-import CABIButton from "~/components/CABIButton";
+import CABIButton from "~/components/cabi-button";
 import type { LoaderArgs } from "@remix-run/node";
 
 export async function loader({ request }: LoaderArgs) {

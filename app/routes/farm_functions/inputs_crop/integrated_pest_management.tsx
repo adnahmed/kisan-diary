@@ -1,5 +1,6 @@
-import React, { FC } from "react";
-import CellRow from "~/components/CellRow";
+import type { FC } from "react";
+import React from "react";
+import CellRow from "~/components/cell-row";
 
 export interface IntegratedPestManagementProps {}
 

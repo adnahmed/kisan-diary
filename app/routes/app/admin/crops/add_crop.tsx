@@ -2,8 +2,8 @@ import { FC, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Form } from "@remix-run/react";
-import TextInputFormik from "~/components/form/input/TextInputFormik";
-import SelectFormik from "~/components/form/input/SelectFormik";
+import TextInputFormik from "~/components/form/input/text-input-formik";
+import SelectFormik from "~/components/form/input/select-formik";
 
 interface CropFormProps {
   cropId: string;

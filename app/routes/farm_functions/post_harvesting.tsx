@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import CellRow from "~/components/CellRow";
+import CellRow from "~/components/cell-row";
 
 export interface PostHarvestingProps {}
 

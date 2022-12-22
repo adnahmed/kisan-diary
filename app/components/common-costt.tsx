@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import React from "react";
-import CellRow from "./CellRow";
+import CellRow from "./cell-row";
 import "./CommonCostTableHeader.scss";
 
 export interface CommonCostTableHeaderProps {}

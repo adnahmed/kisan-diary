@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import CellRow from "~/components/CellRow";
+import CellRow from "~/components/cell-row";
 import Harvesting from "./harvesting";
 import GrossInputsCost from "./inputs_crop/gross_inputs_cost";
 import IntegratedDiseaseManagement from "./inputs_crop/integrated_disease_management";
