@@ -15,5 +15,8 @@ node_modules
 /cypress/videos
 /postgres-data
 
+# netlify dot dir
+.netlify
+
 # typescript build files
 dist/
