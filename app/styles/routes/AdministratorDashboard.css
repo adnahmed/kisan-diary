@@ -1,0 +1,17 @@
+.AdministratorDashboard {}
+
+.DataForm * {
+    display: inline;
+}
+
+.MessageEnvelope .MessageCount {
+    float: right;
+    position: relative;
+    left: -15%;
+    border: 0.1em red solid;
+    clip-path: circle(40%);
+    color: white;
+    background: red;
+    top: -10%;
+    padding: 0.1em 0.2em 0.1em 0.2em;
+}

@@ -1,0 +1,115 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String @id @default(cuid())
+  email     String @unique
+  firstName String
+  lastName  String
+  role      Role
+  // TODO: use @db for value size limit
+  // TODO: Make Country ENUM for validation
+  address   String
+  region    Region @relation(fields: [regionName], references: [name])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  password   Password?
+  Farm       Farm[]
+  regionName String
+}
+
+model Alert {
+  id            String    @id @default(cuid())
+  region        Region    @relation(fields: [regionName], references: [name])
+  alertType     AlertType
+  details       String
+  affectedCrops Crop[]
+  imagePath     String?
+  regionName    String
+}
+
+enum AlertType {
+  alert
+  recommendation
+}
+
+enum Role {
+  admin
+  farmer
+}
+
+model Region {
+  name  String  @id @unique
+  User  User[]
+  Alert Alert[]
+  Farm  Farm[]
+}
+
+model Password {
+  hash String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique
+}
+
+model Farm {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  region            Region             @relation(fields: [regionName], references: [name])
+  user              User               @relation(fields: [owner], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  owner             String             @unique
+  total_land        Int?
+  land_type         LandType?
+  machinery         Machinery[]
+  crops             Crop[]
+  irrigation_source IrrigationSource[]
+  regionName        String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model Crop {
+  id      String  @id @default(cuid())
+  name    String  @unique
+  picture String
+  Farm    Farm?   @relation(fields: [farmId], references: [id])
+  farmId  String?
+  Alert   Alert?  @relation(fields: [alertId], references: [id])
+  alertId String?
+}
+
+enum IrrigationSource {
+  TubeWell
+  Canal
+}
+
+model City {
+  id      String  @id @default(cuid())
+  name    String
+  country Country @relation(fields: [from], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  from    String
+}
+
+model Country {
+  id   String @id @default(cuid())
+  name String @unique
+  City City[]
+}
+
+enum Machinery {
+  Tractor
+  Leveler
+}
+
+enum LandType {
+  Nehri
+  Behri
+}

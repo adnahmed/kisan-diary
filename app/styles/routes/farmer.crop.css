@@ -1,0 +1,14 @@
+.crop-card .options > * {
+  display: block;
+  color: mediumblue;
+  margin: 10px;
+  max-width: max-content;
+  border-width: 2px;
+  border-radius: 1em;
+  padding: 15px;
+}
+.crop-card .heading {
+  font-size: xx-large;
+  text-align: center;
+  font-weight: bold;
+}
