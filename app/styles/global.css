@@ -4,6 +4,6 @@
 html {
   margin: 0.1em;
 }
-
-main {
+img {
+  max-width: 100%;
 }
