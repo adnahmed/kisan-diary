@@ -1,12 +1,11 @@
-import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
-import { withEmotionCache } from "@emotion/react";
 import {
+  ChakraProvider,
   ColorModeScript,
   cookieStorageManagerSSR,
   localStorageManager,
 } from "@chakra-ui/react";
-import { ChakraProvider } from "@chakra-ui/react";
-import { ServerStyleContext, ClientStyleContext } from "./context";
+import { withEmotionCache } from "@emotion/react";
+import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -16,16 +15,17 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { ClientStyleContext, ServerStyleContext } from "./context";
 
-import tailwindStylesheetUrl from "./styles/tailwind.css";
-import globalStyles from "./styles/global.css";
-import { useContext, useEffect } from "react";
 import roboto300 from "@fontsource/roboto/300.css";
 import roboto400 from "@fontsource/roboto/400.css";
 import roboto500 from "@fontsource/roboto/500.css";
 import roboto700 from "@fontsource/roboto/700.css";
-import theme from "./styles/theme";
+import { useContext, useEffect } from "react";
 import { getUser } from "./session.server";
+import globalStyles from "./styles/global.css";
+import tailwindStylesheetUrl from "./styles/tailwind.css";
+import theme from "./styles/theme";
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: tailwindStylesheetUrl },
