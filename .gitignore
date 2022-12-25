@@ -11,3 +11,5 @@ node_modules
 /api/index.js.map
 
 .vercel
+# may contain sensitive data like api keys etc.
+.vscode/settings.json
