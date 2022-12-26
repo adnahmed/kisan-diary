@@ -786,16 +786,16 @@ select {
   grid-column: span 7 / span 7;
 }
 
-.col-start-3 {
-  grid-column-start: 3;
-}
-
 .col-start-1 {
   grid-column-start: 1;
 }
 
 .col-start-4 {
   grid-column-start: 4;
+}
+
+.col-start-3 {
+  grid-column-start: 3;
 }
 
 .col-end-13 {
@@ -810,12 +810,12 @@ select {
   grid-row-start: 2;
 }
 
-.m-11 {
-  margin: 2.75rem;
-}
-
 .m-4 {
   margin: 1rem;
+}
+
+.m-11 {
+  margin: 2.75rem;
 }
 
 .mx-auto {

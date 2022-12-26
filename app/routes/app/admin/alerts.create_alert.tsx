@@ -1,30 +1,25 @@
 import { Button, Heading, Textarea } from "@chakra-ui/react";
+import type { AlertType } from "@prisma/client";
+import { unstable_createFileUploadHandler } from "@remix-run/node";
 import { Form } from "@remix-run/react";
-import { FC } from "react";
-import styles from "~/styles/routes/alerts.create_alert.css";
+import type { ActionArgs, LinksFunction } from "@remix-run/server-runtime";
 import {
-  AsyncCreatableSelect,
-  AsyncSelect,
-  CreatableSelect,
-  Select,
-} from "chakra-react-select";
-import {
-  ActionArgs,
-  LinksFunction,
   unstable_composeUploadHandlers,
   unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
 } from "@remix-run/server-runtime";
-import { z } from "zod";
-import { getUser } from "~/session.server";
-import { prisma } from "~/db.server";
-import { unstable_createFileUploadHandler } from "@remix-run/node";
+import { Select } from "chakra-react-select";
 import { nanoid } from "nanoid";
+import type { FC } from "react";
+import { z } from "zod";
+import { prisma } from "~/db.server";
+import styles from "~/styles/routes/alerts.create_alert.css";
 
 export const link: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
 export const handle = {
   title: () => <Heading>Generate Alert</Heading>,
 };
+
 const AlertSchema = z.object({
   region: z.string(), // TODO : z.arrary(z.string())
   alert_type: z.string(),
@@ -60,7 +55,7 @@ export async function action({ request }: ActionArgs) {
           name: data.region,
         },
       },
-      alertType: data.alert_type,
+      alertType: data.alert_type as AlertType,
       details: data.details,
       imagePath: data.alert_image?.filepath,
       affectedCrops: {
