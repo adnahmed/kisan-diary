@@ -3,7 +3,7 @@
     "tasks": [
         {
             "type": "npm",
-            "label": "Start dev-server",
+            "label": "dev",
             "group": {
                 "kind": "build",
                 "isDefault": true
