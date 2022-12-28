@@ -7,9 +7,37 @@
         {
             "type": "msedge",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Client",
             "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}",
+            "webRoot": "${workspaceFolder}/public/build",
+            "sourceMaps": true,
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Server",
+            "cwd": "${workspaceFolder}/build",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ]
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Server/Client",
+            "configurations": [
+                "Server",
+                "Client",
+            ],
+            "stopAll": true
         }
     ]
 }

@@ -27,13 +27,13 @@ model User {
 }
 
 model Alert {
-  id            String    @id @default(cuid())
-  region        Region    @relation(fields: [regionName], references: [name])
-  alertType     AlertType
-  details       String
-  affectedCrops Crop[]
-  imagePath     String?
-  regionName    String
+  id              String    @id @default(cuid())
+  alertType       AlertType
+  details         String
+  affectedCrops   Crop[]
+  affectedRegions Region[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 enum AlertType {
@@ -77,13 +77,12 @@ model Farm {
 }
 
 model Crop {
-  id      String  @id @default(cuid())
-  name    String  @unique
-  picture String
-  Farm    Farm?   @relation(fields: [farmId], references: [id])
-  farmId  String?
-  Alert   Alert?  @relation(fields: [alertId], references: [id])
-  alertId String?
+  id          String  @id @default(cuid())
+  name        String  @unique
+  picture     String?
+  coveredLand Int
+  farms       Farm[]
+  alerts      Alert[]
 }
 
 enum IrrigationSource {
