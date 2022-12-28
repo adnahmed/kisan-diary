@@ -1,21 +1,21 @@
-import { Button, Heading, Textarea } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import type { AlertType } from "@prisma/client";
 import { unstable_createFileUploadHandler } from "@remix-run/node";
-import { Form } from "@remix-run/react";
 import type { ActionArgs, LinksFunction } from "@remix-run/server-runtime";
 import {
   unstable_composeUploadHandlers,
   unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
 } from "@remix-run/server-runtime";
-import { Select } from "chakra-react-select";
+
 import { nanoid } from "nanoid";
 import type { FC } from "react";
 import { z } from "zod";
+import AlertCreateEditor from "~/components/pages/Expert/AlertCreateEditor";
 import { prisma } from "~/db.server";
 import styles from "~/styles/routes/alerts.create_alert.css";
-
 export const link: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
+
 export const handle = {
   title: () => <Heading>Generate Alert</Heading>,
 };
@@ -35,7 +35,7 @@ export async function action({ request }: ActionArgs) {
     unstable_createFileUploadHandler({
       maxPartSize: 5_000_000,
       file: ({ filename }) => `${nanoid()}_${filename}`,
-      directory: "public/alerts",
+      directory: "/public/images",
     }),
     unstable_createMemoryUploadHandler()
   );
@@ -67,6 +67,7 @@ export async function action({ request }: ActionArgs) {
     },
   });
 }
+
 /*
 Alert: Tomorrow will be raining. Don't apply irrigation in your field.
 Recommendation: Apply urea as per the rate of 50kg per acre.
@@ -74,68 +75,9 @@ Recommendation: Apply urea as per the rate of 50kg per acre.
 interface CreateAlertProps {}
 const CreateAlert: FC<CreateAlertProps> = (props) => {
   return (
-    <div className="CreateAlert grid grid-cols-12">
-      <header className="flex justify-around grid-rows-1 col-span-12">
-        <Heading>Generate Alert</Heading>
-      </header>
-      <main className="grid-rows-2 col-start-3 col-span-7 m-11">
-        <Form encType="multipart/form-data" method="post" data-netlify="true">
-          <label className="flex items-center gap-2 m-4">
-            <span>Region</span>
-            <Select
-              isMulti
-              options={[
-                {
-                  label: "Sargodha",
-                  value: "sargodha",
-                },
-                {
-                  label: "Sahiwal",
-                  value: "sahiwal",
-                },
-              ]}
-              name="region"
-            />
-          </label>
-          <label className="flex items-center gap-2 m-4">
-            <span>Alert Type</span>
-            <select name="type">
-              <option value="recommendation">Recommendation</option>
-              <option value="alert">Alert</option>
-            </select>
-          </label>
-          <label className="flex items-center gap-2 m-4">
-            <span>Details</span>
-            <Textarea name="details" />
-          </label>
-          <label className="flex items-center gap-2 m-4">
-            <span>Affected Crops</span>
-            <Select
-              isMulti
-              name="affected_crops"
-              options={[
-                {
-                  label: "Potato",
-                  value: "potato",
-                },
-                {
-                  label: "Tomato",
-                  value: "tomato",
-                },
-              ]}
-            />
-          </label>
-          <label className="m-4">
-            Attach Image
-            <input
-              name="alert_image"
-              accept="image/png, image/jpeg"
-              type="file"
-            />
-          </label>
-          <Button type="submit">Send</Button>
-        </Form>
-      </main>
+    <div>
+      <h1>Create Alert</h1>
+      <AlertCreateEditor />
     </div>
   );
 };

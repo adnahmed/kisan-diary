@@ -1,8 +1,10 @@
 import type { Role } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import type UserCreateInput from '../app/types/UserCreateInput';
+import type AlertCreateInput from "~/types/AlertCreateInput";
+import type CropCreateInput from "~/types/CropCreateInput";
 import type FarmCreateInput from '../app/types/FarmCreateInput';
+import type UserCreateInput from '../app/types/UserCreateInput';
 
 const prisma = new PrismaClient();
 
@@ -32,6 +34,23 @@ const farm: FarmCreateInput = {
   machinery: ['Tractor', 'Leveler'],
   irrigation_source: ['Canal']
 }
+const crops: CropCreateInput[] = [
+  {
+    name: 'Potato',
+    picture: null,
+    coveredLand: 10
+  },
+  {
+    name: 'Maize',
+    picture: null,
+    coveredLand: 8
+  }
+]
+
+const alert: AlertCreateInput = {
+  alertType: 'alert',
+  details: 'All your Crops are belong to us!'
+}
 
 async function seed() {
   // cleanup the existing database
@@ -41,14 +60,16 @@ async function seed() {
   await prisma.farm.delete({ where: { name: farm.name } }).catch(() => {
     // no worries if it doesn't exist yet
   });
+
   const hashedPassword = await bcrypt.hash("password", 10);
+
   const regionInput = (entity: { region: string }) => ({
     connectOrCreate: {
       create: { name: entity.region },
       where: { name: entity.region }
     }
-
   })
+
   const prismaUserData = (user: UserCreateInput) => ({
     ...user,
     region: regionInput(user),
@@ -59,6 +80,7 @@ async function seed() {
     },
 
   })
+
   const prismaFarmData = {
     ...farm,
     user: {
@@ -81,6 +103,54 @@ async function seed() {
   await prisma.farm.create({
     data: prismaFarmData
   })
+
+  await prisma.crop.createMany({
+    data: crops
+  })
+
+  // Add Potato To Farm
+  await prisma.crop.update({
+    where: {
+      name: crops[0].name
+    }, data: {
+      farms: {
+        connect: {
+          name: farm.name
+        }
+      },
+    }
+  })
+
+  // Add Maize To Farm
+  await prisma.crop.update({
+    where: {
+      name: crops[1].name
+    }, data: {
+      farms: {
+        connect: {
+          name: farm.name
+        }
+      }
+    }
+  })
+
+  // Connect Alert to Potato
+  await prisma.alert.create({
+    data: {
+      ...alert,
+      affectedCrops: {
+        connect: {
+          name: crops[0].name
+        }
+      },
+      affectedRegions: {
+        connect: {
+          name: farmer.region
+        }
+      }
+    }
+  })
+
   console.log(`Database has been seeded. 🌱`);
 }
 

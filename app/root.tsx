@@ -21,6 +21,8 @@ import roboto300 from "@fontsource/roboto/300.css";
 import roboto400 from "@fontsource/roboto/400.css";
 import roboto500 from "@fontsource/roboto/500.css";
 import roboto700 from "@fontsource/roboto/700.css";
+import quillBubbleTheme from "quill/dist/quill.bubble.css";
+import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
@@ -28,8 +30,9 @@ import tailwindStylesheetUrl from "./styles/tailwind.css";
 import theme from "./styles/theme";
 export const links: LinksFunction = () => {
   return [
+    { rel: "stylesheet", href: quillSnowTheme },
+    { rel: "stylesheet", href: quillBubbleTheme },
     { rel: "stylesheet", href: tailwindStylesheetUrl },
-
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
     { rel: "preconnect", href: "https://fonts.gstatic.com" },
     {
