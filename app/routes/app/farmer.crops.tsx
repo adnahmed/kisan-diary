@@ -1,23 +1,19 @@
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Link } from "@chakra-ui/react";
+import type { User } from "@prisma/client";
 import { json, redirect } from "@remix-run/node";
+import { Outlet, Link as RemixLink, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
+import { z } from "zod";
+import Form from "~/components/form/form";
+import GlowyButton from "~/components/glowy_button";
 import { prisma } from "~/db.server";
 import { getUser } from "~/session.server";
-import { z } from "zod";
-import { inputFromFormData } from "domain-functions";
-import type { User } from "@prisma/client";
-import { Link as RemixLink } from "@remix-run/react";
-import { Link } from "@chakra-ui/react";
-import { useState } from "react";
-import GlowyButton from "~/components/glowy_button";
-import Form from "~/components/form/form";
 
 async function getFarmWithCrops(user: User) {
+  // TODO: return crops with farm
   return await prisma.farm.findUnique({
     where: {
       owner: user?.id,
-    },
-    include: {
-      crops: true,
     },
   });
 }
