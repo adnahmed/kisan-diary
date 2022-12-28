@@ -1,6 +1,7 @@
 import BetterTable from "quill-better-table";
 import ImageUploader from "quill-image-uploader";
 import MagicUrl from "quill-magic-url";
+import type { ForwardedRef } from "react";
 import React, { useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import saveToServer from "~/helpers/saveToServer.client";
@@ -60,22 +61,15 @@ interface EditorProps {
   ) => void;
 }
 const Editor = React.forwardRef(
-  (
-    {
-      placeholder = "Compose your text",
-      withTable = false, // TODO: work out a table icon with options ...
-      onChange,
-    }: EditorProps,
-    ref
-  ) => {
+  (props: EditorProps, ref: ForwardedRef<ReactQuill>) => {
     const [editorHtml, setEditorHtml] = useState("");
     return (
       <ReactQuill
         value={editorHtml}
         modules={defaultModules}
         formats={formats}
-        onChange={onChange}
-        placeholder={placeholder}
+        onChange={props.onChange}
+        placeholder={props.placeholder}
         ref={ref}
       />
     );
