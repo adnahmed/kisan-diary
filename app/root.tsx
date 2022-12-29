@@ -5,6 +5,10 @@ import {
   localStorageManager,
 } from "@chakra-ui/react";
 import { withEmotionCache } from "@emotion/react";
+import roboto300 from "@fontsource/roboto/300.css";
+import roboto400 from "@fontsource/roboto/400.css";
+import roboto500 from "@fontsource/roboto/500.css";
+import roboto700 from "@fontsource/roboto/700.css";
 import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
 import {
   Links,
@@ -13,21 +17,18 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from "@remix-run/react";
-import { ClientStyleContext, ServerStyleContext } from "./context";
-
-import roboto300 from "@fontsource/roboto/300.css";
-import roboto400 from "@fontsource/roboto/400.css";
-import roboto500 from "@fontsource/roboto/500.css";
-import roboto700 from "@fontsource/roboto/700.css";
 import quillBubbleTheme from "quill/dist/quill.bubble.css";
 import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
+import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import Layout from "./components/pages/Layout";
+import { ClientStyleContext, ServerStyleContext } from "./context";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import theme from "./styles/theme";
+
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: quillSnowTheme },
@@ -69,15 +70,6 @@ export const meta: MetaFunction = () => ({
   httpEquiv: "Content-Security-Policy",
   content: "default-src 'self'",
 });
-
-export async function loader({ request }: LoaderArgs) {
-  const cookies = request.headers.get("cookie") ?? "";
-  const user = await getUser(request);
-  return {
-    user,
-    cookies,
-  };
-}
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -127,9 +119,15 @@ const Document = withEmotionCache(
   }
 );
 
-export default function App() {
-  const { cookies } = useLoaderData<typeof loader>();
+export async function loader({ request }: LoaderArgs) {
+  return typedjson({
+    user: await getUser(request),
+    cookies: request.headers.get("cookie") ?? "",
+  });
+}
 
+export default function App() {
+  const { cookies, user } = useTypedLoaderData<typeof loader>();
   return (
     <Document>
       <ChakraProvider
@@ -140,7 +138,9 @@ export default function App() {
             : localStorageManager
         }
       >
-        <Outlet />
+        <Layout user={user}>
+          <Outlet />
+        </Layout>
       </ChakraProvider>
     </Document>
   );
