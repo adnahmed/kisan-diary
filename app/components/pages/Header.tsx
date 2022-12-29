@@ -1,14 +1,9 @@
-import { useMatches } from "@remix-run/react";
-import AuthMenu from "./AuthMenu";
-import FarmerNavBar from "./FarmerNavBar";
-import type { LoaderArgs } from "@remix-run/node";
+import { AuthenticatedMenu, UnauthenticatedMenu } from "./Auth";
+interface HeaderArgs {
+  isAuthenticated: Boolean;
+}
 
-export default function Header(props) {
-  const matches = useMatches();
-  const lastMatch = matches.slice(-1)[0];
-  const showFarmerNavbar = /farmer.*/.test(lastMatch.pathname);
-  const showAdminNavbar = /admin.*/.test(lastMatch.pathname);
-
+export default function Header({ isAuthenticated }: HeaderArgs) {
   return (
     <div className="flex flex-col gap-y-2">
       <div className="header">
@@ -16,13 +11,8 @@ export default function Header(props) {
         <a key="title" href="/" className="title">
           Kesan Diary
         </a>
-        <AuthMenu
-          key="authMenu"
-          isLoggedIn={props.isLoggedIn}
-          onOpenLogIn={props.onOpenLogIn}
-        />
+        {isAuthenticated ? <AuthenticatedMenu /> : <UnauthenticatedMenu />}
       </div>
-      {showFarmerNavbar && <FarmerNavBar />}
     </div>
   );
 }
