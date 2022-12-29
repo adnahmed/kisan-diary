@@ -1,5 +1,7 @@
 import { useMatches } from "@remix-run/react";
+import AuthMenu from "./AuthMenu";
 import FarmerNavBar from "./FarmerNavBar";
+import type { LoaderArgs } from "@remix-run/node";
 
 export default function Header(props) {
   const matches = useMatches();
