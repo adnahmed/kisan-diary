@@ -1,4 +1,3 @@
-import React from "react";
 import CellRow from "~/components/cell-row";
 export interface LandPreparationProps {}
 export default function LandPreparation(props: LandPreparationProps) {

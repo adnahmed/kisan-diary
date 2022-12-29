@@ -14,7 +14,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { Crop } from "~/models/Data/Crop";
+import type { Crop } from "~/models/Data/Crop";
 
 export default function Crops() {
   const [cropList, setCropsList] = useState<Crop[]>([]);
