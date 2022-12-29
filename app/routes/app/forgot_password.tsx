@@ -1,6 +1,7 @@
+import type { ActionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { z } from "zod";
 import Form from "~/components/form/form";
-import { ActionArgs, redirect } from "@remix-run/node";
 /*
     Return a consistent message for both existent and non-existent accounts.
     Ensure that the time taken for the user response message is uniform.
@@ -22,7 +23,7 @@ export async function action({ request }: ActionArgs) {
   const email = formData.get("email")?.toString();
 
   /* send jwt to email */
-  return redirect(`/app`, {
+  return redirect(`/`, {
     status: 302,
     headers: {
       RESET_EMAIL_SENT_TO: email ?? "",

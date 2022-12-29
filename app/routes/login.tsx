@@ -5,10 +5,10 @@ import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import React from "react";
 
 import { $path } from "remix-routes";
+import WithModal from "~/components/pages/WithModal";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/session.server";
 import { safeRedirect, validateEmail } from "~/utils";
-import WithModal from "../../components/pages/WithModal";
 
 export async function loader({ request }: LoaderArgs) {
   const user = await getUserId(request);
@@ -68,7 +68,7 @@ export function LoginPage() {
     }
   }, [actionData]);
   return (
-    <div className="flex min-h-full flex-col justify-center from-blue-500 from-blue-400 ">
+    <div className="flex min-h-full flex-col justify-center from-blue-400 ">
       <div className="mx-auto w-full max-w-md px-8 m-4 p-6 bg-green-200 backdrop-blur rounded-md">
         <Form
           method="post"
@@ -180,6 +180,6 @@ export default () => (
   <WithModal
     Body={<LoginPage />}
     Header={<span>Login</span>}
-    autoOpenUrl="/app/login"
+    autoOpenUrl="/login"
   />
 );

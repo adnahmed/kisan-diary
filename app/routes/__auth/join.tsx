@@ -5,16 +5,15 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { z } from "zod";
-import { InputError, makeDomainFunction } from "domain-functions";
-import { createUserSession, getUserId } from "~/session.server";
-import { createUser, getUserByEmail, User } from "~/models/user.server";
-import Form from "~/components/form/form";
-import { performMutation } from "remix-forms";
-import styles from "~/styles/routes/join.css";
-import { Link, UseNumberInputProps } from "@chakra-ui/react";
-import cleanString from "~/helpers/cleanString";
 import { useCatch } from "@remix-run/react";
+import { InputError, makeDomainFunction } from "domain-functions";
+import { performMutation } from "remix-forms";
+import { z } from "zod";
+import Form from "~/components/form/form";
+import cleanString from "~/helpers/cleanString";
+import { createUser, getUserByEmail } from "~/models/user.server";
+import { createUserSession, getUserId } from "~/session.server";
+import styles from "~/styles/routes/join.css";
 const schemaObject = {
   firstName: z.preprocess(cleanString, z.string()),
   lastName: z.preprocess(cleanString, z.string()),
@@ -57,7 +56,7 @@ export const action: ActionFunction = async ({ request }) => {
       request,
       userId: result.data.userId,
       remember: result.data.remember,
-      redirectTo: `/app/${result.data.role}`,
+      redirectTo: `/${result.data.role}`,
     });
   else return json(result, 400);
 };
