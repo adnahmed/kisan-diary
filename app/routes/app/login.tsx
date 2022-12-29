@@ -1,13 +1,14 @@
-import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { useSearchParams, useActionData, Link, Form } from "@remix-run/react";
-import React from "react";
 import { Link as ChakraLink } from "@chakra-ui/react";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
+import React from "react";
 
-import { verifyLogin } from "~/models/user.server";
-import { createUserSession, getUserId, getUser } from "~/session.server";
-import { safeRedirect, validateEmail } from "~/utils";
 import { $path } from "remix-routes";
+import { verifyLogin } from "~/models/user.server";
+import { createUserSession, getUserId } from "~/session.server";
+import { safeRedirect, validateEmail } from "~/utils";
+import WithModal from "../../components/pages/WithModal";
 
 export async function loader({ request }: LoaderArgs) {
   const user = await getUserId(request);
@@ -52,7 +53,7 @@ export async function action({ request }: ActionArgs) {
   });
 }
 
-export default function LoginPage() {
+export function LoginPage() {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/";
   const actionData = useActionData<typeof action>();
@@ -174,3 +175,11 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default () => (
+  <WithModal
+    Body={<LoginPage />}
+    Header={<span>Login</span>}
+    autoOpenUrl="/app/login"
+  />
+);
