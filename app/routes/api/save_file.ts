@@ -16,7 +16,7 @@ export async function action({ request }: ActionArgs) {
         const file = form.get('file')
         const filename = file?.filepath.split('\\').pop()
         return {
-            uploadedURL: `/${directory.split('/').pop()}/${filename}`
+            uploadedUrl: `/${directory.split('/').pop()}/${filename}`
         }
     } catch (err) {
         console.log(err)
