@@ -42,7 +42,7 @@ enum AlertType {
 }
 
 enum Role {
-  admin
+  expert
   farmer
 }
 
