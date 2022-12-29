@@ -1,3 +1,71 @@
 html {
   margin: 0.1em;
 }
+.page {
+  display: grid;
+  grid-template-columns: repeat(1fr, 12);
+}
+.header {
+  display: flex;
+  box-shadow: 3ex;
+  background-color: #368729;
+  background-repeat: repeat;
+  background-size: cover;
+  color: white;
+  position: sticky;
+  top: 0em;
+  z-index: 1;
+}
+
+.title {
+  margin: auto auto;
+  width: fit-content;
+  text-align: center;
+  font-size: 4em;
+  align-self: center;
+}
+
+.logo {
+  max-width: 20%;
+}
+
+footer > * {
+  background-color: rgb(54, 135, 41);
+  position: relative;
+  bottom: 0em;
+  color: white;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+}
+footer {
+  position: sticky;
+  margin-top: 100%;
+}
+.content-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.content-card {
+  border: 1px black solid;
+  width: 26em;
+  margin: 0.5em;
+  height: 20em;
+}
+.content-card img {
+  object-fit: contain;
+}
+
+.promo-bg {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin-top: 8em;
+  padding: 1em;
+  gap: 13em;
+}
+
+.layout > * {
+  border: 2px black solid;
+}
