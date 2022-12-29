@@ -34,7 +34,6 @@ specifiers:
   '@types/quill': ^2.0.10
   '@types/react': ^18.0.26
   '@types/react-dom': ^18.0.9
-  '@types/styled-components': ^5.1.26
   '@vercel/node': ^2.8.2
   bcryptjs: ^2.4.3
   chakra-cli: ^1.0.1
@@ -155,7 +154,6 @@ devDependencies:
   '@types/quill': 2.0.10
   '@types/react': 18.0.26
   '@types/react-dom': 18.0.9
-  '@types/styled-components': 5.1.26
   chakra-cli: 1.0.1
   cross-env: 7.0.3
   dotenv: 16.0.3
@@ -4156,13 +4154,6 @@ packages:
       '@types/unist': 2.0.6
     dev: true
 
-  /@types/hoist-non-react-statics/3.3.1:
-    resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
-    dependencies:
-      '@types/react': 18.0.26
-      hoist-non-react-statics: 3.3.2
-    dev: true
-
   /@types/http-cache-semantics/4.0.1:
     resolution: {integrity: sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ==}
     dev: true
@@ -4317,14 +4308,6 @@ packages:
     dependencies:
       '@types/glob': 7.2.0
       '@types/node': 18.11.17
-    dev: true
-
-  /@types/styled-components/5.1.26:
-    resolution: {integrity: sha512-KuKJ9Z6xb93uJiIyxo/+ksS7yLjS1KzG6iv5i78dhVg/X3u5t1H7juRWqVmodIdz6wGVaIApo1u01kmFRdJHVw==}
-    dependencies:
-      '@types/hoist-non-react-statics': 3.3.1
-      '@types/react': 18.0.26
-      csstype: 3.1.1
     dev: true
 
   /@types/unist/2.0.6:
@@ -8597,6 +8580,7 @@ packages:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
       react-is: 16.13.1
+    dev: false
 
   /hosted-git-info/2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
