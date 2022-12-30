@@ -60,11 +60,9 @@ const ExpertDashboard: FC<ExpertDashboardProps> = () => {
           }
           onClick={onOpenDrawer}
         />
-        {title || (
-          <Heading className="flex justify-around grow" size="lg">
-            Expert Dashboard
-          </Heading>
-        )}
+        <Heading className="flex justify-around grow" size="lg">
+          {title || <span>Expert Dashboard</span>}
+        </Heading>
       </div>
       <Drawer
         isOpen={isOpenDrawer}
