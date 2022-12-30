@@ -70,6 +70,7 @@ specifiers:
   react-tabs: ^6.0.0
   remix-flat-routes: ^0.5.1
   remix-forms: ^1.3.0
+  remix-params-helper: ^0.4.10
   remix-routes: ^1.0.0
   remix-typedjson: ^0.1.6
   remix-utils: ^5.1.0
@@ -129,6 +130,7 @@ dependencies:
   react-select: 5.7.0_ib3m5ricvtkl2cll7qpr2f6lvq
   react-tabs: 6.0.0_react@18.2.0
   remix-forms: 1.3.0_pklxn7ha73gsriyompsbnc3koe
+  remix-params-helper: 0.4.10_zod@3.20.2
   remix-routes: 1.0.0
   remix-typedjson: 0.1.6_3m33dq6deqstxnq3yr6mdtcgsu
   remix-utils: 5.1.0_ysknz5bmhxc5r7na47bnvgzmyu
@@ -12197,6 +12199,14 @@ packages:
       domain-functions: 1.4.0
       react: 18.2.0
       react-hook-form: 7.40.0_react@18.2.0
+      zod: 3.20.2
+    dev: false
+
+  /remix-params-helper/0.4.10_zod@3.20.2:
+    resolution: {integrity: sha512-1LZ1FjxCtPekg4a1R50aKA0uB2+668Wd2a0ld7LDrQ0bJ2TzijnCVr822cs8epziS6MG2bG8ZHMPDAR2t4PK+Q==}
+    peerDependencies:
+      zod: ^3.11.6
+    dependencies:
       zod: 3.20.2
     dev: false
 

@@ -3,11 +3,12 @@ import { Select } from "@chakra-ui/react";
 import type { LoaderArgs } from "@remix-run/node";
 import type { ForwardedRef } from "react";
 import React from "react";
+import { getParams } from "remix-params-helper";
 import { useTypedLoaderData } from "remix-typedjson";
+import { z } from "zod";
 import Heading from "~/components/form/heading";
 import WithModal from "~/components/pages/WithModal";
 import CABIButton from "../cabi-button";
-import { z } from "zod";
 interface CropTypeSelectionProps {
   onSelection: () => void;
 }
@@ -37,7 +38,8 @@ const ParamsSchema = z.object({
   type: z.string().min(-1).max(20),
 });
 export async function loader({ params }: LoaderArgs) {
-  const result = getParams;
+  const result = getParams(params, ParamsSchema);
+  // TODO: push result to page typed..
   return {};
 }
 
