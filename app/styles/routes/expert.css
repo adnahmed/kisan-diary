@@ -3,7 +3,7 @@
 }
 .dashboard {
   display: grid;
-  gap: 2em;
+  gap: 0.2em;
   grid-template-columns: repeat(12, 1fr);
 }
 
