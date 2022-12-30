@@ -8,11 +8,11 @@ import type UserCreateInput from '../app/types/UserCreateInput';
 
 const prisma = new PrismaClient();
 
-const admin: UserCreateInput = {
+const expert: UserCreateInput = {
   email: "admin@kisan.diary",
   firstName: 'Adnan',
   lastName: 'Ahmed',
-  role: 'admin' as Role,
+  role: 'expert' as Role,
   address: 'Wahdat Road Street No. 1, House No. 1',
   region: 'Sargodha'
 }
@@ -54,7 +54,7 @@ const alert: AlertCreateInput = {
 
 async function seed() {
   // cleanup the existing database
-  await prisma.user.deleteMany({ where: { email: { in: [admin.email, farmer.email] } } }).catch(() => {
+  await prisma.user.deleteMany({ where: { email: { in: [expert.email, farmer.email] } } }).catch(() => {
     // no worries if it doesn't exist yet
   });
   await prisma.farm.delete({ where: { name: farm.name } }).catch(() => {
@@ -93,7 +93,7 @@ async function seed() {
   }
 
   await prisma.user.create({
-    data: prismaUserData(admin)
+    data: prismaUserData(expert)
   });
 
   await prisma.user.create({
