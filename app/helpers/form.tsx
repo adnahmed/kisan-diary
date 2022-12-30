@@ -1,5 +1,5 @@
-import { compose, join, reject, isBoolean, isNil, flatten } from "lodash/fp";
 import type { HtmlMetaDescriptor } from "@remix-run/node";
+import { compose, flatten, isBoolean, isNil, join, reject } from "lodash/fp";
 
 const cx = (...args: unknown[]) =>
   compose(join(" "), reject(isBoolean), reject(isNil), flatten)(args);

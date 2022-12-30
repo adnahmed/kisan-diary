@@ -11,7 +11,6 @@ import {
 import { useMatches } from "@remix-run/react";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
-import { useOptionalUser } from "~/utils";
 
 interface ModalProps {
   autoOpenUrl?: String;
@@ -28,26 +27,17 @@ export default function WithModal({
   blockScroll = false,
   bg = "none",
 }: ModalProps) {
-  const user = useOptionalUser();
   const matches = useMatches();
-  const {
-    isOpen: isOpenLogIn,
-    onOpen: onOpenLogIn,
-    onClose: onCloseLogIn,
-  } = useDisclosure();
+  const lastMatch = matches.slice(-1)[0];
+  const { isOpen, onOpen, onClose } = useDisclosure();
   useEffect(() => {
     if (autoOpenUrl) {
-      const lastMatch = matches.slice(-1)[0];
-      if (lastMatch.pathname === autoOpenUrl) onOpenLogIn();
+      if (lastMatch.pathname === autoOpenUrl) onOpen();
     }
-  }, [autoOpenUrl, matches, onOpenLogIn, user]);
+  }, [autoOpenUrl, lastMatch.pathname, matches, onOpen]);
 
   return (
-    <Modal
-      blockScrollOnMount={blockScroll}
-      isOpen={isOpenLogIn}
-      onClose={onCloseLogIn}
-    >
+    <Modal blockScrollOnMount={blockScroll} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay bg={bg} />
       <ModalContent>
         <ModalHeader>{Header}</ModalHeader>
