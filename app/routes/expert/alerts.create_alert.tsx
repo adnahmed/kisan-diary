@@ -97,7 +97,7 @@ const CreateAlert: FC<CreateAlertProps> = (props) => {
     console.log(alert.data);
   }, [alert.data]);
   return (
-    <div>
+    <div className="col-start-1 col-span-12">
       <h1>Create Alert</h1>
       <ClientOnly
         fallback={

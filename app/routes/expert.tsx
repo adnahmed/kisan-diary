@@ -21,7 +21,7 @@ import type { FC } from "react";
 import { useRef } from "react";
 import { HiSpeakerWave } from "react-icons/hi2";
 import { getUser } from "~/session.server";
-import styles from "~/styles/routes/admin.css";
+import styles from "~/styles/routes/expert.css";
 export const links: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
 
 interface ExpertDashboardProps {}
