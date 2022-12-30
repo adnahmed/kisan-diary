@@ -24,7 +24,7 @@ import { getUser } from "~/session.server";
 import styles from "~/styles/routes/admin.css";
 export const links: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
 
-interface AdministratorDashboardProps {}
+interface ExpertDashboardProps {}
 
 export async function loader({ request }: LoaderArgs) {
   return {
@@ -32,7 +32,7 @@ export async function loader({ request }: LoaderArgs) {
   };
 }
 //  - Administrator adds recommended crops based on Land Description and Season.
-const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
+const ExpertDashboard: FC<ExpertDashboardProps> = () => {
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
@@ -62,7 +62,7 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
         />
         {title || (
           <Heading className="flex justify-around grow" size="lg">
-            Administrator Dashboard
+            Expert Dashboard
           </Heading>
         )}
       </div>
@@ -91,18 +91,20 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
                 <Button>Crops</Button>
               </Link>
               <Divider />
-              <div className="button manage_alerts">
-                <Button
-                  leftIcon={<HiSpeakerWave />}
-                  bg="cabi"
-                  color="white"
-                  border="1px"
-                  borderColor="cabi"
-                  _hover={{ bg: "wheat", color: "cabi" }}
-                >
-                  <Link to="alerts">Manage Alerts</Link>
-                </Button>
-              </div>
+              <Link to="alerts">
+                <div className="button manage_alerts">
+                  <Button
+                    leftIcon={<HiSpeakerWave />}
+                    bg="cabi"
+                    color="white"
+                    border="1px"
+                    borderColor="cabi"
+                    _hover={{ bg: "wheat", color: "cabi" }}
+                  >
+                    Manage Alerts
+                  </Button>
+                </div>
+              </Link>
             </Stack>
           </DrawerBody>
         </DrawerContent>
@@ -112,4 +114,4 @@ const AdministratorDashboard: FC<AdministratorDashboardProps> = () => {
   );
 };
 
-export default AdministratorDashboard;
+export default ExpertDashboard;

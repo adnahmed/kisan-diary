@@ -16,7 +16,7 @@ function useNavBar(user?: User) {
   switch (user.role) {
     case Role.farmer:
       return <FarmerNavBar />;
-    case Role.admin:
+    case Role.expert:
       return <ExpertNavBar />;
   }
 }

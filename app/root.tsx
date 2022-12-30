@@ -10,6 +10,7 @@ import roboto400 from "@fontsource/roboto/400.css";
 import roboto500 from "@fontsource/roboto/500.css";
 import roboto700 from "@fontsource/roboto/700.css";
 import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -120,6 +121,9 @@ const Document = withEmotionCache(
 );
 
 export async function loader({ request }: LoaderArgs) {
+  const user = await getUser(request);
+  if (user && new URL(request.url).pathname === "/")
+    return redirect(`/${user.role}`);
   return typedjson({
     user: await getUser(request),
     cookies: request.headers.get("cookie") ?? "",

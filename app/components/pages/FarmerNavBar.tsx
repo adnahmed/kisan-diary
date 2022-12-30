@@ -3,7 +3,7 @@ import { useMatches } from "@remix-run/react";
 import slugify from "slugify";
 export default function FarmerNavBar() {
   const matches = useMatches();
-  const dashboardPath = "/app/farmer/";
+  const dashboardPath = "/farmer/";
   const lastMatch = matches.slice(-1)[0];
   const menu = [
     "Home",

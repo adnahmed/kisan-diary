@@ -49,7 +49,7 @@ export async function action({ request }: ActionArgs) {
     request,
     userId: user.id,
     remember: remember === "on" ? true : false,
-    redirectTo: safeRedirect($path(`/app/${user.role}/home`), "/"),
+    redirectTo: safeRedirect($path(`/${user.role}/home`), "/"),
   });
 }
 

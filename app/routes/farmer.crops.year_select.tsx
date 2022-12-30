@@ -1,20 +1,20 @@
 import {
   Card,
+  CardBody,
   CardHeader,
   Heading,
-  CardBody,
   Modal,
-  ModalContent,
-  ModalOverlay,
-  ModalHeader,
-  ModalCloseButton,
   ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
+import type { LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import CABIButton from "~/components/cabi-button";
-import type { LoaderArgs } from "@remix-run/node";
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
@@ -30,7 +30,7 @@ export function YearSelectionCard() {
         <Heading size={"md"}>Please select an year.</Heading>
         <CardBody>
           <Link
-            to={`/app/farmer/crop?name=${
+            to={`/farmer/crop?name=${
               data.crop
             }?year=${new Date().getFullYear()}`}
           >
