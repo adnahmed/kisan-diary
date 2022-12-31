@@ -23,6 +23,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "sourceMaps": true,
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run",
