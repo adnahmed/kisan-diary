@@ -1,29 +1,23 @@
+import { EditIcon } from "@chakra-ui/icons";
+import type { ActionFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { useActionData, useCatch, useLoaderData } from "@remix-run/react";
+import { makeDomainFunction } from "domain-functions";
 import type { FC } from "react";
 import { useState } from "react";
-import { z } from "zod";
-import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { makeDomainFunction } from "domain-functions";
-import { prisma } from "~/db.server";
-import Form from "~/components/form/form";
-import { useActionData, useCatch, useLoaderData } from "@remix-run/react";
-import { getSession, getUser } from "~/session.server";
-import type { User } from "@prisma/client";
-import React from "react";
-import SaveButton from "~/components/form/SaveButton";
 import { performMutation } from "remix-forms";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import type { LoaderArgs, ActionFunction, MetaFunction } from "@remix-run/node";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
-import type FarmCreateInput from "../../types/FarmCreateInput";
-import { Center, Icon, IconButton } from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
-import Input from "~/components/form/input";
+import { z } from "zod";
+import SaveButton from "~/components/form/SaveButton";
 import DisabledInput from "~/components/form/disabled-input";
-import InputWrapper from "~/components/form/input-wrapper";
-import DisabledSelect from "~/components/form/disabled-select";
-import Select from "~/components/form/select";
 import DisabledSaveButton from "~/components/form/disabled-save-button";
+import DisabledSelect from "~/components/form/disabled-select";
+import Form from "~/components/form/form";
+import Input from "~/components/form/input";
+import Select from "~/components/form/select";
+import { prisma } from "~/db.server";
+import fetchFarm from "~/models/farm.server";
+import { getUser } from "~/session.server";
+import type FarmCreateInput from "~/types/FarmCreateInput";
 export interface GeneralInformationProps {}
 // TODO: move into action
 // TODO: Fetch data from data store e.g. prisma
@@ -71,26 +65,17 @@ const farmInformationMutation = makeDomainFunction(
       },
     },
   };
-
-  try {
-    const farm = await prisma.farm.upsert({
-      where: { name: values.farmName },
-      update: prismaFarmInput,
-      create: prismaFarmInput,
-    });
-    return farm;
-  } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code === "P2002" && error.message.includes("owner"))
-        throw new Error("Farm Name already taken");
-    }
-    throw error;
-  }
+  const farm = await prisma.farm.upsert({
+    where: { name: values.farmName },
+    update: prismaFarmInput,
+    create: prismaFarmInput,
+  });
+  return farm;
 });
 
 export const action: ActionFunction = async ({ request }) => {
-  const user = (await getUser(request)) as User;
-  const session = await getSession(request);
+  const user = await getUser(request);
+  if (!user) throw new Response("User was not found");
   const result = await performMutation({
     request,
     schema: FarmInformationSchema,
@@ -128,24 +113,18 @@ export function CatchBoundary() {
     </div>
   );
 }
-
+export const id: string = "farm_information";
 export async function loader({ request }: LoaderArgs) {
-  const session = await getSession(request);
   const user = await getUser(request);
-  // if (!user || !session) throw redirect("/");
-  return typedjson({
-    farm:
-      (await prisma.farm.findUnique({
-        where: {
-          owner: user.id,
-        },
-      })) || undefined,
+  if (!user) throw new Response("Unable to Fetch Farm Information");
+  return json({
+    farm: await fetchFarm(user),
   });
 }
 
 const GeneralInformation: FC<GeneralInformationProps> = () => {
   const actionData = useActionData<typeof action>();
-  const { farm } = useTypedLoaderData<typeof loader>();
+  const { farm } = useLoaderData<typeof loader>();
   const [showEdit, setShowEdit] = useState(farm !== undefined);
 
   return (
@@ -169,22 +148,15 @@ const GeneralInformation: FC<GeneralInformationProps> = () => {
             />
           </div>
           <Form
-            inputComponent={
-              farm !== undefined && showEdit ? DisabledInput : Input
-            }
-            selectComponent={
-              farm !== undefined && showEdit ? DisabledSelect : Select
-            }
-            buttonComponent={
-              farm !== undefined && showEdit ? DisabledSaveButton : SaveButton
-            }
+            inputComponent={farm && showEdit ? DisabledInput : Input}
+            selectComponent={farm && showEdit ? DisabledSelect : Select}
+            buttonComponent={farm && showEdit ? DisabledSaveButton : SaveButton}
             schema={FarmInformationSchema}
             values={{
               farmName: farm?.name ?? "",
               region: farm?.regionName ?? "",
             }}
           />
-
           {actionData && actionData.error}
         </div>
       </main>
@@ -202,7 +174,5 @@ const GeneralInformation: FC<GeneralInformationProps> = () => {
         })} }
       </div>
       <button type="submit">Save</button>
-
-
 */
 export default GeneralInformation;
