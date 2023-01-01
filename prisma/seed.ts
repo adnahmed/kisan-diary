@@ -3,8 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import type AlertCreateInput from "~/types/AlertCreateInput";
 import type CropCreateInput from "~/types/CropCreateInput";
+import type { UserCreateInput } from "~/types/User";
 import type FarmCreateInput from '../app/types/FarmCreateInput';
-import type UserCreateInput from '../app/types/UserCreateInput';
 
 const prisma = new PrismaClient();
 
@@ -31,6 +31,7 @@ const farm: FarmCreateInput = {
   region: 'Sialkot',
   total_land: 20,
   land_type: 'Nehri',
+
   machinery: ['Tractor', 'Leveler'],
   irrigation_source: ['Canal']
 }

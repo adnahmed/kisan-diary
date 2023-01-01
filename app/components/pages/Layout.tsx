@@ -1,17 +1,17 @@
-import type { User } from "@prisma/client";
 import { Role } from "@prisma/client";
 import type { ReactNode } from "react";
+import type { UserResult } from "../../types/User";
 import ExpertNavBar from "./ExpertNavBar";
 import FarmerNavBar from "./FarmerNavBar";
 import Footer from "./Footer";
 import Header from "./Header";
 
 interface LayoutProps {
-  user?: User;
+  user?: UserResult;
   children: ReactNode;
 }
 
-function useNavBar(user?: User) {
+function useNavBar(user?: UserResult) {
   if (!user) return <></>;
   switch (user.role) {
     case Role.farmer:

@@ -1,3 +1,3 @@
 export default function ExpertNavBar() {
-  return <div></div>;
+  return <div className="navbar"></div>;
 }

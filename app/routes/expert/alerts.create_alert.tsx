@@ -26,12 +26,24 @@ export async function action({ request }: ActionArgs) {
   if (!type || !(type.toString() in AlertType))
     return new Response("Invalid Alert Type", { status: 401 });
   if (!details) throw new Response("Details not provided", { status: 401 });
+  const connectWithCrops = crops.map((crop) => ({ name: crop as string }));
+  const connectWithRegions = regions.map((region) => ({
+    name: region as string,
+  }));
+
   await prisma.alert.create({
     data: {
       details: details as string,
       alertType: type as AlertType,
+      affectedCrops: {
+        connect: connectWithCrops,
+      },
+      affectedRegions: {
+        connect: connectWithRegions,
+      },
     },
   });
+
   return json(`Alert Saved Successfully`);
 }
 
@@ -85,7 +97,6 @@ const CreateAlert: FC<CreateAlertProps> = (props) => {
       formData.append("region", selectedOption.value);
     const currentRef = editorRef?.current;
     const editor = currentRef?.getEditor();
-    editor?.blur();
     const contents = editor?.getContents();
     const jsonifiedContents = JSON.stringify(contents);
     formData.append("details", jsonifiedContents);

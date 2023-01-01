@@ -1,7 +1,8 @@
 import { EditIcon } from "@chakra-ui/icons";
-import type { ActionFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { Box } from "@chakra-ui/react";
+import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useActionData, useCatch, useLoaderData } from "@remix-run/react";
+import { useActionData, useCatch } from "@remix-run/react";
 import { makeDomainFunction } from "domain-functions";
 import type { FC } from "react";
 import { useState } from "react";
@@ -15,9 +16,9 @@ import Form from "~/components/form/form";
 import Input from "~/components/form/input";
 import Select from "~/components/form/select";
 import { prisma } from "~/db.server";
-import fetchFarm from "~/models/farm.server";
 import { getUser } from "~/session.server";
 import type FarmCreateInput from "~/types/FarmCreateInput";
+import { useOptionalFarm } from "../components/hooks/useOptionalFarm";
 export interface GeneralInformationProps {}
 // TODO: move into action
 // TODO: Fetch data from data store e.g. prisma
@@ -114,23 +115,20 @@ export function CatchBoundary() {
   );
 }
 export const id: string = "farm_information";
-export async function loader({ request }: LoaderArgs) {
-  const user = await getUser(request);
-  if (!user) throw new Response("Unable to Fetch Farm Information");
-  return json({
-    farm: await fetchFarm(user),
-  });
-}
 
 const GeneralInformation: FC<GeneralInformationProps> = () => {
   const actionData = useActionData<typeof action>();
-  const { farm } = useLoaderData<typeof loader>();
+  const farm = useOptionalFarm();
   const [showEdit, setShowEdit] = useState(farm !== undefined);
 
   return (
     <div className="flex flex-col gap-5 ">
       <header className="place-self-center text-2xl">Farm Information</header>
-      <main className="w-1/2 place-self-center border p-5 rounded-md">
+      <Box
+        backgroundColor={"cabi"}
+        color={"wheat"}
+        className="w-1/2 place-self-center border p-5 rounded-md farm_information__information"
+      >
         <div className="flex flex-col">
           <div
             className="w-6 h-6 self-end"
@@ -140,7 +138,7 @@ const GeneralInformation: FC<GeneralInformationProps> = () => {
               aria-label="edit"
               bg="cabi"
               color="wheat"
-              boxSize={"1"}
+              size={"md"}
               _hover={{
                 color: "cabi",
                 bg: "wheat",
@@ -155,11 +153,12 @@ const GeneralInformation: FC<GeneralInformationProps> = () => {
             values={{
               farmName: farm?.name ?? "",
               region: farm?.regionName ?? "",
+              irrigationSource: farm?.irrigation_source ?? "",
             }}
           />
           {actionData && actionData.error}
         </div>
-      </main>
+      </Box>
     </div>
   );
 };

@@ -10,7 +10,7 @@ import roboto400 from "@fontsource/roboto/400.css";
 import roboto500 from "@fontsource/roboto/500.css";
 import roboto700 from "@fontsource/roboto/700.css";
 import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -18,11 +18,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import quillBubbleTheme from "quill/dist/quill.bubble.css";
 import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
 import { getUser } from "./session.server";
@@ -93,7 +93,7 @@ const Document = withEmotionCache(
       });
       // reset cache to reapply global styles
       clientStyleData?.reset();
-    }, []);
+    }, [clientStyleData, emotionCache.sheet]);
 
     return (
       <html lang="en">
@@ -124,14 +124,14 @@ export async function loader({ request }: LoaderArgs) {
   const user = await getUser(request);
   if (user && new URL(request.url).pathname === "/")
     return redirect(`/${user.role}`);
-  return typedjson({
+  return json({
     user: await getUser(request),
-    cookies: request.headers.get("cookie") ?? "",
+    cookies: request.headers.get("cookie"),
   });
 }
 
 export default function App() {
-  const { cookies, user } = useTypedLoaderData<typeof loader>();
+  const { cookies, user } = useLoaderData<typeof loader>();
   return (
     <Document>
       <ChakraProvider

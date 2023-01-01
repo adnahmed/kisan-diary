@@ -10,11 +10,12 @@ const DisabledInput = React.forwardRef<
     type={type}
     disabled
     className={cx(
-      "block border-none w-full rounded-md outline-none text-[rgb(54,135,41)]shadow-sm sm:text-sm",
+      "block border-none w-full rounded-mda bg-yellow-400 outline-none text-[rgb(54,135,41)] shadow-sm sm:text-sm",
       className
     )}
     {...props}
   />
 ));
+DisabledInput.displayName = "Disabled Input";
 
 export default DisabledInput;

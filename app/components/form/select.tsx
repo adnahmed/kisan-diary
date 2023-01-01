@@ -15,5 +15,5 @@ const Select = React.forwardRef<
     {...props}
   />
 ));
-
+Select.displayName = "Select";
 export default Select;

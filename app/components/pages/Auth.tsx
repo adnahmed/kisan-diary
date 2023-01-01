@@ -1,4 +1,5 @@
 import { Form, Link } from "@remix-run/react";
+
 export function UnauthenticatedMenu() {
   return (
     <div>
@@ -7,10 +8,13 @@ export function UnauthenticatedMenu() {
     </div>
   );
 }
+
 export function AuthenticatedMenu() {
   return (
-    <Form method="post" action="/logout" data-netlify="true">
-      <button type="submit">Logout</button>
-    </Form>
+    <div>
+      <Form method="post" action="/logout" data-netlify="true">
+        <button type="submit">Logout</button>
+      </Form>
+    </div>
   );
 }

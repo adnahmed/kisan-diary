@@ -9,6 +9,11 @@
             "request": "launch",
             "name": "Client",
             "url": "http://localhost:3000",
+            "outFiles": [
+                "${workspaceFolder}/build/**",
+                "${workspaceFolder}/public/build/**",
+                "!**/node_modules/**"
+            ],
             "webRoot": "${workspaceFolder}/public/build",
             "sourceMaps": true,
             "skipFiles": [
@@ -20,6 +25,10 @@
             "request": "launch",
             "name": "Server",
             "cwd": "${workspaceFolder}/build",
+            "outFiles": [
+                "${workspaceFolder}/build/**",
+                "!**/node_modules/**"
+            ],
             "skipFiles": [
                 "<node_internals>/**"
             ],

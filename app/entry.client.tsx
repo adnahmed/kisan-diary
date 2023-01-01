@@ -1,9 +1,9 @@
-import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode, useState } from "react";
-import { cacheAssets } from "remix-utils";
-import { hydrateRoot } from "react-dom/client";
-import { ClientStyleContext } from "./context";
 import { CacheProvider } from "@emotion/react";
+import { RemixBrowser } from "@remix-run/react";
+import { startTransition, useState } from "react";
+import { hydrateRoot } from "react-dom/client";
+import { cacheAssets } from "remix-utils";
+import { ClientStyleContext } from "./context";
 import createEmotionCache, { defaultCache } from "./createEmotionCache";
 
 cacheAssets().catch((error) => {
@@ -26,6 +26,7 @@ function ClientCacheProvider({ children }: ClientCacheProviderProps) {
     </ClientStyleContext.Provider>
   );
 }
+
 const hydrate = () => {
   startTransition(() => {
     hydrateRoot(

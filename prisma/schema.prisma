@@ -4,11 +4,12 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
 }
 
 model User {
-  id        String @id @default(cuid())
+  id        String @id @default(uuid())
   email     String @unique
   firstName String
   lastName  String
@@ -21,19 +22,29 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  password   Password?
-  Farm       Farm[]
-  regionName String
+  password    Password?
+  Farm        Farm[]
+  regionName  String
+  ReadReciept ReadReciept[]
 }
 
 model Alert {
-  id              String    @id @default(cuid())
+  id              String        @id @default(uuid())
   alertType       AlertType
   details         String
   affectedCrops   Crop[]
   affectedRegions Region[]
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  ReadReciept     ReadReciept[]
+}
+
+model ReadReciept {
+  id      String @id @default(uuid())
+  readBy  User   @relation(fields: [userId], references: [id])
+  alert   Alert  @relation(fields: [alertId], references: [id])
+  userId  String
+  alertId String
 }
 
 enum AlertType {
@@ -61,7 +72,7 @@ model Password {
 }
 
 model Farm {
-  id                String             @id @default(cuid())
+  id                String             @id @default(uuid())
   name              String             @unique
   region            Region             @relation(fields: [regionName], references: [name])
   user              User               @relation(fields: [owner], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -77,7 +88,7 @@ model Farm {
 }
 
 model Crop {
-  id          String  @id @default(cuid())
+  id          String  @id @default(uuid())
   name        String  @unique
   picture     String?
   coveredLand Int
@@ -91,14 +102,14 @@ enum IrrigationSource {
 }
 
 model City {
-  id      String  @id @default(cuid())
+  id      String  @id @default(uuid())
   name    String
   country Country @relation(fields: [from], references: [name], onDelete: Cascade, onUpdate: Cascade)
   from    String
 }
 
 model Country {
-  id   String @id @default(cuid())
+  id   String @id @default(uuid())
   name String @unique
   City City[]
 }
