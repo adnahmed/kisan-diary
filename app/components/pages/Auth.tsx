@@ -1,10 +1,15 @@
 import { Form, Link } from "@remix-run/react";
+import CABIButton from "../cabi-button";
 
 export function UnauthenticatedMenu() {
   return (
-    <div>
-      <Link to="/join">Sign Up</Link>
-      <Link to="/login">Log In</Link>
+    <div className="layout__menu menu__authentication">
+      <Link to="/join">
+        <CABIButton invert={true}>Sign Up</CABIButton>
+      </Link>
+      <Link to="/login">
+        <CABIButton invert={true}>Log In</CABIButton>
+      </Link>
     </div>
   );
 }

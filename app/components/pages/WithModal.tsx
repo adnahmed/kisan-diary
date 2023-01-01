@@ -13,6 +13,7 @@ import type { ReactNode } from "react";
 import { useEffect } from "react";
 
 interface ModalProps {
+  onOpenWhen?: boolean;
   autoOpenUrl?: String;
   Header?: ReactNode;
   Body?: ReactNode;
@@ -21,6 +22,7 @@ interface ModalProps {
 }
 
 export default function WithModal({
+  onOpenWhen,
   autoOpenUrl,
   Header,
   Body,
@@ -31,17 +33,21 @@ export default function WithModal({
   const lastMatch = matches.slice(-1)[0];
   const { isOpen, onOpen, onClose } = useDisclosure();
   useEffect(() => {
-    if (autoOpenUrl) {
-      if (lastMatch.pathname === autoOpenUrl) onOpen();
-    }
-  }, [autoOpenUrl, lastMatch.pathname, matches, onOpen]);
+    if (autoOpenUrl && lastMatch.pathname === autoOpenUrl) onOpen();
+    if (onOpenWhen) onOpen();
+  }, [autoOpenUrl, lastMatch.pathname, matches, onClose, onOpen, onOpenWhen]);
 
   return (
-    <Modal blockScrollOnMount={blockScroll} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      closeOnEsc={true}
+      blockScrollOnMount={blockScroll}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <ModalOverlay bg={bg} />
       <ModalContent>
-        <ModalHeader>{Header}</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader borderColor={"white"}>{Header}</ModalHeader>
+        <ModalCloseButton color={"white"} />
         <ModalBody>{Body}</ModalBody>
       </ModalContent>
     </Modal>

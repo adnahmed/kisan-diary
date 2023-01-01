@@ -27,8 +27,8 @@ export default function Layout({ user, children }: LayoutProps) {
     <div className="layout">
       <Header isAuthenticated={!!user} />
       {NavBar}
-      {children}
-      <Footer />;
+      <div className="layout__children">{children}</div>
+      <Footer />
     </div>
   );
 }

@@ -2,7 +2,7 @@ import type { Farm } from "@prisma/client";
 import { useMatchesData } from "~/utils";
 
 export function useOptionalFarm(): Farm | undefined {
-  const data = useMatchesData("routes/farmer");
+  const data = useMatchesData("root");
   if (!data || !isFarm(data.farm)) {
     return undefined;
   }

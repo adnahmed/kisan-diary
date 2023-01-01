@@ -1,13 +1,15 @@
 import { Button } from "@chakra-ui/react";
-import { ReactNode } from "react";
 export default function CABIButton({ children, ...props }) {
   return (
     <Button
-      bg="cabi"
-      color="white"
+      bg={props.invert ? "wheat" : "cabi"}
+      color={props.invert ? "cabi" : "white"}
       border="1px"
-      borderColor="cabi"
-      _hover={{ bg: "wheat", color: "cabi" }}
+      borderColor={props.invert ? "wheat" : "cabi"}
+      _hover={{
+        bg: props.invert ? "cabi" : "wheat",
+        color: props.invert ? "wheat" : "cabi",
+      }}
       {...props}
     >
       {children}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { loader } from "~/routes/api/unread_alerts";
 import NotificationMenuIcon from "../NotificationMenuIcon";
 import NotificationTooltip from "./NotificationTooltip";
+import WithModal from "./WithModal";
 export default function NotificationGroup() {
   const unread_alerts = useFetcher<typeof loader>();
   useEffect(() => {
@@ -17,11 +18,16 @@ export default function NotificationGroup() {
         onClick={() => setShowNotifications(!showNotifications)}
         unread_alerts={unread_alerts.data?.unread_alerts.length}
       />
-      <div className={`header__notification__box--`}>
-        {showNotifications && unread_alerts.data && (
-          <NotificationTooltip alerts={unread_alerts.data} />
-        )}
-      </div>
+      <WithModal
+        onOpenWhen={showNotifications}
+        Body={
+          <div>
+            {showNotifications && (
+              <NotificationTooltip alerts={unread_alerts.data} />
+            )}
+          </div>
+        }
+      />
     </div>
   );
 }
