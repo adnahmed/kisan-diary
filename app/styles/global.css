@@ -1,41 +1,48 @@
 html {
   font-size: 16px;
 }
+
 @media screen and (min-width: 320px) {
   html {
     font-size: calc(16px + 6 * ((100vw - 320px) / 680));
   }
 }
+
 @media screen and (min-width: 1000px) {
   html {
     font-size: 22px;
   }
 }
+
 body {
   font-size: clamp(100%, 1rem + 2vw, 24px);
 }
+
 html,
 body {
   overflow-x: hidden;
 }
+
 .page {
   display: grid;
   grid-template-columns: repeat(1fr, 12);
 }
-.header {
+
+header {
   display: flex;
+  grid-area: "header";
   box-shadow: 3ex;
   background-color: #368729;
   background-repeat: repeat;
   background-size: cover;
   color: white;
+  border: 2px white solid;
   position: sticky;
-  top: 0em;
-  z-index: 1;
+  inset-block-start: 0;
 }
 
 .title {
-  margin: auto auto;
+  margin: auto;
   width: fit-content;
   font-size: clamp(2.5rem, 3.2vw + 2rem, 4rem);
   text-align: center;
@@ -46,17 +53,15 @@ body {
   max-width: 20%;
 }
 
-footer > * {
-  background-color: rgb(54, 135, 41);
-  position: relative;
-  bottom: 0em;
+footer>* {
+  background-color: rgb(54 135 41);
   color: white;
-  margin-left: 0.1em;
-  margin-right: 0.1em;
 }
+
 footer {
   position: sticky;
 }
+
 .content-row {
   display: flex;
   align-items: center;
@@ -69,24 +74,38 @@ footer {
   margin: 0.5em;
   height: 20em;
 }
+
 .content-card img {
   object-fit: contain;
 }
 
 .promo-bg {
-  display: flex;
+  display: flex column;
   flex-wrap: wrap;
-  flex-direction: column;
-  margin-top: 8em;
+  margin-block-start: 8em;
   padding: 1em;
   gap: 13em;
 }
 
-.layout > * {
+.layout__children {
+  grid-area: "outlet";
+}
+
+.layout>* {
   border: 2px black solid;
 }
 
-navbar {
+.layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+}
+
+.layout__menu {
+  padding: 1rem;
+}
+
+.navbar {
   gap: 0.3rem;
 }
 
@@ -99,10 +118,11 @@ select:disabled {
   opacity: 1;
 }
 
-.farm_information__information > option {
+.farminfo__details>option {
   background: greenyellow;
 }
 
-header > * {
-  z-index: 10;
+.layout__menu .menu__authentication {
+  display: flex;
+  gap: 1em;
 }
