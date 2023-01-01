@@ -127,7 +127,7 @@ const GeneralInformation: FC<GeneralInformationProps> = () => {
       <Box
         backgroundColor={"cabi"}
         color={"wheat"}
-        className="w-1/2 place-self-center border p-5 rounded-md farm_information__information"
+        className="w-1/2 place-self-center border p-5 rounded-md farminfo__details"
       >
         <div className="flex flex-col">
           <div
@@ -138,7 +138,7 @@ const GeneralInformation: FC<GeneralInformationProps> = () => {
               aria-label="edit"
               bg="cabi"
               color="wheat"
-              size={"md"}
+              boxSize={"2em"}
               _hover={{
                 color: "cabi",
                 bg: "wheat",
