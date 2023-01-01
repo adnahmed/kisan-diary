@@ -25,6 +25,7 @@ import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
 import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
+import fetchFarm from "./models/farm.server";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
@@ -93,7 +94,7 @@ const Document = withEmotionCache(
       });
       // reset cache to reapply global styles
       clientStyleData?.reset();
-    }, [clientStyleData, emotionCache.sheet]);
+    }, []);
 
     return (
       <html lang="en">
@@ -127,6 +128,7 @@ export async function loader({ request }: LoaderArgs) {
   return json({
     user: await getUser(request),
     cookies: request.headers.get("cookie"),
+    farm: user?.role === "farmer" && (await fetchFarm(user)),
   });
 }
 
