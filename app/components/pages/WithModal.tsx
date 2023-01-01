@@ -1,4 +1,4 @@
-import type { BackgroundProps } from "@chakra-ui/react";
+import type { BackgroundProps, ModalProps } from "@chakra-ui/react";
 import {
   Modal,
   ModalBody,
@@ -12,7 +12,7 @@ import { useMatches } from "@remix-run/react";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 
-interface ModalProps {
+interface CommonModalProps {
   onOpenWhen?: boolean;
   autoOpenUrl?: String;
   Header?: ReactNode;
@@ -28,7 +28,9 @@ export default function WithModal({
   Body,
   blockScroll = false,
   bg = "none",
-}: ModalProps) {
+  ...props
+}: Omit<ModalProps, "onOpen" | "onClose" | "isOpen" | "children"> &
+  CommonModalProps) {
   const matches = useMatches();
   const lastMatch = matches.slice(-1)[0];
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,6 +45,7 @@ export default function WithModal({
       blockScrollOnMount={blockScroll}
       isOpen={isOpen}
       onClose={onClose}
+      {...props}
     >
       <ModalOverlay bg={bg} />
       <ModalContent>

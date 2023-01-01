@@ -18,16 +18,20 @@ export default function NotificationGroup() {
         onClick={() => setShowNotifications(!showNotifications)}
         unread_alerts={unread_alerts.data?.unread_alerts.length}
       />
-      <WithModal
-        onOpenWhen={showNotifications}
-        Body={
-          <div>
-            {showNotifications && (
-              <NotificationTooltip alerts={unread_alerts.data} />
-            )}
-          </div>
-        }
-      />
+      <div className="notification__tooltip">
+        <WithModal
+          onOpenWhen={showNotifications}
+          Body={
+            <div>
+              {showNotifications && (
+                <NotificationTooltip
+                  unread_alerts={unread_alerts.data?.unread_alerts}
+                />
+              )}
+            </div>
+          }
+        />
+      </div>
     </div>
   );
 }

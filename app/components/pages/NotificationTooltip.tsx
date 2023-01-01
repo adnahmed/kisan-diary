@@ -1,19 +1,41 @@
-import type { AlertType } from "@prisma/client";
-export default function NotificationTooltip(props) {
+import { Link } from "@chakra-ui/react";
+import type { Alert, AlertType } from "@prisma/client";
+import Emoji from "react-emojis";
+type AlertOutput = { createdAt: string; updatedAt: string } & Omit<
+  Alert,
+  "createdAt" | "updatedAt"
+>;
+interface NotificationTooltipProps {
+  unread_alerts?: AlertOutput[];
+}
+export default function NotificationTooltip({
+  unread_alerts,
+}: NotificationTooltipProps) {
   function NotificationIcon(type: AlertType) {
     switch (type) {
       case "alert":
-        return <> s</>;
+        return <Emoji emoji="warning" size="30" />;
       case "recommendation":
-        return <></>;
+        return <Emoji emoji="sparkle" size="30" />;
     }
   }
-  return props.alerts.unread_alerts.map((alert) => (
-    <div key={alert}>
-      <div className="notification__content">
-        <div className="notification__content__icon">ss</div>
-        <div className="notification__content__details">{alert.details}</div>
-      </div>
-    </div>
-  ));
+  return (
+    <>
+      {unread_alerts?.map((alert: AlertOutput) => (
+        <div key={alert.id}>
+          <Link
+            href={`/farmer/alert?id=${alert.id}`}
+            className="notification__content"
+          >
+            <span className="notification__content__icon">
+              {NotificationIcon(alert.alertType)}
+            </span>
+            <span className="notification__content_headline">
+              {alert.details}
+            </span>
+          </Link>
+        </div>
+      ))}
+    </>
+  );
 }
