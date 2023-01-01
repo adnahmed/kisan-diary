@@ -5,17 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "msedge",
+            "type": "firefox",
             "request": "launch",
             "name": "Client",
             "url": "http://localhost:3000",
-            "outFiles": [
-                "${workspaceFolder}/build/**",
-                "${workspaceFolder}/public/build/**",
-                "!**/node_modules/**"
-            ],
             "webRoot": "${workspaceFolder}/public/build",
-            "sourceMaps": true,
             "skipFiles": [
                 "<node_internals>/**"
             ]
