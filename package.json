@@ -10,7 +10,7 @@
     "clean": "rimraf build public/build",
     "dev": "run-p dev:*:* dev:*",
     "dev:build:server": "cross-env NODE_ENV=development npm run build:server -- --watch",
-    "dev:run:server": "cross-env NODE_ENV=development nodemon --inspect --require ./node_modules/dotenv/config --require ./mocks ./build/expressServer.js",
+    "dev:run:server": "cross-env NODE_ENV=development node --inspect --require ./node_modules/dotenv/config --require ./mocks ./build/expressServer.js",
     "dev:css": "cross-env NODE_ENV=development tailwindcss -c tailwind.config.js  -w -i ./app/styles/tailwind.css -o app/styles/tailwind.css",
     "dev:remix": "cross-env NODE_ENV=development remix watch",
     "docker": "docker-compose up -d",
