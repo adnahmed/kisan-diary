@@ -123,7 +123,6 @@ const GeneralInformation: FC<GeneralInformationProps> = () => {
 
   return (
     <div className="flex flex-col gap-5 ">
-      <header className="place-self-center text-2xl">Farm Information</header>
       <Box
         backgroundColor={"cabi"}
         color={"wheat"}
