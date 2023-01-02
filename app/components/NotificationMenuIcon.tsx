@@ -1,15 +1,16 @@
 import { Avatar, AvatarBadge, Center, IconButton } from "@chakra-ui/react";
-import type { ReactNode } from "react";
-import { FaBell } from "react-icons/fa";
+import type { AlertType } from "@prisma/client";
+import NotificationIcon from "~/helpers/NotificationIcon";
 import { useOptionalUser } from "~/utils";
 interface NotificationMenuIconProps {
-  unread_alerts: ReactNode;
+  numberOfAlerts?: number;
+  type: AlertType;
 }
+
 function NotificationMenuIcon({
-  onClick,
-  unread_alerts,
-  ...props
-}: JSX.IntrinsicElements["button"] & NotificationMenuIconProps) {
+  numberOfAlerts,
+  type,
+}: NotificationMenuIconProps) {
   const user = useOptionalUser();
   return (
     <>
@@ -20,8 +21,7 @@ function NotificationMenuIcon({
           aria-label="view notifications"
           bg="cabi"
           variant={"unstyled"}
-          onClick={onClick}
-          {...props}
+          className="header__notification notification__icon"
           icon={
             <>
               <Avatar
@@ -30,7 +30,7 @@ function NotificationMenuIcon({
                 size="2xl"
                 width={"1rem"}
                 height={"1rem"}
-                icon={<FaBell />}
+                icon={NotificationIcon(type)}
               >
                 <Center>
                   <AvatarBadge
@@ -41,7 +41,7 @@ function NotificationMenuIcon({
                     fontSize={".6rem"}
                     textAlign={"center"}
                   >
-                    {unread_alerts}
+                    {numberOfAlerts}
                   </AvatarBadge>
                 </Center>
               </Avatar>
