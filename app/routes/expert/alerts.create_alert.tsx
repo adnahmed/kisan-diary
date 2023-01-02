@@ -1,3 +1,4 @@
+import { Heading } from "@chakra-ui/react";
 import { AlertType } from "@prisma/client";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -10,6 +11,7 @@ import { ClientOnly } from "remix-utils";
 import Editor from "~/components/quill.client";
 import { prisma } from "~/db.server";
 import styles from "~/styles/routes/alerts.create_alert.css";
+import CABIButton from "../../components/cabi-button";
 export const link: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
 export async function loader({ request }: LoaderArgs) {
   return {
@@ -108,8 +110,8 @@ const CreateAlert: FC<CreateAlertProps> = (props) => {
     console.log(alert.data);
   }, [alert.data]);
   return (
-    <div className="col-start-1 col-span-12">
-      <h1>Create Alert</h1>
+    <div className="create-alert__dashboard">
+      <Heading>Create Alert</Heading>
       <ClientOnly
         fallback={
           <div style={{ width: 500, height: 300 }}>
@@ -144,7 +146,7 @@ const CreateAlert: FC<CreateAlertProps> = (props) => {
                 ))}
               </select>
             </label>
-            <button onClick={handleSubmit}>Save</button>
+            <CABIButton onClick={handleSubmit}>Send</CABIButton>
           </main>
         )}
       </ClientOnly>

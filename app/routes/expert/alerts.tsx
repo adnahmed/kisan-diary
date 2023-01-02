@@ -16,7 +16,7 @@ export const handle = {
   title: (
     <div className="">
       <Emoji emoji="speaker-high-volume" size="30" />
-      <span>Manage Alerts</span>
+      <span>Manage Alerts / Recommendation</span>
     </div>
   ),
 };

@@ -3,15 +3,11 @@
   --md: min-width: 1000px;
 
   /*border variables*/
-  --border-sm: 0.2em;
-  --border-md: 0.4em;
-  --border-lg: 0.6em;
-  --border-xl: 0.8em;
-  --border-2xl: 1.0em;
-
-  /*padding variables*/
-  --padding-sm: 0.2em;
-  --padding-md: 0.4em;
+  --length-sm: 0.2em;
+  --length-md: 0.4em;
+  --length-lg: 0.6em;
+  --length-xl: 0.8em;
+  --length-2xl: 1.0em;
 
   /*width variables*/
   --width-full: 100vw;
@@ -102,10 +98,11 @@ footer {
   grid-column: 1/span 12;
   gap: 0.3rem;
   align-items: middle;
-  padding: var(--padding-md);
+  padding: var(--length-md);
   color: white;
   background-color: var(--color-cabi-100);
-  border-radius: var(--border-md);
+  border-block-start: var(--length-md) solid var(--color-white-100);
+  margin-block-start: var(--length-md);
 }
 
 .navbar__menu {
@@ -146,14 +143,14 @@ header:not(.chakra-modal__header) {
 
 header .header__home {
   display: flex;
-  grid-row: 1/4;
+  grid-row: 1/span 3;
   grid-column: 1/span 8;
   align-items: center;
   text-align: center;
 }
 
 .header__home .home__logo {
-  max-width: 20%;
+  max-width: 25%;
 }
 
 .header__home .home__heading {
@@ -171,7 +168,7 @@ header .header__home {
   position: absolute;
   min-width: 30vw;
   max-width: 30vw;
-  padding: var(--padding-md);
+  padding: var(--length-md);
   color: black;
   background-color: #ffff;
   border: 1px black solid;

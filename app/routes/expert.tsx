@@ -1,25 +1,8 @@
-import { HamburgerIcon } from "@chakra-ui/icons";
-import {
-  Button,
-  Center,
-  Divider,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  Heading,
-  IconButton,
-  Image,
-  Stack,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { Link, Outlet, useMatches } from "@remix-run/react";
+import { Heading, useDisclosure } from "@chakra-ui/react";
+import { Outlet, useCatch, useMatches } from "@remix-run/react";
 import type { LinksFunction, LoaderArgs } from "@remix-run/server-runtime";
 import type { FC } from "react";
 import { useRef } from "react";
-import { HiSpeakerWave } from "react-icons/hi2";
 import { getUser } from "~/session.server";
 import styles from "~/styles/routes/expert.css";
 export const links: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
@@ -44,72 +27,37 @@ const ExpertDashboard: FC<ExpertDashboardProps> = () => {
   const title = lastMatch && lastMatch.handle && lastMatch.handle.title;
   const btnRef = useRef(null);
   return (
-    <div className="dashboard">
+    <div className="home">
       <div className="heading flex items-center p-4">
-        <IconButton
-          aria-label="Open Drawer"
-          bg="cabi"
-          color="wheat"
-          border="1px"
-          borderColor="cabi"
-          ref={btnRef}
-          icon={
-            <Center w="100%" h="100%">
-              <HamburgerIcon />
-            </Center>
-          }
-          onClick={onOpenDrawer}
-        />
         <Heading className="flex justify-around grow" size="lg">
           {title || <span>Expert Dashboard</span>}
         </Heading>
       </div>
-      <Drawer
-        isOpen={isOpenDrawer}
-        placement="left"
-        onClose={onCloseDrawer}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>
-            <Image
-              boxSize="150px"
-              borderRadius="full"
-              fallbackSrc="/assets/blank-profile-picture.webp"
-              alt="user_name"
-              bg="gray.100"
-              fit="scale-down"
-            />
-          </DrawerHeader>
-          <DrawerBody>
-            <Stack>
-              <Link to="crops">
-                <Button>Crops</Button>
-              </Link>
-              <Divider />
-              <Link to="alerts">
-                <div className="button manage_alerts">
-                  <Button
-                    leftIcon={<HiSpeakerWave />}
-                    bg="cabi"
-                    color="white"
-                    border="1px"
-                    borderColor="cabi"
-                    _hover={{ bg: "wheat", color: "cabi" }}
-                  >
-                    Manage Alerts
-                  </Button>
-                </div>
-              </Link>
-            </Stack>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
       <Outlet />
     </div>
   );
 };
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <div>
+      <h1>Error</h1>
+      <p>{error.message}</p>
+      <p>The stack trace is:</p>
+      <pre>{error.stack}</pre>
+    </div>
+  );
+}
+export function CatchBoundary() {
+  const caught = useCatch();
 
+  return (
+    <div>
+      <h1>Caught</h1>
+      <p>Status: {caught.status}</p>
+      <pre>
+        <code>{JSON.stringify(caught.data, null, 2)}</code>
+      </pre>
+    </div>
+  );
+}
 export default ExpertDashboard;
