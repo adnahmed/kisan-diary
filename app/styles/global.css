@@ -125,7 +125,7 @@ select:disabled {
   padding-inline: 2rem;
 }
 
-header {
+header:not(.chakra-modal__header) {
   position: sticky;
   display: grid;
   grid-area: "header";
