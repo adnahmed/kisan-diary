@@ -1,8 +1,12 @@
 import { Heading } from "@chakra-ui/react";
+import { Role } from "@prisma/client";
 import { useCatch } from "@remix-run/react";
+import type { UserResult } from "~/types/User";
 import { useOptionalUser } from "../../utils";
 import { useOptionalFarm } from "../hooks/useOptionalFarm";
 import { AuthenticatedMenu, UnauthenticatedMenu } from "./Auth";
+import ExpertNavBar from "./ExpertNavBar";
+import FarmerNavBar from "./FarmerNavBar";
 import NotificationGroup from "./NotificationGroup";
 const AppTitle = "Kisan Diary";
 interface HeaderHeadingProps {
@@ -11,10 +15,22 @@ interface HeaderHeadingProps {
 }
 function HeaderHeading({ showFarmName, farmName }: HeaderHeadingProps) {
   return (
-    <>
-      {showFarmName && <Heading fontSize={`3xl`}>{farmName}</Heading>}
-      <Heading fontSize={showFarmName ? `xs` : `4xl`}>{AppTitle}</Heading>
-    </>
+    <div className="header__home home__heading">
+      {showFarmName && (
+        <Heading
+          className="header__home home__heading heading__farm"
+          fontSize={`3xl`}
+        >
+          {farmName}
+        </Heading>
+      )}
+      <Heading
+        className="header__home home__heading heading_app"
+        fontSize={showFarmName ? `xs` : `4xl`}
+      >
+        {AppTitle}
+      </Heading>
+    </div>
   );
 }
 
@@ -31,25 +47,36 @@ export function ErrorBoundary({ error }: { error: Error }) {
     </div>
   );
 }
+function useNavBar(user?: UserResult) {
+  if (!user) return <></>;
+  switch (user.role) {
+    case Role.farmer:
+      return <FarmerNavBar />;
+    case Role.expert:
+      return <ExpertNavBar />;
+  }
+}
 export default function Header({ isAuthenticated }: HeaderArgs) {
   const user = useOptionalUser();
   const farm = useOptionalFarm();
-
+  const NavBar = useNavBar(user);
   return (
     <header>
-      <a href="/" className="flex grow">
-        <img key="logo" alt="logo" className="logo" src="/assets/diary.png" />
-        <div className="self-center w-full text-center">
-          <HeaderHeading
-            farmName={farm?.name}
-            showFarmName={user !== undefined && user.role === "farmer"}
-          />
-        </div>
+      <a href="/" className="header__home">
+        <img
+          key="logo"
+          alt="logo"
+          className="header__home home__logo"
+          src="/assets/diary.png"
+        />
+        <HeaderHeading
+          farmName={farm?.name}
+          showFarmName={user !== undefined && user.role === "farmer"}
+        />
       </a>
-      <div className="layout__menu">
-        {isAuthenticated ? <AuthenticatedMenu /> : <UnauthenticatedMenu />}
-        {farm && <NotificationGroup />}
-      </div>
+      {isAuthenticated ? <AuthenticatedMenu /> : <UnauthenticatedMenu />}
+      {farm && <NotificationGroup />}
+      {NavBar}
     </header>
   );
 }

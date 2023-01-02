@@ -1,11 +1,12 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { useDataRefresh } from "remix-utils";
 import type { loader } from "~/routes/api/unread_alerts";
 import NotificationMenuIcon from "../NotificationMenuIcon";
 import NotificationTooltip from "./NotificationTooltip";
-import WithModal from "./WithModal";
 export default function NotificationGroup() {
   const unread_alerts = useFetcher<typeof loader>();
+  const { refresh } = useDataRefresh();
   useEffect(() => {
     if (unread_alerts.type === "init") unread_alerts.load("/api/unread_alerts");
   }, [unread_alerts, unread_alerts.data, unread_alerts.type]);
@@ -13,25 +14,17 @@ export default function NotificationGroup() {
   const [showNotifications, setShowNotifications] = useState(false);
 
   return (
-    <div className="flex flex-col">
+    <div className="header__notification">
       <NotificationMenuIcon
+        className="header__notification notification__icon"
         onClick={() => setShowNotifications(!showNotifications)}
         unread_alerts={unread_alerts.data?.unread_alerts.length}
       />
-      <div className="notification__tooltip">
-        <WithModal
-          onOpenWhen={showNotifications}
-          Body={
-            <div>
-              {showNotifications && (
-                <NotificationTooltip
-                  unread_alerts={unread_alerts.data?.unread_alerts}
-                />
-              )}
-            </div>
-          }
+      {showNotifications && (
+        <NotificationTooltip
+          unread_alerts={unread_alerts.data?.unread_alerts}
         />
-      </div>
+      )}
     </div>
   );
 }

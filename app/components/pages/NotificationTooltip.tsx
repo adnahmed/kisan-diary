@@ -20,22 +20,21 @@ export default function NotificationTooltip({
     }
   }
   return (
-    <>
+    <div className="header__notification notification__tooltip">
       {unread_alerts?.map((alert: AlertOutput) => (
-        <div key={alert.id}>
-          <Link
-            href={`/farmer/alert?id=${alert.id}`}
-            className="notification__content"
-          >
-            <span className="notification__content__icon">
-              {NotificationIcon(alert.alertType)}
-            </span>
-            <span className="notification__content_headline">
-              {alert.details}
-            </span>
-          </Link>
-        </div>
+        <Link
+          key={alert.id}
+          href={`/farmer/alert?id=${alert.id}`}
+          className="notification__content"
+        >
+          <span className="notification__content__icon">
+            {NotificationIcon(alert.alertType)}
+          </span>
+          <span className="notification__content_headline">
+            {alert.details}
+          </span>
+        </Link>
       ))}
-    </>
+    </div>
   );
 }

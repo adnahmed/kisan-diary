@@ -24,10 +24,7 @@ export default function FarmerNavBar() {
   ];
 
   return (
-    <Box
-      bg="cabi"
-      className={`flex align-middle bg-[#368729] text-white p-2 rounded-md navbar wrap justify-between`}
-    >
+    <Box bg="cabi" className={` navbar wrap justify-between`}>
       {menu.map((menu_item) => (
         <Link
           variant="cabi"

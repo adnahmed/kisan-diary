@@ -8,6 +8,7 @@ interface NotificationMenuIconProps {
 function NotificationMenuIcon({
   onClick,
   unread_alerts,
+  ...props
 }: JSX.IntrinsicElements["button"] & NotificationMenuIconProps) {
   const user = useOptionalUser();
   return (
@@ -20,6 +21,7 @@ function NotificationMenuIcon({
           bg="cabi"
           variant={"unstyled"}
           onClick={onClick}
+          {...props}
           icon={
             <>
               <Avatar
@@ -50,6 +52,7 @@ function NotificationMenuIcon({
     </>
   );
 }
+
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <div>

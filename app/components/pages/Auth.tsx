@@ -3,7 +3,7 @@ import CABIButton from "../cabi-button";
 
 export function UnauthenticatedMenu() {
   return (
-    <div className="layout__menu menu__authentication">
+    <div className="menu__authentication header__menu">
       <Link to="/join">
         <CABIButton invert={true}>Sign Up</CABIButton>
       </Link>
@@ -16,7 +16,7 @@ export function UnauthenticatedMenu() {
 
 export function AuthenticatedMenu() {
   return (
-    <div>
+    <div className="header__menu menu__authentication">
       <Form method="post" action="/logout" data-netlify="true">
         <button type="submit">Logout</button>
       </Form>
