@@ -12,6 +12,12 @@
             "webRoot": "${workspaceFolder}/public/build",
             "skipFiles": [
                 "<node_internals>/**"
+            ],
+            "pathMappings": [
+                {
+                    "url": "http://localhost:3000/app",
+                    "path": "${workspaceFolder}/app"
+                }
             ]
         },
         {
@@ -32,7 +38,7 @@
                 "run",
                 "dev"
             ]
-        },
+        }
     ],
     "compounds": [
         {
