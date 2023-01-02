@@ -41,15 +41,11 @@ body {
   font-size: clamp(2.5rem, 3.2vw + 2rem, 4rem);
 }
 
-
-
-footer>* {
-  color: white;
-  background-color: rgb(54 135 41);
-}
-
 footer {
   position: sticky;
+  color: white;
+  font-size: 0.6em;
+  background-color: rgb(54 135 41);
 }
 
 .content-row {
@@ -89,6 +85,12 @@ footer {
   display: grid;
   grid-template-rows: auto 1fr auto;
   height: 100vh;
+  background: url('/assets/dashboard.jpeg');
+  background-color: #c7e4e2;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-size: 100vw;
 }
 
 .navbar {
