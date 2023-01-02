@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer>
-      <div className="ProjectDescription">
+      <div className="">
         <span>
           Developed by <strong>Adnan Ahmed Khan</strong>
         </span>
@@ -9,7 +9,7 @@ export default function Footer() {
           Arid # <strong>2018-ARID-0957</strong>
         </span>
         <span>
-          Under Supervision of <strong>Mrs. Tayyaba</strong>
+          Under Supervision of <strong>Mr. Umar Farooq</strong>
         </span>
         <span>
           Submitted to{" "}
