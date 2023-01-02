@@ -11,6 +11,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import Emoji from "react-emojis";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import CABIButton from "../../components/cabi-button";
 export const handle = {
   title: (
     <div className="">
@@ -32,70 +33,81 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const ManageAlerts: FC<ManageAlertsProps> = () => {
-  const submit = useSubmit();
-  const [showFilterTabs, setShowFilterTabs] = useState(false);
-  const data = useLoaderData<typeof loader>();
-  async function handleChange(event) {
-    await submit(event.currentTarget, { replace: true });
-  }
   return (
     <div className="col-start-1 col-span-12">
       <main>
-        <button onClick={() => setShowFilterTabs(!showFilterTabs)}>
-          Filter
-        </button>
-        {showFilterTabs && (
-          <Tabs>
-            <TabList>
-              <Tab>Season</Tab>
-              <Tab>Year</Tab>
-            </TabList>
-            <TabPanel>
-              <Form onChange={handleChange} data-netlify="true">
-                {data.seasons.map((season) => {
-                  const id = `${season}-id`;
-                  return (
-                    <label key={season} htmlFor={id}>
-                      <input
-                        type="checkbox"
-                        name=""
-                        id={id}
-                        value={season}
-                        defaultChecked
-                      />
-                      {capitalize(season)}
-                    </label>
-                  );
-                })}
-              </Form>
-            </TabPanel>
-            <TabPanel>
-              <Form onChange={handleChange} data-netlify="true">
-                {data.years.map((year) => {
-                  const id = `${year}-id`;
-                  return (
-                    <label key={year} htmlFor={id}>
-                      <input
-                        type="checkbox"
-                        name=""
-                        id={id}
-                        value={year}
-                        defaultChecked
-                      />
-                      {year}
-                    </label>
-                  );
-                })}
-              </Form>
-            </TabPanel>
-          </Tabs>
-        )}
-        <Link to="create_alert">Create</Link>
+        <Filter />
+        <CABIButton>
+          <Link to="create_alert">Create</Link>
+        </CABIButton>
       </main>
     </div>
   );
 };
 
+function Filter() {
+  const [showFilterTabs, setShowFilterTabs] = useState(false);
+  const data = useLoaderData<typeof loader>();
+  async function handleChange(event) {
+    await submit(event.currentTarget, { replace: true });
+  }
+
+  const submit = useSubmit();
+  return (
+    <div>
+      <CABIButton onClick={() => setShowFilterTabs(!showFilterTabs)}>
+        Filter
+      </CABIButton>
+
+      {showFilterTabs && (
+        <Tabs>
+          <TabList>
+            <Tab>Season</Tab>
+            <Tab>Year</Tab>
+          </TabList>
+          <TabPanel>
+            <Form onChange={handleChange} data-netlify="true">
+              {data.seasons.map((season) => {
+                const id = `${season}-id`;
+                return (
+                  <label key={season} htmlFor={id}>
+                    <input
+                      type="checkbox"
+                      name=""
+                      id={id}
+                      value={season}
+                      defaultChecked
+                    />
+                    {capitalize(season)}
+                  </label>
+                );
+              })}
+            </Form>
+          </TabPanel>
+          <TabPanel>
+            <Form onChange={handleChange} data-netlify="true">
+              {data.years.map((year) => {
+                const id = `${year}-id`;
+                return (
+                  <label key={year} htmlFor={id}>
+                    <input
+                      type="checkbox"
+                      name=""
+                      id={id}
+                      value={year}
+                      defaultChecked
+                    />
+                    {year}
+                  </label>
+                );
+              })}
+            </Form>
+          </TabPanel>
+        </Tabs>
+      )}
+    </div>
+  );
+}
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <div>
