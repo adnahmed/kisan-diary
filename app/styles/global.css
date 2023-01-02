@@ -15,8 +15,14 @@
 
   /*width variables*/
   --width-full: 100vw;
+
+  /*gap variables*/
+  --gap-sm: 0.2em;
+  --gap-md: 0.4em;
+
   /*brand colors*/
-  --color-cabi-100: #368729
+  --color-cabi-100: #368729;
+  --color-white-100: #fff;
 }
 
 body {
@@ -163,9 +169,14 @@ header .header__home {
 
 .header__notification .notification__tooltip {
   position: absolute;
-  background-color: hotpink;
-  border: 2px black solid;
-  inset-inline-start: -100px;
+  min-width: 30vw;
+  max-width: 30vw;
+  padding: var(--padding-md);
+  color: black;
+  background-color: #ffff;
+  border: 1px black solid;
+  border-radius: var(--border-md);
+  inset-inline-end: 2vw;
 }
 
 .header__notification .notification__icon {
@@ -176,4 +187,13 @@ header .header__home {
   display: flex;
   grid-row: 1/2;
   gap: 1em;
+}
+
+.notification__content {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.notification__content .content__date {
+  display: flex;
 }

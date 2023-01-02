@@ -1,5 +1,8 @@
 import { Link } from "@chakra-ui/react";
-import type { Alert, AlertType } from "@prisma/client";
+import type { Alert } from "@prisma/client";
+import { AlertType } from "@prisma/client";
+import { formatDistance } from "date-fns";
+import { useMemo } from "react";
 import Emoji from "react-emojis";
 type AlertOutput = { createdAt: string; updatedAt: string } & Omit<
   Alert,
@@ -11,6 +14,25 @@ interface NotificationTooltipProps {
 export default function NotificationTooltip({
   unread_alerts,
 }: NotificationTooltipProps) {
+  const alerts = useMemo<AlertOutput[] | undefined>(
+    () => unread_alerts?.filter((ura) => ura.alertType === AlertType.alert),
+    [unread_alerts]
+  );
+  const recommendations = useMemo<AlertOutput[] | undefined>(
+    () =>
+      unread_alerts?.filter(
+        (ura) => ura.alertType === AlertType.recommendation
+      ),
+    [unread_alerts]
+  );
+  return (
+    <div className="header__notification notification__tooltip">
+      {alerts ? <AlertList alerts={alerts} /> : <p>No Alerts Yet!</p>}
+    </div>
+  );
+}
+
+function AlertList({ alerts }: { alerts: AlertOutput[] }) {
   function NotificationIcon(type: AlertType) {
     switch (type) {
       case "alert":
@@ -19,22 +41,30 @@ export default function NotificationTooltip({
         return <Emoji emoji="sparkle" size="30" />;
     }
   }
+
   return (
-    <div className="header__notification notification__tooltip">
-      {unread_alerts?.map((alert: AlertOutput) => (
+    <>
+      {alerts.map((alert) => (
         <Link
           key={alert.id}
           href={`/farmer/alert?id=${alert.id}`}
           className="notification__content"
         >
-          <span className="notification__content__icon">
+          <span className="notification__content content__date">
+            <span className="notification__content content__date date__icon">
+              <Emoji emoji="three-oclock" size="20" />
+            </span>
+            {formatDistance(new Date(alert.createdAt), new Date())} ago
+          </span>
+
+          <span className="notification__content content__icon">
             {NotificationIcon(alert.alertType)}
           </span>
-          <span className="notification__content_headline">
+          <span className="notification__content content_headline">
             {alert.details}
           </span>
         </Link>
       ))}
-    </div>
+    </>
   );
 }

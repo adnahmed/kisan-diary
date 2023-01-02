@@ -11,7 +11,9 @@ export default function NotificationGroup() {
     if (unread_alerts.type === "init") unread_alerts.load("/api/unread_alerts");
   }, [unread_alerts, unread_alerts.data, unread_alerts.type]);
 
-  const [showNotifications, setShowNotifications] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(
+    process.env.NODE_ENV === "development" ? true : false
+  );
 
   return (
     <div className="header__notification">
