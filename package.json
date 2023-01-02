@@ -35,6 +35,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.5",
+    "@floating-ui/react": "^0.15.1",
     "@fontsource/roboto": "^4.5.8",
     "@prisma/client": "^4.7.1",
     "@remix-run/express": "^1.9.0",
