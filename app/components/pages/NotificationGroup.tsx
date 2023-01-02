@@ -4,8 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDataRefresh } from "remix-utils";
 import type { loader } from "~/routes/api/unread_alerts";
 import type AlertOutput from "~/types/AlertOutput";
-import NotificationMenuIcon from "../NotificationMenuIcon";
-import NotificationTooltip from "./NotificationTooltip";
+import NotificationButton from "./NotificationButton";
 export default function NotificationGroup() {
   const unread_alerts = useFetcher<typeof loader>();
   const { refresh } = useDataRefresh();
@@ -32,49 +31,29 @@ export default function NotificationGroup() {
   );
   return (
     <div className="header__notification">
-      <div className="header__notification notification__alerts">
-        <div
-          onClick={() => {
-            setShowAlerts(!showAlerts);
-            setShowRecommendations(false);
-          }}
-          className="header__notification notification__button"
-        >
-          <NotificationMenuIcon
-            type={AlertType.alert}
-            numberOfAlerts={alerts?.length}
-          />
-          <span className="header__notification notification__button button__label">
-            Alerts
-          </span>
-        </div>
-        {showAlerts && <NotificationTooltip alerts={alerts} />}
-      </div>
-
-      <div className="header__notification notification__recommendations">
-        <div
-          onClick={() => {
-            setShowRecommendations(!showRecommendations);
-            setShowAlerts(false);
-          }}
-          className="header__notification notification__button"
-        >
-          <NotificationMenuIcon
-            type={AlertType.recommendation}
-            numberOfAlerts={recommendations?.length}
-          />
-          <span className="header__notification notification__button button__label">
-            Recommendations
-          </span>
-        </div>
-        {showRecommendations && (
-          <NotificationTooltip alerts={recommendations} />
-        )}
-      </div>
+      <NotificationButton
+        type={AlertType.alert}
+        label={"Alerts"}
+        alerts={alerts}
+        showNotifications={showAlerts}
+        onClick={() => {
+          setShowAlerts(!showAlerts);
+          setShowRecommendations(false);
+        }}
+      />
+      <NotificationButton
+        type={AlertType.recommendation}
+        label={"Recommendations"}
+        alerts={recommendations}
+        showNotifications={showRecommendations}
+        onClick={() => {
+          setShowRecommendations(!showRecommendations);
+          setShowAlerts(false);
+        }}
+      />
     </div>
   );
 }
-/*  */
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
