@@ -26,6 +26,7 @@ model User {
   Farm        Farm[]
   regionName  String
   ReadReciept ReadReciept[]
+  ExpertFile  ExpertFile[]
 }
 
 model Alert {
@@ -122,4 +123,11 @@ enum Machinery {
 enum LandType {
   Nehri
   Behri
+}
+
+model ExpertFile {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  name   String
+  userId String
 }
