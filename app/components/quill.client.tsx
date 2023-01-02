@@ -4,6 +4,7 @@ import MagicUrl from "quill-magic-url";
 import type { ForwardedRef } from "react";
 import React, { useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
+import uploadFile from "~/helpers/uploadFile";
 
 Quill.register("modules/imageUploader", ImageUploader);
 Quill.register("modules/magicUrl", MagicUrl);
@@ -57,24 +58,8 @@ const Editor = React.forwardRef(
         matchVisual: false,
       },
       magicUrl: true,
-      imageUploader: {
-        upload: async (file: File) => {
-          const body = new FormData();
-          body.append("file", file);
-          try {
-            const result = await fetch("/api/save_file", {
-              method: "POST",
-              body: body,
-            });
-            const { uploadedUrl } = await result.json();
-            return uploadedUrl;
-          } catch (error) {
-            if (typeof error === "string") console.error("Error:", error);
-          }
-        },
-      },
+      imageUploader: { upload: uploadFile },
     };
-
     return (
       <ReactQuill
         value={editorHtml}
@@ -87,4 +72,5 @@ const Editor = React.forwardRef(
     );
   }
 );
+Editor.displayName = "Editor";
 export default Editor;

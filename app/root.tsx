@@ -62,6 +62,7 @@ export const links: LinksFunction = () => {
       rel: "stylesheet",
       href: roboto700,
     },
+    { rel: "preload", href: "/assets/dashboard.jpeg", as: "image" },
   ];
 };
 
