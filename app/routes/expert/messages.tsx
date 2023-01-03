@@ -32,7 +32,7 @@ import { useCatch } from "@remix-run/react";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useMemo } from "react";
 import createConversation from "~/helpers/createConversation";
-import { serviceFactory } from "~/models/serviceFactory.client";
+import { serviceFactory } from "~/services/chat/serviceFactory.client";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: chatoscopeStyles }];
 };
@@ -236,30 +236,30 @@ const eliotStorage = new BasicStorage({ groupIdGenerator, messageIdGenerator });
 const emilyStorage = new BasicStorage({ groupIdGenerator, messageIdGenerator });
 const joeStorage = new BasicStorage({ groupIdGenerator, messageIdGenerator });
 export const akaneModel = {
-  name: "Akane",
+  name: "Adnan",
   avatar: "",
 };
 
 export const eliotModel = {
-  name: "Eliot",
+  name: "Sulman",
   avatar: "",
 };
 
 export const emilyModel = {
-  name: "Emily",
+  name: "Faizan",
   avatar: "",
 };
 
 export const joeModel = {
-  name: "Joe",
+  name: "Kauser",
   avatar: "",
 };
 const users = [akaneModel, eliotModel, emilyModel, joeModel];
 const chats = [
-  { name: "Akane", storage: akaneStorage },
-  { name: "Eliot", storage: eliotStorage },
-  { name: "Emily", storage: emilyStorage },
-  { name: "Joe", storage: joeStorage },
+  { name: "Adnan", storage: akaneStorage },
+  { name: "Sulman", storage: eliotStorage },
+  { name: "Faizan", storage: emilyStorage },
+  { name: "Kauser", storage: joeStorage },
 ];
 const akane = new User({
   id: akaneModel.name,

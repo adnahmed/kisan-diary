@@ -1,3 +1,4 @@
+// TODO: Add routes-gen please!!
 import {
   ChakraProvider,
   ColorModeScript,
@@ -29,7 +30,7 @@ import { ClientOnly } from "remix-utils";
 import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
 import fetchFarm from "./models/farm.server";
-import { serviceFactory } from "./models/serviceFactory.client";
+import { serviceFactory } from "./services/chat/serviceFactory.client";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
