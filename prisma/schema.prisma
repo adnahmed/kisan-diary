@@ -8,27 +8,6 @@ generator client {
   previewFeatures = ["clientExtensions"]
 }
 
-model User {
-  id        String @id @default(uuid())
-  email     String @unique
-  firstName String
-  lastName  String
-  role      Role
-  // TODO: use @db for value size limit
-  // TODO: Make Country ENUM for validation
-  address   String
-  region    Region @relation(fields: [regionName], references: [name])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  password    Password?
-  Farm        Farm[]
-  regionName  String
-  ReadReciept ReadReciept[]
-  ExpertFile  ExpertFile[]
-}
-
 model Alert {
   id              String        @id @default(uuid())
   alertType       AlertType
@@ -125,9 +104,44 @@ enum LandType {
   Behri
 }
 
-model ExpertFile {
+// @description: File Upload Data for farmer and expert
+model FileUpload {
   id     String @id @default(uuid())
   user   User   @relation(fields: [userId], references: [id])
-  name   String // change name to path
+  path   String @unique
   userId String
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt()
+  sender     User     @relation(name: "UserSentMessages", fields: [senderId], references: [id])
+  reciever   User     @relation(name: "UserRecievedMessages", fields: [recieverId], references: [id])
+  senderId   String
+  recieverId String
+}
+
+model User {
+  id               String    @id @default(uuid())
+  sentMessages     Message[] @relation(name: "UserSentMessages")
+  recievedMessages Message[] @relation(name: "UserRecievedMessages")
+  email            String    @unique
+  firstName        String
+  lastName         String
+  role             Role
+  // TODO: use @db for value size limit
+  // TODO: Make Country ENUM for validation
+  address          String
+  region           Region    @relation(fields: [regionName], references: [name])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  password    Password?
+  Farm        Farm[]
+  regionName  String
+  ReadReciept ReadReciept[]
+  FileUpload  FileUpload[]
 }

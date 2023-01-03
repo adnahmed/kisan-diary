@@ -58,7 +58,15 @@ async function seed() {
   await prisma.user.deleteMany({ where: { email: { in: [expert.email, farmer.email] } } }).catch(() => {
     // no worries if it doesn't exist yet
   });
-  await prisma.farm.delete({ where: { name: farm.name } }).catch(() => {
+  await prisma.farm.deleteMany({ where: { name: farm.name } }).catch(() => {
+    // no worries if it doesn't exist yet
+  });
+
+  await prisma.crop.deleteMany({ where: { name: { in: crops.map(c => c.name) } } }).catch(() => {
+    // no worries if it doesn't exist yet
+  });
+
+  await prisma.alert.deleteMany().catch(() => {
     // no worries if it doesn't exist yet
   });
 
