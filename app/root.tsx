@@ -4,6 +4,7 @@ import {
   cookieStorageManagerSSR,
   localStorageManager,
 } from "@chakra-ui/react";
+import { AutoDraft, BasicStorage, ChatProvider } from "@chatscope/use-chat";
 import { withEmotionCache } from "@emotion/react";
 import roboto300 from "@fontsource/roboto/300.css";
 import roboto400 from "@fontsource/roboto/400.css";
@@ -20,17 +21,22 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { nanoid } from "nanoid";
 import quillBubbleTheme from "quill/dist/quill.bubble.css";
 import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
+import { ClientOnly } from "remix-utils";
 import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
 import fetchFarm from "./models/farm.server";
+import { serviceFactory } from "./models/serviceFactory.client";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import theme from "./styles/theme";
-
+const messageIdGenerator = () => nanoid();
+const groupIdGenerator = () => nanoid();
+const chatStorage = new BasicStorage({ groupIdGenerator, messageIdGenerator });
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: quillSnowTheme },
@@ -146,9 +152,24 @@ export default function App() {
             : localStorageManager
         }
       >
-        <Layout user={user}>
-          <Outlet />
-        </Layout>
+        <ClientOnly fallback={<div>Loading...</div>}>
+          {() => (
+            <ChatProvider
+              serviceFactory={serviceFactory}
+              storage={chatStorage}
+              config={{
+                typingThrottleTime: 250,
+                typingDebounceTime: 900,
+                debounceTyping: true,
+                autoDraft: AutoDraft.Save | AutoDraft.Restore,
+              }}
+            >
+              <Layout user={user}>
+                <Outlet />
+              </Layout>
+            </ChatProvider>
+          )}
+        </ClientOnly>
       </ChakraProvider>
     </Document>
   );
