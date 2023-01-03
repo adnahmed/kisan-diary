@@ -1,11 +1,33 @@
-import path from "path";
-import express from "express";
-import compression from "compression";
-import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
+import compression from "compression";
+import express from "express";
 import prom from "express-prometheus-middleware";
+import { createServer } from 'http';
+import morgan from "morgan";
+import path from "path";
+import { Server } from 'socket.io';
 const app = express();
 const metricsApp = express();
+
+// You need to create the HTTP server from the Express app
+const httpServer = createServer(app);
+
+// And then attach the socket.io server to the HTTP server
+const io = new Server(httpServer);
+
+// Then you can use `io` to listen the `connection` event and get a socket
+// from a client
+io.on("connection", (socket) => {
+    // from this point you are on the WS connection with a specific client
+    console.log(socket.id, "connected");
+
+    socket.emit("confirmation", "connected!");
+
+    socket.on("event", (data) => {
+        console.log(socket.id, data);
+        socket.emit("event", "pong");
+    });
+});
 app.use(
     prom({
         metricsPath: "/metrics",
@@ -92,7 +114,7 @@ app.all(
 
 const port = process.env.port || 3000;
 
-app.listen(port, () => {
+httpServer.listen(port, () => {
     // require the built app so we're ready when the first request comes in
     require(BUILD_DIR);
     console.log(`✅ app ready: http://localhost:3000`);
