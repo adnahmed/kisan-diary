@@ -15,6 +15,10 @@
             ],
             "pathMappings": [
                 {
+                    "url": "http://localhost:3000/node_modules/.pnpm/object-assign@4.1.1/node_modules/object-assign",
+                    "path": "${workspaceFolder}/build"
+                },
+                {
                     "url": "http://localhost:3000/app",
                     "path": "${workspaceFolder}/app"
                 }
