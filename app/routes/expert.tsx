@@ -30,7 +30,7 @@ const ExpertDashboard: FC<ExpertDashboardProps> = () => {
     <div className="home">
       <div className="heading flex items-center p-4">
         <Heading className="flex justify-around grow" size="lg">
-          {title || <span>Expert Dashboard</span>}
+          {title}
         </Heading>
       </div>
       <Outlet />

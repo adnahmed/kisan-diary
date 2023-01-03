@@ -11,9 +11,14 @@ import NotificationGroup from "./NotificationGroup";
 const AppTitle = "Kisan Diary";
 interface HeaderHeadingProps {
   showFarmName: boolean;
+  showExpertTitle: boolean;
   farmName?: string;
 }
-function HeaderHeading({ showFarmName, farmName }: HeaderHeadingProps) {
+function HeaderHeading({
+  showFarmName,
+  farmName,
+  showExpertTitle,
+}: HeaderHeadingProps) {
   return (
     <div className="header__home home__heading">
       {showFarmName && (
@@ -22,6 +27,11 @@ function HeaderHeading({ showFarmName, farmName }: HeaderHeadingProps) {
           fontSize={`3xl`}
         >
           {farmName}
+        </Heading>
+      )}
+      {showExpertTitle && (
+        <Heading className="flex justify-around grow" size="lg">
+          {<span>Expert Dashboard</span>}
         </Heading>
       )}
       <Heading
@@ -58,6 +68,7 @@ function useNavBar(user?: UserResult) {
 }
 export default function Header({ isAuthenticated }: HeaderArgs) {
   const user = useOptionalUser();
+  const isUser = user !== undefined;
   const farm = useOptionalFarm();
   const NavBar = useNavBar(user);
   return (
@@ -71,7 +82,8 @@ export default function Header({ isAuthenticated }: HeaderArgs) {
         />
         <HeaderHeading
           farmName={farm?.name}
-          showFarmName={user !== undefined && user.role === "farmer"}
+          showExpertTitle={isUser && user.role === Role.expert}
+          showFarmName={isUser && user.role === Role.farmer}
         />
       </a>
       {isAuthenticated ? <AuthenticatedMenu /> : <UnauthenticatedMenu />}
