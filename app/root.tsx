@@ -27,10 +27,12 @@ import quillBubbleTheme from "quill/dist/quill.bubble.css";
 import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
 import { ClientOnly } from "remix-utils";
+import { SocketProvider } from "./components/SocketProvider";
 import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
 import fetchFarm from "./models/farm.server";
-import { serviceFactory } from "./services/chat/serviceFactory.client";
+import socket from "./services/chat.client";
+import { serviceFactory } from "./services/serviceFactory.client";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
@@ -38,6 +40,7 @@ import theme from "./styles/theme";
 const messageIdGenerator = () => nanoid();
 const groupIdGenerator = () => nanoid();
 const chatStorage = new BasicStorage({ groupIdGenerator, messageIdGenerator });
+
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: quillSnowTheme },
@@ -143,35 +146,50 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function App() {
   const { cookies, user } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    return () => {
+      socket.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("confirmation", (data) => {
+      console.log(data);
+    });
+  }, []);
   return (
     <Document>
-      <ChakraProvider
-        theme={theme}
-        colorModeManager={
-          typeof cookies === "string"
-            ? cookieStorageManagerSSR(cookies)
-            : localStorageManager
-        }
-      >
-        <ClientOnly fallback={<div>Loading...</div>}>
-          {() => (
-            <ChatProvider
-              serviceFactory={serviceFactory}
-              storage={chatStorage}
-              config={{
-                typingThrottleTime: 250,
-                typingDebounceTime: 900,
-                debounceTyping: true,
-                autoDraft: AutoDraft.Save | AutoDraft.Restore,
-              }}
-            >
-              <Layout user={user}>
-                <Outlet />
-              </Layout>
-            </ChatProvider>
-          )}
-        </ClientOnly>
-      </ChakraProvider>
+      <SocketProvider socket={socket}>
+        <ChakraProvider
+          theme={theme}
+          colorModeManager={
+            typeof cookies === "string"
+              ? cookieStorageManagerSSR(cookies)
+              : localStorageManager
+          }
+        >
+          <ClientOnly fallback={<div>Loading...</div>}>
+            {() => (
+              <ChatProvider
+                serviceFactory={serviceFactory}
+                storage={chatStorage}
+                config={{
+                  typingThrottleTime: 250,
+                  typingDebounceTime: 900,
+                  debounceTyping: true,
+                  autoDraft: AutoDraft.Save | AutoDraft.Restore,
+                }}
+              >
+                <Layout user={user}>
+                  <Outlet />
+                </Layout>
+              </ChatProvider>
+            )}
+          </ClientOnly>
+        </ChakraProvider>
+      </SocketProvider>
     </Document>
   );
 }
