@@ -1,7 +1,7 @@
 import { useCatch } from "@remix-run/react";
 
 export default function Home() {
-  return <div>Home</div>;
+  return <div className="expert__home"></div>;
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {

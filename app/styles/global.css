@@ -43,6 +43,7 @@ body {
 
 footer {
   position: sticky;
+  grid-area: 'footer';
   color: white;
   font-size: 0.6em;
   background-color: rgb(54 135 41);
@@ -91,6 +92,13 @@ footer {
   background-position: center;
   background-size: cover;
   background-size: 100vw;
+}
+
+.expert__layout {
+  background: url('/assets/expert.jpeg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80vw;
 }
 
 .navbar {

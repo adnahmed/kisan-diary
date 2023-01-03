@@ -63,6 +63,7 @@ export const links: LinksFunction = () => {
       href: roboto700,
     },
     { rel: "preload", href: "/assets/dashboard.jpeg", as: "image" },
+    { rel: "preload", href: "/assets/expert.jpeg", as: "image" },
   ];
 };
 

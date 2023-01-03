@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
-import React from "react";
+import { useFetcher } from "@remix-run/react";
+import React, { useState } from "react";
 import CABIButton from "~/components/cabi-button";
-import uploadFile from "~/helpers/uploadFile";
 export const handle = {
   title: "Manuals",
 };
@@ -11,33 +11,64 @@ export const meta: MetaFunction = () => {
     description: "Expert's Saved Manuals",
   };
 };
+
 export default function Manuals() {
   const documentRef = React.useRef<HTMLInputElement>(null);
-  const nameRef = React.useRef<HTMLInputElement>(null);
-
-  function uploadDocument() {
+  const namingFormRef = React.useRef<HTMLDivElement>(null);
+  const fetcher = useFetcher();
+  const [askDocumentNaming, setAskDocumentNaming] = useState(false);
+  async function uploadDocument() {
     const documentInput = documentRef.current;
     if (!documentInput) return; // might error
-    const document = documentInput.files;
-    if (!document) return;
-    uploadFile(document[0]);
+    const documents = documentInput.files;
+    if (!documents) return;
+    const namingForm = namingFormRef.current;
+    if (!namingForm) return;
+    const formData = new FormData();
+    for (let i = 0; i < documents.length; i++) {
+      formData.append(`file`, documents[i], documents[i].name);
+    }
+    await fetcher.submit(formData, {
+      method: "post",
+      encType: "multipart/form-data",
+      action: "/api/save_files",
+    });
   }
+
   return (
     <div className="manuals">
-      <input className="manuals__input--name" ref={nameRef} type="text" />
       <input
         className="manuals__input--file"
+        multiple
         ref={documentRef}
-        accept=".pdf,.docx,.xls,.jpeg,.mp4,.mp3"
+        accept="audio/*,video/*,image/*,application/msword,application/pdf,application/vnd.ms-excel"
         type="file"
       />
       <CABIButton
         className="manuals__upload upload__button"
-        onClick={uploadDocument}
+        onClick={() => setAskDocumentNaming(true)}
         type="submit"
       >
-        Upload Manual
+        Upload
       </CABIButton>
+      {askDocumentNaming && (
+        <div ref={namingFormRef}>
+          {Array.from(documentRef.current?.files || []).map((file) => {
+            return (
+              <input
+                key={file.name + file.size}
+                type="text"
+                name="filename"
+                defaultValue={file.name}
+              />
+            );
+          })}
+          <CABIButton type="submit" onClick={uploadDocument}>
+            Save Changes
+          </CABIButton>
+        </div>
+      )}
+      {fetcher.data && <p>{JSON.stringify(fetcher.data)}</p>}
     </div>
   );
 }
