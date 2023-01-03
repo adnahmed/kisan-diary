@@ -32,7 +32,7 @@ import { useCatch } from "@remix-run/react";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useMemo } from "react";
 import createConversation from "~/helpers/createConversation";
-import { serviceFactory } from "~/services/chat/serviceFactory.client";
+import { serviceFactory } from "~/services/serviceFactory.client";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: chatoscopeStyles }];
 };
@@ -357,7 +357,8 @@ chats.forEach((c) => {
 });
 export default function Messages() {
   return (
-    <div>
+    <div className="flex wrap">
+      <div></div>
       <ChatProvider
         serviceFactory={serviceFactory}
         storage={akaneStorage}
@@ -381,30 +382,6 @@ export default function Messages() {
         }}
       >
         <Chat user={eliot} />
-      </ChatProvider>
-      <ChatProvider
-        serviceFactory={serviceFactory}
-        storage={emilyStorage}
-        config={{
-          typingThrottleTime: 250,
-          typingDebounceTime: 900,
-          debounceTyping: true,
-          autoDraft: AutoDraft.Save | AutoDraft.Restore,
-        }}
-      >
-        <Chat user={emily} />
-      </ChatProvider>
-      <ChatProvider
-        serviceFactory={serviceFactory}
-        storage={joeStorage}
-        config={{
-          typingThrottleTime: 250,
-          typingDebounceTime: 900,
-          debounceTyping: true,
-          autoDraft: AutoDraft.Save | AutoDraft.Restore,
-        }}
-      >
-        <Chat user={joe} />
       </ChatProvider>
     </div>
   );
