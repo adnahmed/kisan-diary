@@ -31,7 +31,7 @@ import { SocketProvider } from "./components/SocketProvider";
 import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
 import fetchFarm from "./models/farm.server";
-import socket from "./services/chat.client";
+import client_socket from "./services/chat.client";
 import { serviceFactory } from "./services/serviceFactory.client";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
@@ -149,19 +149,19 @@ export default function App() {
 
   useEffect(() => {
     return () => {
-      socket.close();
+      client_socket.close();
     };
   }, []);
 
   useEffect(() => {
-    if (!socket) return;
-    socket.on("confirmation", (data) => {
+    if (!client_socket) return;
+    client_socket.on("confirmation", (data) => {
       console.log(data);
     });
   }, []);
   return (
     <Document>
-      <SocketProvider socket={socket}>
+      <SocketProvider socket={client_socket}>
         <ChakraProvider
           theme={theme}
           colorModeManager={
