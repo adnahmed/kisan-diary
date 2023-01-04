@@ -1,0 +1,185 @@
+@startuml
+
+skinparam linetype ortho
+
+enum AlertType {
+  alert
+  recommendation
+}
+
+enum Role {
+  expert
+  farmer
+}
+
+enum IrrigationSource {
+  TubeWell
+  Canal
+}
+
+enum Machinery {
+  Tractor
+  Leveler
+}
+
+enum LandType {
+  Nehri
+  Behri
+}
+
+enum MessageStatus {
+  pending
+  sent
+  delivered
+  seen
+}
+
+enum MessageDirection {
+  incoming
+  outgoing
+}
+
+entity Alert {
+  * id: String
+  * alertType: AlertType
+  * details: String
+  * affectedCrops: Crop[]
+  * affectedRegions: Region[]
+  * createdAt: DateTime
+  * updatedAt: DateTime
+  * ReadReciept: ReadReciept[]
+}
+
+entity ReadReciept {
+  * id: String
+  * readBy: User
+  * alert: Alert
+  * userId: String
+  * alertId: String
+  * createdAt: DateTime
+  * updatedAt: DateTime
+}
+
+entity Region {
+  * name: String
+  * User: User[]
+  * Alert: Alert[]
+  * Farm: Farm[]
+}
+
+entity Password {
+  * hash: String
+  * user: User
+  * userId: String
+}
+
+entity Farm {
+  * id: String
+  * name: String
+  * region: Region
+  * user: User
+  * owner: String
+  * total_land: Int
+  * land_type: LandType
+  * machinery: Machinery[]
+  * crops: Crop[]
+  * irrigation_source: IrrigationSource[]
+  * regionName: String
+  * createdAt: DateTime
+  * updatedAt: DateTime
+}
+
+entity Crop {
+  * id: String
+  * name: String
+  picture: String?
+  * coveredLand: Int
+  * farms: Farm[]
+  * alerts: Alert[]
+}
+
+entity City {
+  * id: String
+  * name: String
+  * country: Country
+  * from: String
+}
+
+entity Country {
+  * id: String
+  * name: String
+  * City: City[]
+}
+
+entity FileUpload {
+  * id: String
+  * user: User
+  * path: String
+  * userId: String
+  Conversation: Conversation?
+  conversationId: String?
+}
+
+entity Conversation {
+  * id: String
+  * participants: User[]
+  * files: FileUpload[]
+  * messages: Message[]
+}
+
+entity Message {
+  * id: String
+  * status: MessageStatus
+  * direction: MessageDirection
+  * isRead: Boolean
+  * createdAt: DateTime
+  * updateAt: DateTime
+  * sender: User
+  * reciever: User
+  * senderId: String
+  * recieverId: String
+  * Conversation: Conversation
+  * conversationId: String
+}
+
+entity User {
+  * id: String
+  * sentMessages: Message[]
+  * recievedMessages: Message[]
+  * email: String
+  * firstName: String
+  * lastName: String
+  * role: Role
+  * address: String
+  * region: Region
+  * createdAt: DateTime
+  * updatedAt: DateTime
+  password: Password?
+  * Farm: Farm[]
+  * regionName: String
+  * ReadReciept: ReadReciept[]
+  * FileUpload: FileUpload[]
+  * conversations: Conversation[]
+}
+
+Alert ||..|| AlertType
+Alert ||..|{ ReadReciept
+Alert }|..|{ Region
+Password |o..|| User
+Region ||..|{ Farm
+Alert }|..|{ Crop
+City }|..|| Country
+City }|..|| Country
+FileUpload }|..|| User
+FileUpload }|..o| Conversation
+Conversation ||..|{ Message
+ReadReciept }|..|| User
+Alert ||..|| AlertType
+User ||..|| Role
+Farm ||..|{ IrrigationSource
+Farm ||..|{ Machinery
+Farm ||..|| LandType
+Message ||..|| MessageStatus
+Message ||..|| MessageDirection
+
+@enduml
