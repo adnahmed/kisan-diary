@@ -106,10 +106,12 @@ enum LandType {
 
 // @description: File Upload Data for farmer and expert
 model FileUpload {
-  id     String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id])
-  path   String @unique
-  userId String
+  id             String        @id @default(uuid())
+  user           User          @relation(fields: [userId], references: [id])
+  path           String        @unique
+  userId         String
+  Conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  conversationId String?
 }
 
 enum MessageStatus {
