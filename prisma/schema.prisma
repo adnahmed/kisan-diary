@@ -164,9 +164,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  password    Password?
-  Farm        Farm[]
-  regionName  String
-  ReadReciept ReadReciept[]
-  FileUpload  FileUpload[]
+  password      Password?
+  Farm          Farm[]
+  regionName    String
+  ReadReciept   ReadReciept[]
+  FileUpload    FileUpload[]
+  conversations Conversation[]
 }
