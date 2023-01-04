@@ -5,7 +5,7 @@ import {
   cookieStorageManagerSSR,
   localStorageManager,
 } from "@chakra-ui/react";
-import { AutoDraft, BasicStorage, ChatProvider } from "@chatscope/use-chat";
+import { AutoDraft, ChatProvider } from "@chatscope/use-chat";
 import { withEmotionCache } from "@emotion/react";
 import roboto300 from "@fontsource/roboto/300.css";
 import roboto400 from "@fontsource/roboto/400.css";
@@ -22,7 +22,6 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { nanoid } from "nanoid";
 import quillBubbleTheme from "quill/dist/quill.bubble.css";
 import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
@@ -32,14 +31,12 @@ import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
 import fetchFarm from "./models/farm.server";
 import client_socket from "./services/chat.client";
+import chatStorage from "./services/chatStorage";
 import { serviceFactory } from "./services/serviceFactory.client";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import theme from "./styles/theme";
-const messageIdGenerator = () => nanoid();
-const groupIdGenerator = () => nanoid();
-const chatStorage = new BasicStorage({ groupIdGenerator, messageIdGenerator });
 
 export const links: LinksFunction = () => {
   return [
