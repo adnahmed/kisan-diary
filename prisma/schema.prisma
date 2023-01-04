@@ -126,17 +126,26 @@ enum MessageDirection {
   outgoing
 }
 
+model Conversation {
+  id           String       @id @default(uuid())
+  participants User[]
+  files        FileUpload[]
+  messages     Message[]
+}
+
 model Message {
-  id         String           @id @default(uuid())
-  status     MessageStatus
-  direction  MessageDirection
-  isRead     Boolean          @default(false)
-  createdAt  DateTime         @default(now())
-  updateAt   DateTime         @updatedAt()
-  sender     User             @relation(name: "UserSentMessages", fields: [senderId], references: [id])
-  reciever   User             @relation(name: "UserRecievedMessages", fields: [recieverId], references: [id])
-  senderId   String
-  recieverId String
+  id             String           @id @default(uuid())
+  status         MessageStatus
+  direction      MessageDirection
+  isRead         Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updateAt       DateTime         @updatedAt()
+  sender         User             @relation(name: "UserSentMessages", fields: [senderId], references: [id])
+  reciever       User             @relation(name: "UserRecievedMessages", fields: [recieverId], references: [id])
+  senderId       String
+  recieverId     String
+  Conversation   Conversation     @relation(fields: [conversationId], references: [id])
+  conversationId String
 }
 
 model User {
