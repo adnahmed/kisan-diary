@@ -10,7 +10,7 @@ class ChatService implements IChatService {
     constructor(storage: IStorage, update: UpdateState, client_socket: Socket) {
         // TODO: Add Event Handlers here...
         this.eventHandlers = {
-            onMessage: (event: ChatEvent<ChatEventType.Message>) => {
+            onMessage: (event: MessageEvent) => {
                 /**
                  * TODO:
                  * 1. Add a message to the conversation to which the message was sent.
