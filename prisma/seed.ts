@@ -66,7 +66,14 @@ async function seed() {
     // no worries if it doesn't exist yet
   });
 
-  await prisma.alert.deleteMany().catch(() => {
+  await prisma.alert.deleteMany({ where: { details: alert.details } }).catch(() => {
+    // no worries if it doesn't exist yet
+  });
+
+  await prisma.readReciept.deleteMany({ where: { alert: { details: alert.details } } }).catch(() => {
+    // no worries if it doesn't exist yet
+  });
+  await prisma.region.deleteMany().catch(() => {
     // no worries if it doesn't exist yet
   });
 
@@ -160,6 +167,21 @@ async function seed() {
     }
   })
 
+  // farmer reads the alert
+  await prisma.readReciept.create({
+    data: {
+      readBy: {
+        connect: {
+          email: farmer.email
+        },
+      },
+      alert: {
+        connect: {
+          details: alert.details
+        }
+      }
+    }
+  })
   console.log(`Database has been seeded. 🌱`);
 }
 
