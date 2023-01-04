@@ -5,9 +5,9 @@ import type EventHandlers from "~/types/EventHandlers";
 class ChatService implements IChatService {
     eventHandlers: EventHandlers
     storage?: IStorage
-    socket: Socket
+    client_socket: Socket
     updateState: UpdateState
-    constructor(storage: IStorage, update: UpdateState, socket: Socket) {
+    constructor(storage: IStorage, update: UpdateState, client_socket: Socket) {
         // TODO: Add Event Handlers here...
         this.eventHandlers = {
             onMessage: (event: ChatEvent<ChatEventType.Message>) => {
@@ -44,9 +44,7 @@ class ChatService implements IChatService {
         }
         this.storage = storage;
         this.updateState = update;
-        this.socket = socket
-
-
+        this.client_socket = client_socket
         /* 
         TODO: attach event handler for `chat-protocol` 
         1. Check type of event

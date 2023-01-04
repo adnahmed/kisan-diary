@@ -1,4 +1,4 @@
 import { io } from "socket.io-client";
 
-const socket = io();
-export default socket;
+const client_socket = io();
+export default client_socket;
