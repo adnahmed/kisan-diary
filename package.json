@@ -25,7 +25,8 @@
     "pretest:e2e:run": "npm run build",
     "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run",
     "cosmos": "cosmos",
-    "cosmos:export": "cosmos-export"
+    "cosmos:export": "cosmos-export",
+    "uml:schema": "prisma-uml ./prisma/schema.prisma > ./prisma/schema.plantuml"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.14",
