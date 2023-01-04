@@ -1,97 +1,87 @@
-import { Link } from "@chakra-ui/react";
-import type { User } from "@prisma/client";
-import { json, redirect } from "@remix-run/node";
-import { Outlet, Link as RemixLink, useLoaderData } from "@remix-run/react";
+import { AddIcon } from "@chakra-ui/icons";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Center,
+  IconButton,
+} from "@chakra-ui/react";
+import type { LoaderArgs } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 import { useState } from "react";
-import { z } from "zod";
-import Form from "~/components/form/form";
-import GlowyButton from "~/components/glowy_button";
-import { prisma } from "~/db.server";
-import { getUser } from "~/session.server";
+import NewCropModal from "~/components/pages/NewCrop";
+import type { Crop } from "~/models/Data/Crop";
+import styles from "~/styles/routes/farmer.crops.css";
+export async function loader({ request }: LoaderArgs) {
+  return {};
+}
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: styles }];
+};
+export const handle = {
+  title: (
+    <div className="flex w-full pl-2">
+      <span className="flex-1">Crops</span>
+      <Link to="crops/new">
+        <IconButton
+          aria-label="Add"
+          bg="cabi"
+          color="wheat"
+          border="1px"
+          borderColor="cabi"
+          icon={
+            <Center h="100%" w="100%">
+              <AddIcon />
+            </Center>
+          }
+          boxSize={8}
+          _hover={{
+            color: "cabi",
+            bg: "wheat",
+          }}
+        />
+      </Link>
+    </div>
+  ),
+};
 
-async function getFarmWithCrops(user: User) {
-  // TODO: return crops with farm
-  return await prisma.farm.findUnique({
-    where: {
-      owner: user?.id,
-    },
-  });
-}
-export async function loader({ request }) {
-  const user = await getUser(request);
-  if (!user) return redirect("/");
-  const farm = await getFarmWithCrops(user);
-  return json({
-    user,
-    farm: farm,
-    crops: farm?.crops,
-  });
-}
-const CropSchema = z.object({
-  name: z.string(),
-});
 export default function Crops() {
-  const data = useLoaderData<typeof loader>();
-  const [showNewCropForm, setShowNewCropForm] = useState(false);
+  const [cropList, setCropsList] = useState<Crop[]>([]);
+  const [showCropForm, setShowCropForm] = useState(false);
+  const deleteCrop = (id: string) => {
+    setCropsList(cropList.filter((c) => c.id !== id));
+  };
   return (
-    <main>
-      <div>
-        <div>
-          {!showNewCropForm && (
-            <button onClick={() => setShowNewCropForm(!showNewCropForm)}>
-              <GlowyButton>
-                <b style={{ color: "blue" }}>New Crop</b>
-              </GlowyButton>
-            </button>
-          )}
-          {showNewCropForm && <Form schema={CropSchema} />}
-        </div>
-        <div
-          className="CropSelection"
-          style={{ display: "flex", flexDirection: "column" }}
-        >
-          <div style={{ display: "flex" }}>
-            <b style={{ flex: "0", color: "green", fontSize: "xxx-large" }}>
-              Crops
-            </b>
-          </div>
-          {/* crops.map */}
-          {[
-            { id: "0", fullName: "Potato" },
-            { id: "1", fullName: "Wheat" },
-          ].map((crop) => (
-            <div key={crop.id} id="dashboard-table" style={{ display: "flex" }}>
-              <div
-                id="dashboard-table-row"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignContent: "space-between",
-                  flex: "0",
-                  maxWidth: "299px",
-                  alignItems: "center",
-                }}
-              >
-                <GlowyButton>
-                  <Link as={RemixLink} to={`year_select?crop=${crop.fullName}`}>
-                    {crop.fullName}
-                  </Link>
-                </GlowyButton>
-                <img
-                  style={{
-                    display: "inline",
-                    borderWidth: "0px",
-                    maxHeight: "199px",
-                  }}
-                  alt={crop.fullName + " Image"}
-                  src={"assets/" + crop.fullName.toLowerCase() + ".jpg"}
-                />
+    <div className="crops__dashboard">
+      <NewCropModal />
+      <Accordion allowToggle>
+        <AccordionItem>
+          <AccordionButton _expanded={{ bg: "cabi", color: "wheat" }}>
+            <Box
+              display={"flex"}
+              as="span"
+              flex="1"
+              textAlign="left"
+              justifyContent={"space-between"}
+            >
+              <span>All Crops</span>
+              <AccordionIcon />
+            </Box>
+          </AccordionButton>
+          <AccordionPanel pb={4}>
+            {cropList.map((c) => (
+              <div key={c.fullName}>
+                <span>{c.fullName}</span>
+                <button onClick={() => deleteCrop(c.id)}>Delete</button>
+                <button onClick={() => setShowCropForm(true)}>View</button>{" "}
               </div>
-              <Outlet />
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
+            ))}
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    </div>
   );
 }
