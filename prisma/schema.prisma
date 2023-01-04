@@ -11,7 +11,7 @@ generator client {
 model Alert {
   id              String        @id @default(uuid())
   alertType       AlertType
-  details         String
+  details         String        @unique
   affectedCrops   Crop[]
   affectedRegions Region[]
   createdAt       DateTime      @default(now())
