@@ -112,13 +112,27 @@ model FileUpload {
   userId String
 }
 
+enum MessageStatus {
+  pending
+  sent
+  delivered
+  seen
+}
+
+enum MessageDirection {
+  incoming
+  outgoing
+}
+
 model Message {
-  id         String   @id @default(uuid())
-  isRead     Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt()
-  sender     User     @relation(name: "UserSentMessages", fields: [senderId], references: [id])
-  reciever   User     @relation(name: "UserRecievedMessages", fields: [recieverId], references: [id])
+  id         String           @id @default(uuid())
+  status     MessageStatus
+  direction  MessageDirection
+  isRead     Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+  updateAt   DateTime         @updatedAt()
+  sender     User             @relation(name: "UserSentMessages", fields: [senderId], references: [id])
+  reciever   User             @relation(name: "UserRecievedMessages", fields: [recieverId], references: [id])
   senderId   String
   recieverId String
 }
