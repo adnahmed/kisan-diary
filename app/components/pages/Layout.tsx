@@ -1,4 +1,3 @@
-import { Role } from "@prisma/client";
 import type { ReactNode } from "react";
 import type { UserResult } from "../../types/User";
 import Footer from "./Footer";
@@ -10,9 +9,9 @@ interface LayoutProps {
 }
 
 export default function Layout({ user, children }: LayoutProps) {
-  const isExpert = user?.role === Role.expert ? "expert__layout" : "";
+  const isPublic = user === undefined && "public__layout";
   return (
-    <div className={`layout ${isExpert}`}>
+    <div className={`layout ${isPublic}`}>
       <Header isAuthenticated={!!user} />
       <div className={`layout__children `}>{children}</div>
       <Footer />

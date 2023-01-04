@@ -86,12 +86,16 @@ footer {
   display: grid;
   grid-template-rows: auto 1fr auto;
   height: 100vh;
+}
+
+.public__layout {
   background: url('/assets/dashboard.jpeg');
   background-color: #c7e4e2;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   background-size: 100vw;
+
 }
 
 .expert__layout {
