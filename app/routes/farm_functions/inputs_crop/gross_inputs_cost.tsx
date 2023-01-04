@@ -1,13 +1,12 @@
 import type { FC } from "react";
-import React from "react";
 import CellRow from "~/components/cell-row";
 import IntegratedDiseaseManagement from "./integrated_disease_management";
 import IntegratedPestManagement from "./integrated_pest_management";
 import IntegratedWeedManagement from "./integrated_weed_management";
-import Irrigation from "./Irrigation";
+import Irrigation from "./irrigation";
 import LaborManagement from "./labor_management";
 import NutrientManagement from "./nutrient_management";
-import Seed from "./Seed";
+import Seed from "./seed";
 
 export interface GrossInputsCostProps {}
 
