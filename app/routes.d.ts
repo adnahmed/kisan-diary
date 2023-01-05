@@ -41,6 +41,7 @@ declare module "routes-gen" {
     "/farmer/crops/add_crop": Record<string, never>;
     "/farmer/crop": Record<string, never>;
     "/farmer/crop/land-preparation": Record<string, never>;
+    "/farmer/help": Record<string, never>;
     "/farmer/home": Record<string, never>;
     "/": Record<string, never>;
     "/logout": Record<string, never>;
@@ -91,6 +92,7 @@ declare module "routes-gen" {
       | ["/farmer/crops/add_crop"]
       | ["/farmer/crop"]
       | ["/farmer/crop/land-preparation"]
+      | ["/farmer/help"]
       | ["/farmer/home"]
       | ["/"]
       | ["/logout"]
