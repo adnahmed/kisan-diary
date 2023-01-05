@@ -72,10 +72,7 @@ export function CatchBoundary() {
     </div>
   );
 }
-/*
-Alert: Tomorrow will be raining. Don't apply irrigation in your field.
-Recommendation: Apply urea as per the rate of 50kg per acre.
-*/
+
 interface CreateAlertProps {}
 const CreateAlert: FC<CreateAlertProps> = (props) => {
   const { regions, crops } = useLoaderData<typeof loader>();
