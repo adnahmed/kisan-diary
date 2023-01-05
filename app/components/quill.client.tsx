@@ -1,4 +1,6 @@
 import BetterTable from "quill-better-table";
+import ImageDrop from "quill-image-drop-module";
+import ImageResize from "quill-image-resize";
 import ImageUploader from "quill-image-uploader";
 import MagicUrl from "quill-magic-url";
 import type { ForwardedRef } from "react";
@@ -9,7 +11,8 @@ import uploadFile from "~/helpers/uploadFile";
 Quill.register("modules/imageUploader", ImageUploader);
 Quill.register("modules/magicUrl", MagicUrl);
 Quill.register("modules/better-table", BetterTable);
-
+Quill.register("modules/imageResize", ImageResize);
+Quill.register("modules/imageDrop", ImageDrop);
 const formats = [
   "header",
   "font",
@@ -58,7 +61,9 @@ const Editor = React.forwardRef(
         matchVisual: false,
       },
       magicUrl: true,
+      imageResize: {},
       imageUploader: { upload: uploadFile },
+      imageDrop: true,
     };
     return (
       <ReactQuill
@@ -72,5 +77,6 @@ const Editor = React.forwardRef(
     );
   }
 );
+
 Editor.displayName = "Editor";
 export default Editor;
