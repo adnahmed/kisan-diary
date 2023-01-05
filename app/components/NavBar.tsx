@@ -8,25 +8,25 @@ interface NavBarProps {
 }
 export default function NavBar({ dashboardPath, menu }: NavBarProps) {
   const lastMatch = useLastMatch();
-  function getBackgroundColor(menu_item: string) {
-    const isActiveLink = lastMatch === slugify(menu_item);
-    return isActiveLink ? `wheat` : `cabi`;
-  }
-
   return (
     <Box bg="cabi" className={`navbar`}>
       {menu.map((menu_item) => (
         <Link
           variant="cabi"
           key={menu_item}
-          backgroundColor={getBackgroundColor(menu_item)}
           className=""
           href={
             dashboardPath +
             slugify(menu_item, { lower: true, trim: true, replacement: "_" })
           }
         >
-          <CABIButton>{menu_item}</CABIButton>
+          <CABIButton
+            invert={
+              lastMatch === menu_item.toLocaleLowerCase().replace(" ", "_")
+            }
+          >
+            {menu_item}
+          </CABIButton>
         </Link>
       ))}
     </Box>
