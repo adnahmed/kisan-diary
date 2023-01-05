@@ -7,7 +7,7 @@
         {
             "type": "firefox",
             "request": "launch",
-            "name": "Client",
+            "name": "Client_Firefox",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}/public/build",
             "skipFiles": [
@@ -23,6 +23,16 @@
                     "path": "${workspaceFolder}/app"
                 }
             ]
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Client_Edge",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/public/build",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
         },
         {
             "type": "node",
@@ -46,10 +56,18 @@
     ],
     "compounds": [
         {
-            "name": "Server/Client",
+            "name": "Server/ClientE",
             "configurations": [
                 "Server",
-                "Client",
+                "Client_Edge",
+            ],
+            "stopAll": true
+        },
+        {
+            "name": "Server/ClientF",
+            "configurations": [
+                "Server",
+                "Client_Firefox",
             ],
             "stopAll": true
         }
