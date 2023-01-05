@@ -1,7 +1,6 @@
 import type { ActionArgs } from "@remix-run/server-runtime";
 import {
   json,
-  redirect,
   unstable_parseMultipartFormData,
 } from "@remix-run/server-runtime";
 import { prisma } from "~/db.server";
@@ -11,7 +10,10 @@ import { getUser } from "~/session.server";
 export async function action({ request }: ActionArgs) {
   try {
     const user = await getUser(request);
-    if (!user) redirect("/404");
+    if (!user)
+      throw new Error(
+        "Failed uploading file. error: Could not verify identity."
+      );
     const formData = await unstable_parseMultipartFormData(
       request,
       uploadHandler

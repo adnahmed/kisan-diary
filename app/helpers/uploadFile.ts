@@ -1,9 +1,11 @@
+import { route } from "routes-gen";
+
 async function uploadFile(file: File, filename?: string) {
     const body = new FormData();
     body.append("file", file);
     if (filename) body.append('filename', filename)
     try {
-        const result = await fetch("/api/save_file", {
+        const result = await fetch(route("/api/save_file"), {
             method: "POST",
             body: body,
         });

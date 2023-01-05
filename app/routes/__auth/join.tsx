@@ -8,6 +8,7 @@ import { json, redirect } from "@remix-run/node";
 import { useCatch } from "@remix-run/react";
 import { InputError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
+import { route } from "routes-gen";
 import { z } from "zod";
 import Form from "~/components/form/form";
 import cleanString from "~/helpers/cleanString";
@@ -85,7 +86,7 @@ export function CatchBoundary() {
 }
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
-  if (userId) return redirect("/");
+  if (userId) return redirect(route("/"));
   return json({});
 }
 

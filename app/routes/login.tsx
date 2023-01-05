@@ -5,6 +5,7 @@ import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import React from "react";
 
 import { $path } from "remix-routes";
+import { route } from "routes-gen";
 import WithModal from "~/components/pages/WithModal";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/session.server";
@@ -12,7 +13,7 @@ import { safeRedirect, validateEmail } from "~/utils";
 
 export async function loader({ request }: LoaderArgs) {
   const user = await getUserId(request);
-  if (user) return redirect("/");
+  if (user) return redirect(route("/"));
   return null;
 }
 
@@ -49,13 +50,13 @@ export async function action({ request }: ActionArgs) {
     request,
     userId: user.id,
     remember: remember === "on" ? true : false,
-    redirectTo: safeRedirect($path(`/${user.role}/home`), "/"),
+    redirectTo: safeRedirect($path(route(`/${user.role}/home`)), route("/")),
   });
 }
 
 export function LoginPage() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/";
+  const redirectTo = searchParams.get("redirectTo") || route("/");
   const actionData = useActionData<typeof action>();
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
@@ -162,7 +163,7 @@ export function LoginPage() {
               <Link
                 className="text-blue-500 underline"
                 to={{
-                  pathname: "/join",
+                  pathname: route("/join"),
                   search: searchParams.toString(),
                 }}
               >
@@ -180,6 +181,6 @@ export default () => (
   <WithModal
     Body={<LoginPage />}
     Header={<span>Login</span>}
-    autoOpenUrl="/login"
+    autoOpenUrl={route("/login")}
   />
 );

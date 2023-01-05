@@ -1,3 +1,4 @@
+import { route } from "routes-gen";
 import NavBar from "../NavBar";
 
 const menu = [
@@ -10,5 +11,5 @@ const menu = [
   "Messages",
 ];
 export default function FarmerNavBar() {
-  return <NavBar dashboardPath="/farmer/" menu={menu} />;
+  return <NavBar dashboardPath={route("/farmer")} menu={menu} />;
 }

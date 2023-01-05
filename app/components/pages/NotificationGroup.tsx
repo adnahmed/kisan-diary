@@ -5,11 +5,13 @@ import { useDataRefresh } from "remix-utils";
 import type { loader } from "~/routes/api/unread_alerts";
 import type AlertOutput from "~/types/AlertOutput";
 import NotificationButton from "./NotificationButton";
+import { route } from "routes-gen";
 export default function NotificationGroup() {
   const unread_alerts = useFetcher<typeof loader>();
   const { refresh } = useDataRefresh();
   useEffect(() => {
-    if (unread_alerts.type === "init") unread_alerts.load("/api/unread_alerts");
+    if (unread_alerts.type === "init")
+      unread_alerts.load(route("/api/unread_alerts"));
   }, [unread_alerts, unread_alerts.data, unread_alerts.type]);
 
   const [showAlerts, setShowAlerts] = useState(false);

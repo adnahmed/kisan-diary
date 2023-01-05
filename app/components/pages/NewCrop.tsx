@@ -5,6 +5,7 @@ import type { ForwardedRef } from "react";
 import React from "react";
 import { getParams } from "remix-params-helper";
 import { useTypedLoaderData } from "remix-typedjson";
+import { route } from "routes-gen";
 import { z } from "zod";
 import Heading from "~/components/form/heading";
 import WithModal from "~/components/pages/WithModal";
@@ -62,7 +63,7 @@ const NewCropModal = () => (
   <WithModal
     Body={<NewCrop />}
     Header={<Heading>New Crop</Heading>}
-    autoOpenUrl="/expert/crops/new"
+    autoOpenUrl={route("/farmer/crops/add_crop")}
   />
 );
 export default NewCropModal;

@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import React, { useState } from "react";
+import { route } from "routes-gen";
 import CABIButton from "~/components/cabi-button";
 export const handle = {
   title: "Manuals",
@@ -31,7 +32,7 @@ export default function Manuals() {
     await fetcher.submit(formData, {
       method: "post",
       encType: "multipart/form-data",
-      action: "/api/save_files",
+      action: route("/api/save_files"),
     });
   }
 

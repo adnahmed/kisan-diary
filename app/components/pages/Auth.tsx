@@ -1,13 +1,13 @@
 import { Form, Link } from "@remix-run/react";
+import { route } from "routes-gen";
 import CABIButton from "../cabi-button";
-
 export function UnauthenticatedMenu() {
   return (
     <div className="menu__authentication header__menu">
-      <Link to="/join">
+      <Link to={route("/join")}>
         <CABIButton invert={true}>Sign Up</CABIButton>
       </Link>
-      <Link to="/login">
+      <Link to={route("/login")}>
         <CABIButton invert={true}>Log In</CABIButton>
       </Link>
     </div>
@@ -17,7 +17,7 @@ export function UnauthenticatedMenu() {
 export function AuthenticatedMenu() {
   return (
     <div className="header__menu menu__authentication">
-      <Form method="post" action="/logout" data-netlify="true">
+      <Form method="post" action={route("/logout")} data-netlify="true">
         <button type="submit">Logout</button>
       </Form>
     </div>

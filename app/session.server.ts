@@ -1,4 +1,5 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
+import { route } from "routes-gen";
 import invariant from "tiny-invariant";
 
 import type { User } from "~/models/user.server";
@@ -10,7 +11,7 @@ export const sessionStorage = createCookieSessionStorage({
   cookie: {
     name: "__session",
     httpOnly: true,
-    path: "/",
+    path: route("/"),
     sameSite: "lax",
     secrets: [process.env.SESSION_SECRET],
     secure: process.env.NODE_ENV === "production",
@@ -89,7 +90,7 @@ export async function createUserSession({
 
 export async function logout(request: Request) {
   const session = await getSession(request);
-  return redirect("/", {
+  return redirect(route("/"), {
     headers: {
       "Set-Cookie": await sessionStorage.destroySession(session),
     },

@@ -8,6 +8,7 @@ import { AuthenticatedMenu, UnauthenticatedMenu } from "./Auth";
 import ExpertNavBar from "./ExpertNavBar";
 import FarmerNavBar from "./FarmerNavBar";
 import NotificationGroup from "./NotificationGroup";
+import { route } from "routes-gen";
 const AppTitle = "Kisan Diary";
 interface HeaderHeadingProps {
   showFarmName: boolean;
@@ -22,12 +23,9 @@ function HeaderHeading({
   return (
     <div className="header__home home__heading">
       {showFarmName && (
-        <Heading
-          className="header__home home__heading heading__farm"
-          fontSize={`3xl`}
-        >
+        <div className="header__home home__heading heading__farm">
           {farmName}
-        </Heading>
+        </div>
       )}
       {showExpertTitle && (
         <Heading className="flex justify-around grow" size="lg">
@@ -73,7 +71,7 @@ export default function Header({ isAuthenticated }: HeaderArgs) {
   const NavBar = useNavBar(user);
   return (
     <header>
-      <a href="/" className="header__home">
+      <a href={route("/")} className="header__home">
         <img
           key="logo"
           alt="logo"
