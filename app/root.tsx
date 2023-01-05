@@ -5,7 +5,6 @@ import {
   cookieStorageManagerSSR,
   localStorageManager,
 } from "@chakra-ui/react";
-import { AutoDraft, ChatProvider } from "@chatscope/use-chat";
 import { withEmotionCache } from "@emotion/react";
 import roboto300 from "@fontsource/roboto/300.css";
 import roboto400 from "@fontsource/roboto/400.css";
@@ -25,14 +24,12 @@ import {
 import quillBubbleTheme from "quill/dist/quill.bubble.css";
 import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
-import { ClientOnly } from "remix-utils";
+import { route } from "routes-gen";
 import { SocketProvider } from "./components/SocketProvider";
 import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
 import fetchFarm from "./models/farm.server";
 import client_socket from "./services/chat.client";
-import chatStorage from "./services/chatStorage";
-import { serviceFactory } from "./services/serviceFactory.client";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
@@ -132,8 +129,8 @@ const Document = withEmotionCache(
 
 export async function loader({ request }: LoaderArgs) {
   const user = await getUser(request);
-  if (user && new URL(request.url).pathname === "/")
-    return redirect(`/${user.role}`);
+  if (user && new URL(request.url).pathname === route("/"))
+    return redirect(route(`/${user.role}`));
   return json({
     user: await getUser(request),
     cookies: request.headers.get("cookie"),
@@ -167,24 +164,9 @@ export default function App() {
               : localStorageManager
           }
         >
-          <ClientOnly fallback={<div>Loading...</div>}>
-            {() => (
-              <ChatProvider
-                serviceFactory={serviceFactory}
-                storage={chatStorage}
-                config={{
-                  typingThrottleTime: 250,
-                  typingDebounceTime: 900,
-                  debounceTyping: true,
-                  autoDraft: AutoDraft.Save | AutoDraft.Restore,
-                }}
-              >
-                <Layout user={user}>
-                  <Outlet />
-                </Layout>
-              </ChatProvider>
-            )}
-          </ClientOnly>
+          <Layout user={user}>
+            <Outlet />
+          </Layout>
         </ChakraProvider>
       </SocketProvider>
     </Document>
