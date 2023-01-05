@@ -3,8 +3,11 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import type AlertCreateInput from "~/types/AlertCreateInput";
 import type CropCreateInput from "~/types/CropCreateInput";
+import type PostCreateInput from "~/types/PostCreateInput";
 import type { UserCreateInput } from "~/types/User";
+import type { CommentCreateWithoutReplyInput } from '../app/types/CommentCreateInput';
 import type FarmCreateInput from '../app/types/FarmCreateInput';
+import type PostTagCreateInput from '../app/types/PostTagCreateInput';
 
 const prisma = new PrismaClient();
 
@@ -48,11 +51,22 @@ const crops: CropCreateInput[] = [
   }
 ]
 
+const post: PostCreateInput = {
+  title: 'An unseen bug in wheat crop. What should i do?',
+  content: 'Hello Experts, I am looking at a bug namely `Akintas Papari`. Please provide protective measure for my wheat crop against this bug. Thanks'
+}
+const tags: PostTagCreateInput[] = [
+  { name: 'Wheat' },
+  { name: 'Bug' },
+  { name: 'Akintas Papari' }
+]
 const alert: AlertCreateInput = {
   alertType: 'alert',
   details: 'All your Crops are belong to us!'
 }
-
+const comment: CommentCreateWithoutReplyInput = {
+  content: "This is a comment on `Akintas Papari`",
+}
 async function seed() {
   // cleanup the existing database
   await prisma.user.deleteMany({ where: { email: { in: [expert.email, farmer.email] } } }).catch(() => {
@@ -73,7 +87,18 @@ async function seed() {
   await prisma.readReciept.deleteMany({ where: { alert: { details: alert.details } } }).catch(() => {
     // no worries if it doesn't exist yet
   });
+  await prisma.post.deleteMany({ where: { title: post.title } }).catch(() => {
+    // no worries if it doesn't exist yet`
+  });
+  await prisma.comment.deleteMany({ where: { content: comment.content } }).catch(() => {
+    // no worries if it doesn't exist yet
+  });
+
   await prisma.region.deleteMany().catch(() => {
+    // no worries if it doesn't exist yet
+  });
+
+  await prisma.postTag.deleteMany({ where: { name: { in: tags.map(tag => tag.name) } } }).catch(() => {
     // no worries if it doesn't exist yet
   });
 
@@ -108,11 +133,11 @@ async function seed() {
     region: regionInput(farm)
   }
 
-  await prisma.user.create({
+  const createdExpert = await prisma.user.create({
     data: prismaUserData(expert)
   });
 
-  await prisma.user.create({
+  const createdFarmer = await prisma.user.create({
     data: prismaUserData(farmer),
   });
 
@@ -182,6 +207,39 @@ async function seed() {
       }
     }
   })
+
+  const createdPost = await prisma.post.create({
+    data: {
+      ...post,
+      postedBy: {
+        connect: {
+          id: createdFarmer.id
+        }
+      },
+      tags: {
+        connectOrCreate: tags.map(tag => ({
+          create: { name: tag.name },
+          where: { name: tag.name }
+        }))
+      }
+    }
+  })
+  await prisma.comment.create({
+    data: {
+      ...comment,
+      commenter: {
+        connect: {
+          id: createdExpert.id
+        }
+      },
+      postedFor: {
+        connect: {
+          id: createdPost.id
+        }
+      }
+    }
+  })
+
   console.log(`Database has been seeded. 🌱`);
 }
 
