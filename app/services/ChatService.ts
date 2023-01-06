@@ -1,6 +1,14 @@
 import type { ChatEvent, ChatEventHandler, ChatEventType, IChatService, IStorage, SendMessageServiceParams, SendTypingServiceParams, UpdateState } from "@chatscope/use-chat";
 import type { Socket } from "socket.io-client";
-import type EventHandlers from "~/types/EventHandlers";
+declare type EventHandlers = {
+    onMessage: ChatEventHandler<ChatEventType.Message, ChatEvent<ChatEventType.Message>>;
+    onConnectionStateChanged: ChatEventHandler<ChatEventType.ConnectionStateChanged, ChatEvent<ChatEventType.ConnectionStateChanged>>;
+    onUserConnected: ChatEventHandler<ChatEventType.UserConnected, ChatEvent<ChatEventType.UserConnected>>;
+    onUserDisconnected: ChatEventHandler<ChatEventType.UserDisconnected, ChatEvent<ChatEventType.UserDisconnected>>;
+    onUserPresenceChanged: ChatEventHandler<ChatEventType.UserPresenceChanged, ChatEvent<ChatEventType.UserPresenceChanged>>;
+    onUserTyping: ChatEventHandler<ChatEventType.UserTyping, ChatEvent<ChatEventType.UserTyping>>;
+    [key: string]: any;
+};
 
 class ChatService implements IChatService {
     eventHandlers: EventHandlers
@@ -10,7 +18,7 @@ class ChatService implements IChatService {
     constructor(storage: IStorage, update: UpdateState, client_socket: Socket) {
         // TODO: Add Event Handlers here...
         this.eventHandlers = {
-            onMessage: (event: MessageEvent) => {
+            onMessage: (event: ChatEvent<ChatEventType.Message>) => {
                 /**
                  * TODO:
                  * 1. Add a message to the conversation to which the message was sent.
