@@ -1,5 +1,5 @@
 import BetterTable from "quill-better-table";
-import ImageDrop from "quill-image-drop-module";
+import { ImageDrop } from "quill-image-drop-module";
 import ImageResize from "quill-image-resize";
 import ImageUploader from "quill-image-uploader";
 import MagicUrl from "quill-magic-url";

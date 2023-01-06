@@ -1,8 +1,7 @@
 import { Link } from "@chakra-ui/react";
-import type { AlertType } from "@prisma/client";
 import { formatDistance } from "date-fns";
 import Emoji from "react-emojis";
-import AlertOutput from "~/types/AlertOutput";
+import type AlertOutput from "~/types/AlertOutput";
 
 interface NotificationTooltipProps {
   alerts?: AlertOutput[];
