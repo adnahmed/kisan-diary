@@ -1,5 +1,6 @@
 import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import e from "express";
 import { z } from "zod";
 import Form from "~/components/form/form";
 /*
@@ -21,7 +22,6 @@ const schema = z.object({
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const email = formData.get("email")?.toString();
-
   /* send jwt to email */
   return redirect(`/`, {
     status: 302,

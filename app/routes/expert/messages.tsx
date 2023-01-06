@@ -13,26 +13,32 @@ import {
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import chatoscopeStyles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
-import type { MessageContent, TextContent } from "@chatscope/use-chat";
+import type {
+  IStorage,
+  MessageContent,
+  TextContent,
+  UpdateState,
+} from "@chatscope/use-chat";
 import {
   AutoDraft,
   BasicStorage,
   ChatMessage,
   ChatProvider,
   MessageContentType,
-  MessageDirection,
   MessageStatus,
   Presence,
   User,
   UserStatus,
   useChat,
 } from "@chatscope/use-chat";
+import { MessageDirection } from "@prisma/client";
 import type { LinksFunction } from "@remix-run/node";
 import { useCatch } from "@remix-run/react";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useMemo } from "react";
 import createConversation from "~/helpers/createConversation";
-import { serviceFactory } from "~/services/serviceFactory.client";
+import ChatService from "~/services/ChatService";
+import client_socket from "~/services/chat.client";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: chatoscopeStyles }];
 };
@@ -100,7 +106,7 @@ export function Chat({ user }: MessageProps) {
       content: text as unknown as MessageContent<TextContent>,
       contentType: MessageContentType.TextHtml,
       senderId: user.id,
-      direction: MessageDirection.Outgoing,
+      direction: MessageDirection.outgoing,
       status: MessageStatus.Sent,
     });
 
@@ -355,10 +361,15 @@ chats.forEach((c) => {
     }
   });
 });
+function serviceFactory(
+  storage: IStorage,
+  updateState: UpdateState
+): ChatService {
+  return new ChatService(storage, updateState, client_socket);
+}
 export default function Messages() {
   return (
     <div className="flex wrap">
-      <div></div>
       <ChatProvider
         serviceFactory={serviceFactory}
         storage={akaneStorage}
