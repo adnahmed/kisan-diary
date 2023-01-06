@@ -1,5 +1,6 @@
 declare module "routes-gen" {
   export type RouteParams = {
+    "/api/fetch_replies": Record<string, never>;
     "/api/unread_alerts": Record<string, never>;
     "/forgot_password": Record<string, never>;
     "/api/save_files": Record<string, never>;
@@ -42,6 +43,7 @@ declare module "routes-gen" {
     "/farmer/crop": Record<string, never>;
     "/farmer/crop/land-preparation": Record<string, never>;
     "/farmer/help": Record<string, never>;
+    "/farmer/help/post": Record<string, never>;
     "/farmer/home": Record<string, never>;
     "/": Record<string, never>;
     "/logout": Record<string, never>;
@@ -51,6 +53,7 @@ declare module "routes-gen" {
 
   export function route<
     T extends
+      | ["/api/fetch_replies"]
       | ["/api/unread_alerts"]
       | ["/forgot_password"]
       | ["/api/save_files"]
@@ -93,6 +96,7 @@ declare module "routes-gen" {
       | ["/farmer/crop"]
       | ["/farmer/crop/land-preparation"]
       | ["/farmer/help"]
+      | ["/farmer/help/post"]
       | ["/farmer/home"]
       | ["/"]
       | ["/logout"]
