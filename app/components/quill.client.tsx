@@ -7,7 +7,7 @@ import MagicUrl from "quill-magic-url";
 import type { ForwardedRef } from "react";
 import React from "react";
 import ReactQuill, { Quill } from "react-quill";
-import uploadFile from "~/helpers/uploadFile";
+import { defaultModules } from "~/helpers/constants";
 
 Quill.register("modules/imageUploader", ImageUploader);
 Quill.register("modules/magicUrl", MagicUrl);
@@ -30,29 +30,6 @@ const formats = [
   "image",
   "video",
 ];
-const defaultModules = {
-  toolbar: [
-    [{ header: "1" }, { header: "2" }, { font: [] }],
-    [{ size: [] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    ["link", "image", "video"],
-    ["clean"],
-  ],
-  clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
-    matchVisual: false,
-  },
-  magicUrl: true,
-  imageResize: {},
-  imageUploader: { upload: uploadFile },
-  imageDrop: true,
-};
 
 interface EditorProps {
   placeholder?: string;
