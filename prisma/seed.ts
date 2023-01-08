@@ -2,7 +2,7 @@ import type { Role } from "@prisma/client";
 import { AlertType, IssueType, PrismaClient } from '@prisma/client';
 import bcrypt from "bcryptjs";
 import type CropCreateInput from "~/types/CropCreateInput";
-import type IssueCreateInput from "~/types/PostCreateInput";
+import type IssueCreateInput from "~/types/IssueCreateInput";
 import type { UserCreateInput } from "~/types/User";
 import type FarmCreateInput from '../app/types/FarmCreateInput';
 

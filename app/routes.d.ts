@@ -31,6 +31,7 @@ declare module "routes-gen" {
     "/expert": Record<string, never>;
     "/expert/manage-alerts-recommendations/create_alert": Record<string, never>;
     "/expert/manage-alerts-recommendations": Record<string, never>;
+    "/expert/farmer-issues": Record<string, never>;
     "/expert/messages": Record<string, never>;
     "/expert/farmers": Record<string, never>;
     "/expert/manuals": Record<string, never>;
@@ -84,6 +85,7 @@ declare module "routes-gen" {
       | ["/expert"]
       | ["/expert/manage-alerts-recommendations/create_alert"]
       | ["/expert/manage-alerts-recommendations"]
+      | ["/expert/farmer-issues"]
       | ["/expert/messages"]
       | ["/expert/farmers"]
       | ["/expert/manuals"]
