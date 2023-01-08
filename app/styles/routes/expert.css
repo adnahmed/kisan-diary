@@ -22,3 +22,11 @@
   grid-row-start: 4;
   grid-column: 9 / 13;
 }
+
+.home {
+  height: 100%;
+  background: url('/assets/expert.jpeg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30vw;
+}
