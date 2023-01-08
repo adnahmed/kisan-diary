@@ -29,8 +29,8 @@ declare module "routes-gen" {
     "/api/user": Record<string, never>;
     "/dev/null": Record<string, never>;
     "/expert": Record<string, never>;
-    "/expert/manage_alertsrecommendations/create_alert": Record<string, never>;
-    "/expert/manage_alertsrecommendations": Record<string, never>;
+    "/expert/manage-alerts-recommendations/create_alert": Record<string, never>;
+    "/expert/manage-alerts-recommendations": Record<string, never>;
     "/expert/messages": Record<string, never>;
     "/expert/farmers": Record<string, never>;
     "/expert/manuals": Record<string, never>;
@@ -82,8 +82,8 @@ declare module "routes-gen" {
       | ["/api/user"]
       | ["/dev/null"]
       | ["/expert"]
-      | ["/expert/manage_alertsrecommendations/create_alert"]
-      | ["/expert/manage_alertsrecommendations"]
+      | ["/expert/manage-alerts-recommendations/create_alert"]
+      | ["/expert/manage-alerts-recommendations"]
       | ["/expert/messages"]
       | ["/expert/farmers"]
       | ["/expert/manuals"]
