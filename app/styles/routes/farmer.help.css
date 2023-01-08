@@ -1,15 +1,20 @@
 .help.help__dashboard {
     display: grid;
-    grid-template-rows: 2em auto auto;
+    grid-template-rows: 2em auto 2em auto;
     grid-template-columns: repeat(12, 1fr);
     gap: 2em;
     padding: 3em;
     padding-block-start: 1em;
 }
 
-.help__dashboard.dashboard__heading {
+.help__dashboard.dashboard__heading--solution,
+.help__dashboard.dashboard__heading--post {
     grid-row: 1/2;
     grid-column: 2/ span 10;
+}
+
+.help__dashboard.dashboard__heading--solution {
+    grid-row: 3/4;
 }
 
 .help__dashboard.dashboard__input {
@@ -18,9 +23,6 @@
 }
 
 .help__dashboard.dashboard__posts {
-    grid-row: 3/4;
+    grid-row: 4/5;
     grid-column: 2 / span 8;
 }
-
-/*
-*/
