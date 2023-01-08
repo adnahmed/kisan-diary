@@ -1,5 +1,4 @@
 import { useCatch } from "@remix-run/react";
-
 export default function Home() {
   return <div className="expert__home"></div>;
 }

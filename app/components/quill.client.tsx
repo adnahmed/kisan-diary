@@ -5,7 +5,7 @@ import ImageResize from "quill-image-resize";
 import ImageUploader from "quill-image-uploader";
 import MagicUrl from "quill-magic-url";
 import type { ForwardedRef } from "react";
-import React, { useState } from "react";
+import React from "react";
 import ReactQuill, { Quill } from "react-quill";
 import uploadFile from "~/helpers/uploadFile";
 
@@ -58,6 +58,8 @@ interface EditorProps {
   placeholder?: string;
   withTable?: boolean;
   modules?: StringMap;
+  defaultValue?: string;
+  readonly?: boolean;
   onChange?: (
     content, // HTML Contents of Editor
     delta, // Quill Delta representing changes
@@ -67,14 +69,15 @@ interface EditorProps {
 }
 const Editor = React.forwardRef(
   (
-    { onChange, placeholder, modules = defaultModules }: EditorProps,
+    { onChange, placeholder, modules = defaultModules, ...props }: EditorProps,
     ref: ForwardedRef<ReactQuill>
   ) => {
-    const [editorHtml, setEditorHtml] = useState("");
     return (
       <ReactQuill
-        value={editorHtml}
-        modules={modules}
+        defaultValue={props.defaultValue}
+        readOnly={props.readonly}
+        modules={props.readonly ? { toolbar: [] } : modules}
+        theme={props.readonly ? "bubble" : "snow"}
         formats={formats}
         onChange={onChange}
         placeholder={placeholder}
