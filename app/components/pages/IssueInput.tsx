@@ -1,4 +1,3 @@
-import { Select } from "@chakra-ui/react";
 import { IssueType } from "@prisma/client";
 import type { LinksFunction } from "@remix-run/node";
 import type { FetcherWithComponents } from "@remix-run/react";
@@ -9,7 +8,6 @@ import { ClientOnly } from "remix-utils";
 import uploadFile from "~/helpers/uploadFile";
 import type action from "~/routes/farmer.help.post";
 import styles from "~/styles/components/PostInput.css";
-import CABIButton from "../cabi-button";
 import Editor from "../quill.client";
 
 export const links: LinksFunction = () => {
@@ -60,13 +58,13 @@ export default function PostInput({ issue_fetcher }: PostInputProps) {
     <div className={`post post__input`}>
       <label className="post__input input__type">
         <span className="input__type type__heading">Issue Type</span>
-        <Select placeholder="Select a value" ref={typeRef}>
+        <select placeholder="Select a value" ref={typeRef}>
           {Object.keys(IssueType).map((issue_type) => (
             <option key={issue_type} value={issue_type}>
               {issue_type.replace("_", " ")}
             </option>
           ))}
-        </Select>
+        </select>
       </label>
       <div className="post__input input__editor">
         <ClientOnly fallback={<div>Loading...</div>}>
@@ -79,9 +77,9 @@ export default function PostInput({ issue_fetcher }: PostInputProps) {
           )}
         </ClientOnly>
       </div>
-      <CABIButton onClick={createPost} className="post__input post__send">
+      <button onClick={createPost} className="post__input post__send">
         Send
-      </CABIButton>
+      </button>
     </div>
   );
 }

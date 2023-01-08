@@ -4,6 +4,7 @@ import { formatDistance } from "date-fns";
 import { ClientOnly } from "remix-utils";
 import styles from "~/styles/components/PostCard.css";
 import Editor from "../quill.client";
+import ReadOnlyEditor from "./ReadOnlyEditor";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
@@ -11,10 +12,11 @@ export const links: LinksFunction = () => {
 interface PostCardProps {
   issue: Issue & { Solution: Solution | null };
 }
-export default function PostCard({ issue }: PostCardProps) {
+export default function IssueCard({ issue }: PostCardProps) {
+  var issue_number = 0;
   return (
-    <div className="post__card">
-      <div className="post post__created">
+    <div className="issue__card">
+      <div className="issue issue__created">
         Posted:
         {formatDistance(issue.postedOn, new Date())}
       </div>
@@ -27,7 +29,12 @@ export default function PostCard({ issue }: PostCardProps) {
       <ClientOnly fallback={<div>Loading...</div>}>
         {() => <Editor defaultValue={issue.content} readonly />}
       </ClientOnly>
-      <div>{issue.Solution && issue.Solution.content}</div>
+      <div>
+        <span>Solution:</span>
+        <div>
+          {issue.Solution && <ReadOnlyEditor value={issue.Solution.content} />}
+        </div>
+      </div>
     </div>
   );
 }
