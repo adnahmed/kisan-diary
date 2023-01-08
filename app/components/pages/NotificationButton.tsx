@@ -6,7 +6,7 @@ import NotificationTooltip from "./NotificationTooltip";
 interface NotificationButtonProps {
   onClick: () => void;
   showNotifications: boolean;
-  alerts?: AlertOutput[];
+  alerts: AlertOutput[];
   label: string;
   type: AlertType;
 }

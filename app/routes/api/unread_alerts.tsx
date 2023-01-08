@@ -1,5 +1,6 @@
 import type { LoaderArgs } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
+import { prisma } from "~/db.server";
 import fetchAllCrops from "~/models/all_crops.server";
 import fetchFarm from "~/models/farm.server";
 import fetchUnreadAlerts from "~/models/unread_alerts.server";
@@ -14,5 +15,21 @@ export async function loader({ request }: LoaderArgs) {
   if (!crops) throw new Response("Crops Not Found");
   return json({
     unread_alerts: await fetchUnreadAlerts({ user, farm, crops }),
+    suitableCrops: await prisma.crop.findMany({
+      where: {
+        suitableRegions: {
+          every: {
+            name: user.regionName,
+          },
+        },
+        // suitableSoilTypes: {
+        //   hasEvery: farm.soil_type,
+        // },
+      },
+    }),
   });
+
+  // return json({
+
+  // });
 }

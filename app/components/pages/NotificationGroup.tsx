@@ -1,42 +1,66 @@
+import type { Crop } from "@prisma/client";
 import { AlertType } from "@prisma/client";
+import type { LoaderArgs } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
 import { useDataRefresh } from "remix-utils";
-import type { loader } from "~/routes/api/unread_alerts";
+import fetchFarm from "~/models/farm.server";
+import { getUser } from "~/session.server";
 import type AlertOutput from "~/types/AlertOutput";
 import NotificationButton from "./NotificationButton";
-import { route } from "routes-gen";
+
+export async function loader({ request }: LoaderArgs) {
+  const user = await getUser(request);
+  if (!user) throw new Response("Crops Not Found");
+  const farm = await fetchFarm(user);
+  if (!farm) throw new Response("Crops Not Found");
+  return;
+}
 export default function NotificationGroup() {
-  const unread_alerts = useFetcher<typeof loader>();
   const { refresh } = useDataRefresh();
-  useEffect(() => {
-    if (unread_alerts.type === "init")
-      unread_alerts.load(route("/api/unread_alerts"));
-  }, [unread_alerts, unread_alerts.data, unread_alerts.type]);
+  const alert_fetcher = useFetcher();
+  useEffect(() => alert_fetcher.load("/api/unread_alerts"));
+  // useEffect(() => {
+  //   if (alerts_fetcher.type === "init")
+  //     alerts_fetcher.load(route("/api/unread_alerts"));
+  // }, [alerts_fetcher, alerts_fetcher.data, alerts_fetcher.type]);
 
   const [showAlerts, setShowAlerts] = useState(false);
   const [showRecommendations, setShowRecommendations] = useState(false);
 
   const alerts = useMemo<AlertOutput[] | undefined>(
     () =>
-      unread_alerts?.data?.unread_alerts.filter(
+      alert_fetcher?.data?.unread_alerts.filter(
         (ura) => ura.alertType === AlertType.alert
       ),
-    [unread_alerts]
+    [alert_fetcher.data]
   );
+
   const recommendations = useMemo<AlertOutput[] | undefined>(
     () =>
-      unread_alerts?.data?.unread_alerts.filter(
+      alert_fetcher?.data?.unread_alerts.filter(
         (ura) => ura.alertType === AlertType.recommendation
       ),
-    [unread_alerts]
+    [alert_fetcher.data]
   );
+  useEffect(() => {
+    console.log("SuitableCrops: ", alert_fetcher.data?.suitableCrops);
+  }, [alert_fetcher.data]);
+  function getSuitableCropAlerts(suitableCrops: Crop[]): AlertOutput[] {
+    return suitableCrops.map((suitableCrop) => ({
+      id: suitableCrop.id,
+      details: `${suitableCrop.name} is suitable for your farm.`,
+      alertType: "recommendation" as AlertType,
+      createdAt: new Date().toLocaleDateString(),
+      updatedAt: new Date().toLocaleDateString(),
+    }));
+  }
   return (
     <div className="header__notification">
       <NotificationButton
         type={AlertType.alert}
         label={"Alerts"}
-        alerts={alerts}
+        alerts={alerts || []}
         showNotifications={showAlerts}
         onClick={() => {
           setShowAlerts(!showAlerts);
@@ -46,7 +70,9 @@ export default function NotificationGroup() {
       <NotificationButton
         type={AlertType.recommendation}
         label={"Recommendations"}
-        alerts={recommendations}
+        alerts={getSuitableCropAlerts(
+          alert_fetcher.data?.suitableCrops || []
+        ).concat(recommendations || [])}
         showNotifications={showRecommendations}
         onClick={() => {
           setShowRecommendations(!showRecommendations);
