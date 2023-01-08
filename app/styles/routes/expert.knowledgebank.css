@@ -1,0 +1,21 @@
+.knowledgebank__dashboard.dashboard__form {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 50vw;
+    margin: auto;
+}
+
+.dashboard__form.form__field {
+    display: flex;
+    justify-content: space-between;
+    padding: 4% 0%;
+}
+
+.dashboard__form.form__field>select {
+    width: 40%;
+}
+
+.dashboard__form.form__submit {
+    width: 40%;
+    place-self: center;
+}
