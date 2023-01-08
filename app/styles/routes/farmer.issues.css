@@ -51,10 +51,13 @@
 .issues__list.issues__count {
     width: 100%;
     font-weight: bold;
-    border-block-end: 1px solid var(--color-cabi-100);
 }
 
 .issues__list.issues__post {
     display: flex;
     flex-flow: column wrap;
+}
+
+.issues__list.issue__post {
+    border-block-end: 1px solid var(--color-cabi-100);
 }
