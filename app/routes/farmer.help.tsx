@@ -1,9 +1,12 @@
 import { Heading } from "@chakra-ui/react";
+import type { IssueType } from "@prisma/client";
 import type { ActionArgs, LinksFunction, LoaderArgs } from "@remix-run/node";
 import { Outlet, useFetcher, useLocation } from "@remix-run/react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { route } from "routes-gen";
-import PostCard, { links as PostCardLinks } from "~/components/pages/PostCard";
+import IssueCard, {
+  links as PostCardLinks,
+} from "~/components/pages/IssueCard";
 import PostInput, {
   links as PostInputLinks,
 } from "~/components/pages/PostInput";
@@ -19,34 +22,52 @@ export const links: LinksFunction = () => {
 };
 
 export async function action({ request }: ActionArgs) {
+  const user = await getUser(request);
+  if (!user) return;
   const formData = await request.formData();
-
-  return typedjson({
-    post: formData.get("post"),
-    title: formData.get("title"),
+  const type = formData.get("type");
+  if (!type) return null;
+  const issue = formData.get("issue");
+  if (!issue) return null;
+  await prisma.issue.create({
+    data: {
+      type: type as IssueType, // TODO: likely a bug, use type validation
+      content: issue.toString(),
+      postedBy: {
+        connect: {
+          id: user.id,
+        },
+      },
+      belongs_to: {
+        connect: {
+          owner: user.id,
+        },
+      },
+    },
   });
+  return null;
 }
 export async function loader({ request }: LoaderArgs) {
   const user = await getUser(request);
   if (!user) throw new Error("User Not Found");
   return typedjson({
-    posts: await prisma.post.findMany({
+    issues: await prisma.issue.findMany({
       where: {
         postedBy: {
           id: user.id,
         },
       },
       include: {
-        tags: true,
+        Solution: true,
       },
     }),
   });
 }
 
 export default function Help() {
-  const { posts } = useTypedLoaderData<typeof loader>();
+  const { issues } = useTypedLoaderData<typeof loader>();
   const location = useLocation();
-  const post_fetcher = useFetcher<typeof action>();
+  const issue_fetcher = useFetcher<typeof action>();
 
   // TODO: is this a remix bug?
   return location.pathname === route("/farmer/help") ? (
@@ -55,13 +76,11 @@ export default function Help() {
         Post For Emerging Issue
       </Heading>
       <div className="help__dashboard dashboard__input">
-        <PostInput post_fetcher={post_fetcher} />
+        <PostInput issue_fetcher={issue_fetcher} />
       </div>
       <div className="help__dashboard dashboard__posts">
-        {posts &&
-          posts.map((post) => (
-            <PostCard key={post.id} post={post} tags={post.tags} />
-          ))}
+        {issues &&
+          issues.map((issue) => <IssueCard key={issue.id} issue={issue} />)}
       </div>
     </div>
   ) : (

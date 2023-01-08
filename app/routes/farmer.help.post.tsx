@@ -4,9 +4,7 @@ import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import CommentInput, {
   links as CommentInputLinks,
 } from "~/components/pages/CommentInput";
-import CommentList, {
-  links as CommentListLinks,
-} from "~/components/pages/CommentList";
+import { links as CommentListLinks } from "~/components/pages/CommentList";
 
 import { prisma } from "~/db.server";
 import styles from "~/styles/routes/farmer.help.post.css";
@@ -24,11 +22,8 @@ export async function loader({ request }: LoaderArgs) {
   const postId = params.get("id");
   if (!postId) throw new Error("Id not provided.");
   return typedjson({
-    post: await prisma.post.findUnique({
+    post: await prisma.issue.findUnique({
       where: { id: postId },
-      include: {
-        comments: true,
-      },
     }),
   });
 }
@@ -38,7 +33,6 @@ export default function Post() {
   return (
     post && (
       <div className="post">
-        <div className="post post__title">{post.title}</div>
         <div className="post post__created">
           {formatDistance(post.postedOn, new Date())}
         </div>
@@ -49,13 +43,6 @@ export default function Post() {
         )}
         <div className="post post__details">{post.content}</div>
         <CommentInput to={post.id} />
-        <CommentList
-          comments={post.comments.map((comment) => ({
-            ...comment,
-            postedOn: comment.postedOn.toDateString(),
-            updatedOn: comment.updatedOn.toDateString(),
-          }))}
-        />
       </div>
     )
   );
