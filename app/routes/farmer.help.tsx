@@ -9,7 +9,7 @@ import IssueCard, {
 } from "~/components/pages/IssueCard";
 import PostInput, {
   links as PostInputLinks,
-} from "~/components/pages/PostInput";
+} from "~/components/pages/IssueInput";
 import { prisma } from "~/db.server";
 import { getUser } from "~/session.server";
 import styles from "~/styles/routes/farmer.help.css";
