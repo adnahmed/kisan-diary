@@ -95,8 +95,7 @@ const CreateAlert: FC<CreateAlertProps> = (props) => {
     for (const selectedOption of regionsSelect.selectedOptions)
       formData.append("region", selectedOption.value);
     const currentRef = editorRef?.current;
-    const editor = currentRef?.getEditor();
-    const contents = editor?.getContents();
+    const contents = currentRef?.editor?.getContents();
     const jsonifiedContents = JSON.stringify(contents);
     formData.append("details", jsonifiedContents);
     formData.append("alert", alertType);

@@ -5,10 +5,10 @@ export function UnauthenticatedMenu() {
   return (
     <div className="menu__authentication header__menu">
       <Link to={route("/join")}>
-        <CABIButton invert={true}>Sign Up</CABIButton>
+        <CABIButton invertVariant={true}>Sign Up</CABIButton>
       </Link>
       <Link to={route("/login")}>
-        <CABIButton invert={true}>Log In</CABIButton>
+        <CABIButton invertVariant={true}>Log In</CABIButton>
       </Link>
     </div>
   );

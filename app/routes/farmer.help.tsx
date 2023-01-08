@@ -1,5 +1,6 @@
-import type { LinksFunction, LoaderArgs } from "@remix-run/node";
-import { Outlet, useLocation } from "@remix-run/react";
+import { Heading } from "@chakra-ui/react";
+import type { ActionArgs, LinksFunction, LoaderArgs } from "@remix-run/node";
+import { Outlet, useFetcher, useLocation } from "@remix-run/react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { route } from "routes-gen";
 import PostCard, { links as PostCardLinks } from "~/components/pages/PostCard";
@@ -17,6 +18,14 @@ export const links: LinksFunction = () => {
   ];
 };
 
+export async function action({ request }: ActionArgs) {
+  const formData = await request.formData();
+
+  return typedjson({
+    post: formData.get("post"),
+    title: formData.get("title"),
+  });
+}
 export async function loader({ request }: LoaderArgs) {
   const user = await getUser(request);
   if (!user) throw new Error("User Not Found");
@@ -37,14 +46,23 @@ export async function loader({ request }: LoaderArgs) {
 export default function Help() {
   const { posts } = useTypedLoaderData<typeof loader>();
   const location = useLocation();
+  const post_fetcher = useFetcher<typeof action>();
+
   // TODO: is this a remix bug?
   return location.pathname === route("/farmer/help") ? (
-    <div className="help_dashboard">
-      <PostInput />
-      {posts &&
-        posts.map((post) => (
-          <PostCard key={post.id} post={post} tags={post.tags} />
-        ))}
+    <div className="help help__dashboard">
+      <Heading className="help__dashboard dashboard__heading">
+        Post For Emerging Issue
+      </Heading>
+      <div className="help__dashboard dashboard__input">
+        <PostInput post_fetcher={post_fetcher} />
+      </div>
+      <div className="help__dashboard dashboard__posts">
+        {posts &&
+          posts.map((post) => (
+            <PostCard key={post.id} post={post} tags={post.tags} />
+          ))}
+      </div>
     </div>
   ) : (
     <Outlet />

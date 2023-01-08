@@ -1,3 +1,4 @@
+import type { StringMap } from "quill";
 import BetterTable from "quill-better-table";
 import { ImageDrop } from "quill-image-drop-module";
 import ImageResize from "quill-image-resize";
@@ -29,9 +30,34 @@ const formats = [
   "image",
   "video",
 ];
+const defaultModules = {
+  toolbar: [
+    [{ header: "1" }, { header: "2" }, { font: [] }],
+    [{ size: [] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image", "video"],
+    ["clean"],
+  ],
+  clipboard: {
+    // toggle to add extra line breaks when pasting HTML:
+    matchVisual: false,
+  },
+  magicUrl: true,
+  imageResize: {},
+  imageUploader: { upload: uploadFile },
+  imageDrop: true,
+};
+
 interface EditorProps {
   placeholder?: string;
   withTable?: boolean;
+  modules?: StringMap;
   onChange?: (
     content, // HTML Contents of Editor
     delta, // Quill Delta representing changes
@@ -40,38 +66,18 @@ interface EditorProps {
   ) => void;
 }
 const Editor = React.forwardRef(
-  (props: EditorProps, ref: ForwardedRef<ReactQuill>) => {
+  (
+    { onChange, placeholder, modules = defaultModules }: EditorProps,
+    ref: ForwardedRef<ReactQuill>
+  ) => {
     const [editorHtml, setEditorHtml] = useState("");
-    const defaultModules = {
-      toolbar: [
-        [{ header: "1" }, { header: "2" }, { font: [] }],
-        [{ size: [] }],
-        ["bold", "italic", "underline", "strike", "blockquote"],
-        [
-          { list: "ordered" },
-          { list: "bullet" },
-          { indent: "-1" },
-          { indent: "+1" },
-        ],
-        ["link", "image", "video"],
-        ["clean"],
-      ],
-      clipboard: {
-        // toggle to add extra line breaks when pasting HTML:
-        matchVisual: false,
-      },
-      magicUrl: true,
-      imageResize: {},
-      imageUploader: { upload: uploadFile },
-      imageDrop: true,
-    };
     return (
       <ReactQuill
         value={editorHtml}
-        modules={defaultModules}
+        modules={modules}
         formats={formats}
-        onChange={props.onChange}
-        placeholder={props.placeholder}
+        onChange={onChange}
+        placeholder={placeholder}
         ref={ref}
       />
     );
