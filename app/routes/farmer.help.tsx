@@ -68,19 +68,30 @@ export default function Help() {
   const { issues } = useTypedLoaderData<typeof loader>();
   const location = useLocation();
   const issue_fetcher = useFetcher<typeof action>();
-
+  let issue_number = 0;
   // TODO: is this a remix bug?
   return location.pathname === route("/farmer/help") ? (
     <div className="help help__dashboard">
-      <Heading className="help__dashboard dashboard__heading">
+      <Heading className="help__dashboard dashboard__heading--post">
         Post For Emerging Issue
       </Heading>
       <div className="help__dashboard dashboard__input">
         <PostInput issue_fetcher={issue_fetcher} />
       </div>
+      <Heading className="help__dashboard dashboard__heading--solution">
+        Solutions from Expert
+      </Heading>
       <div className="help__dashboard dashboard__posts">
         {issues &&
-          issues.map((issue) => <IssueCard key={issue.id} issue={issue} />)}
+          issues.map((issue) => {
+            issue_number++;
+            return (
+              <div key={issue.id}>
+                <span>Issue #{issue_number}</span>
+                <IssueCard issue={issue} />
+              </div>
+            );
+          })}
       </div>
     </div>
   ) : (

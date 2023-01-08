@@ -6,8 +6,8 @@ import { formatDistance } from "date-fns";
 import React, { useContext, useState } from "react";
 import type ReactQuill from "react-quill";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
-import { ClientOnly } from "remix-utils";
 import CABIButton from "~/components/cabi-button";
+import ReadOnlyEditor from "~/components/pages/ReadOnlyEditor";
 import Editor from "~/components/quill.client";
 import { prisma } from "~/db.server";
 import { getUser } from "~/session.server";
@@ -205,17 +205,6 @@ function IssuePost({ issue, withResponse = true }: IssuePostProps) {
         )
       )}
     </div>
-  );
-}
-interface ReadOnlyEditorProps {
-  value: string;
-}
-
-function ReadOnlyEditor({ value }: ReadOnlyEditorProps) {
-  return (
-    <ClientOnly fallback={<div>Loading...</div>}>
-      {() => <Editor defaultValue={value} readonly={true} />}
-    </ClientOnly>
   );
 }
 
