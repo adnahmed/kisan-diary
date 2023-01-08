@@ -1,9 +1,13 @@
+import type { Season } from "@prisma/client";
 import { Role, SoilType } from "@prisma/client";
 import type { ActionArgs, LinksFunction, LoaderArgs } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import type { FC } from "react";
-import { useState } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import {
+  typedjson,
+  useTypedActionData,
+  useTypedLoaderData,
+} from "remix-typedjson";
 import { prisma } from "~/db.server";
 import { getUser } from "~/session.server";
 import styles from "~/styles/routes/expert.knowledgebank.css";
@@ -18,7 +22,7 @@ export async function loader({ request }: LoaderArgs) {
 
   return typedjson({
     regions: await prisma.region.findMany(),
-    crops: await prisma.crop.findMany(),
+    crops: await prisma.crop.findMany({ include: { suitableRegions: true } }),
   });
 }
 interface CropFormProps {
@@ -27,30 +31,37 @@ interface CropFormProps {
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
+  const cropName = formData.get("crop_name");
+  if (!cropName) return null;
+  const suitableSoilTypes = formData.getAll("soil_type");
+  const suitableRegions = formData.getAll("region");
+  if (!suitableRegions) return null;
+  const suitableSeasons = formData.getAll("season");
+  await prisma.crop.update({
+    where: {
+      name: cropName?.toString(),
+    },
+    data: {
+      suitableSoilTypes: suitableSoilTypes.map(
+        (suitableSoilType) => suitableSoilType.toString() as SoilType
+      ),
+      suitableRegions: {
+        connect: suitableRegions.map((suitableRegion) => ({
+          name: suitableRegion.toString(),
+        })),
+      },
+      suitableSeasons: suitableSeasons.map(
+        (suitableSeason) => suitableSeason.toString() as Season
+      ),
+    },
+  });
+  return null;
 }
-const CropFormValues = {
-  cropName: "",
-  suitableLandTypes: [],
-  suitableRegions: [],
-  suitableSeasons: [],
-  pictures: [],
-};
-const LandTypes = [
-  { value: "1", label: "Nehri" },
-  { value: "2", label: "Sookhi" },
-  { value: "3", label: "Behri" },
-];
 
 const CropForm: FC<CropFormProps> = ({ cropId }) => {
   const data = useTypedLoaderData<typeof loader>();
+  const action_data = useTypedActionData<typeof action>();
   const { crops, regions } = data;
-  const [images, setImages] = useState([]);
-  const onChange = (imageList, addUpdateIndex) => {
-    console.log(imageList, addUpdateIndex);
-    setImages(imageList);
-  };
-  const onSave = () => {};
-
   return (
     <div className="knowledgebank knowledgebank__dashboard">
       <Form method="post" className="knowledgebank__dashboard dashboard__form">
@@ -73,8 +84,8 @@ const CropForm: FC<CropFormProps> = ({ cropId }) => {
           </select>
         </div>
         <div className="dashboard__form form__field">
-          <label htmlFor="regions">Suitable Regions</label>
-          <select name="regions" multiple>
+          <label htmlFor="region">Suitable Regions</label>
+          <select name="region" multiple>
             {regions.map((region) => (
               <option key={region.name} value={region.name}>
                 {region.name}
@@ -83,13 +94,15 @@ const CropForm: FC<CropFormProps> = ({ cropId }) => {
           </select>
         </div>
         <div className="dashboard__form form__field">
-          <label htmlFor="seasons">Suitable Seasons</label>
-          <select name="seasons" multiple>
-            <option value="rabbi">Rabbi</option>
-            <option value="kharif">Kharif</option>
+          <label htmlFor="season">Suitable Seasons</label>
+          <select name="season" multiple>
+            <option value="Rabbi">Rabbi</option>
+            <option value="Kharif">Kharif</option>
           </select>
         </div>
-        <CABIButton className="dashboard__form form__submit">Save</CABIButton>
+        <CABIButton type="submit" className="dashboard__form form__submit">
+          Save
+        </CABIButton>
       </Form>
     </div>
   );

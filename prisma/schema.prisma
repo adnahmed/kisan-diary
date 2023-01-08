@@ -82,10 +82,12 @@ enum Role {
 }
 
 model Region {
-  name  String  @id @unique
-  User  User[]
-  Alert Alert[]
-  Farm  Farm[]
+  name   String  @id @unique
+  User   User[]
+  Alert  Alert[]
+  Farm   Farm[]
+  Crop   Crop?   @relation(fields: [cropId], references: [id])
+  cropId String?
 }
 
 model Password {
@@ -113,12 +115,15 @@ model Farm {
 }
 
 model Crop {
-  id          String  @id @default(uuid())
-  name        String  @unique
-  picture     String?
-  coveredLand Int
-  farms       Farm[]
-  alerts      Alert[]
+  id                String     @id @default(uuid())
+  name              String     @unique
+  picture           String?
+  coveredLand       Int
+  farms             Farm[]
+  alerts            Alert[]
+  suitableRegions   Region[]
+  suitableSeasons   Season[]
+  suitableSoilTypes SoilType[]
 }
 
 enum IrrigationSource {

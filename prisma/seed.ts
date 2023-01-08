@@ -7,7 +7,7 @@ import type CropCreateInput from '../app/types/CropCreateInput';
 import type FarmCreateInput from '../app/types/FarmCreateInput';
 import CropsSeed from "./crops.seed";
 import RegionsSeed from "./regions.seed";
-const crops: CropCreateInput[] = CropsSeed.map(crop_seed => ({ name: crop_seed, picture: '', coveredLand: 0 }))
+const crops: CropCreateInput[] = CropsSeed.map(crop_seed => ({ name: crop_seed, picture: '', coveredLand: 0, suitableSeasons: [], suitableSoilTypes: [] }))
 const prisma = new PrismaClient();
 const alert = {}
 const expert: UserCreateInput = {
@@ -115,6 +115,7 @@ async function seed() {
 
   await prisma.crop.createMany({
     data: crops
+
   })
 
   // Add Potato To Farm
