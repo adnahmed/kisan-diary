@@ -3,6 +3,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum IssueType {
+  seed
+  quality
+  land_management
+  water_management
+  fertilizer_management
+  insect_pest_management
+  disease_management
+  harvest
+  post_harvest
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -28,37 +40,30 @@ model ReadReciept {
   updatedAt DateTime @updatedAt
 }
 
-model PostTag {
-  id     String @id @default(uuid())
-  name   String @unique
-  usedBy User[] @relation("UserTags")
-  posts  Post[] @relation("PostTags")
+model Issue {
+  id String @id @default(uuid())
+
+  postedBy   User      @relation(fields: [userId], references: [id])
+  content    String
+  type       IssueType
+  belongs_to Farm      @relation(fields: [farmId], references: [id])
+  postedOn   DateTime  @default(now())
+  updatedOn  DateTime  @updatedAt
+  userId     String
+  solution   Solution?
+  farmId     String
 }
 
-model Post {
-  id        String    @id @default(uuid())
-  tags      PostTag[] @relation("PostTags")
-  postedBy  User      @relation(fields: [userId], references: [id])
-  title     String
-  content   String
-  comments  Comment[]
-  postedOn  DateTime  @default(now())
-  updatedOn DateTime  @updatedAt
-  userId    String
-}
+model Solution {
+  id String @id @default(uuid())
 
-model Comment {
-  id        String    @id @default(uuid())
-  commenter User      @relation(fields: [userId], references: [id])
+  postedBy  User     @relation(fields: [userId], references: [id])
   content   String
-  postedFor Post      @relation(fields: [postId], references: [id])
-  repliedTo Comment?  @relation("CommentReplies", fields: [replyId], references: [id])
-  replies   Comment[] @relation("CommentReplies")
-  postedOn  DateTime  @default(now())
-  updatedOn DateTime  @updatedAt
+  for       Issue    @relation(fields: [issueId], references: [id])
+  postedOn  DateTime @default(now())
+  updatedOn DateTime @updatedAt
   userId    String
-  replyId   String?
-  postId    String
+  issueId   String   @unique
 }
 
 enum AlertType {
@@ -99,6 +104,7 @@ model Farm {
   regionName        String
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+  Issue             Issue[]
 }
 
 model Crop {
@@ -204,7 +210,6 @@ model User {
   ReadReciept   ReadReciept[]
   FileUpload    FileUpload[]
   conversations Conversation[]
-  Post          Post[]
-  Comment       Comment[]
-  tags          PostTag[]      @relation("UserTags")
+  Issue         Issue[]
+  Solution      Solution[]
 }

@@ -1,16 +1,13 @@
 import type { Role } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
+import { AlertType, IssueType, PrismaClient } from '@prisma/client';
 import bcrypt from "bcryptjs";
-import type AlertCreateInput from "~/types/AlertCreateInput";
 import type CropCreateInput from "~/types/CropCreateInput";
-import type PostCreateInput from "~/types/PostCreateInput";
+import type IssueCreateInput from "~/types/PostCreateInput";
 import type { UserCreateInput } from "~/types/User";
-import type { CommentCreateWithoutReplyInput } from '../app/types/CommentCreateInput';
 import type FarmCreateInput from '../app/types/FarmCreateInput';
-import type PostTagCreateInput from '../app/types/PostTagCreateInput';
 
 const prisma = new PrismaClient();
-
+const alert = {}
 const expert: UserCreateInput = {
   email: "admin@kisan.diary",
   firstName: 'Adnan',
@@ -51,22 +48,11 @@ const crops: CropCreateInput[] = [
   }
 ]
 
-const post: PostCreateInput = {
-  title: 'An unseen bug in wheat crop. What should i do?',
-  content: 'Hello Experts, I am looking at a bug namely `Akintas Papari`. Please provide protective measure for my wheat crop against this bug. Thanks'
+const issue: IssueCreateInput = {
+  content: 'Hello Experts, I am looking at a bug namely `Akintas Papari`. Please provide protective measure for my wheat crop against this bug. Thanks',
+  type: IssueType.disease_management
 }
-const tags: PostTagCreateInput[] = [
-  { name: 'Wheat' },
-  { name: 'Bug' },
-  { name: 'Akintas Papari' }
-]
-const alert: AlertCreateInput = {
-  alertType: 'alert',
-  details: 'All your Crops are belong to us!'
-}
-const comment: CommentCreateWithoutReplyInput = {
-  content: "This is a comment on `Akintas Papari`",
-}
+
 async function seed() {
   // cleanup the existing database
   await prisma.user.deleteMany({ where: { email: { in: [expert.email, farmer.email] } } }).catch(() => {
@@ -80,25 +66,15 @@ async function seed() {
     // no worries if it doesn't exist yet
   });
 
-  await prisma.alert.deleteMany({ where: { details: alert.details } }).catch(() => {
+  await prisma.alert.deleteMany({ where: { details: '' } }).catch(() => {
     // no worries if it doesn't exist yet
   });
 
-  await prisma.readReciept.deleteMany({ where: { alert: { details: alert.details } } }).catch(() => {
-    // no worries if it doesn't exist yet
-  });
-  await prisma.post.deleteMany({ where: { title: post.title } }).catch(() => {
-    // no worries if it doesn't exist yet`
-  });
-  await prisma.comment.deleteMany({ where: { content: comment.content } }).catch(() => {
+  await prisma.readReciept.deleteMany({ where: { alert: { details: '' } } }).catch(() => {
     // no worries if it doesn't exist yet
   });
 
   await prisma.region.deleteMany().catch(() => {
-    // no worries if it doesn't exist yet
-  });
-
-  await prisma.postTag.deleteMany({ where: { name: { in: tags.map(tag => tag.name) } } }).catch(() => {
     // no worries if it doesn't exist yet
   });
 
@@ -141,7 +117,7 @@ async function seed() {
     data: prismaUserData(farmer),
   });
 
-  await prisma.farm.create({
+  const createdFarm = await prisma.farm.create({
     data: prismaFarmData
   })
 
@@ -179,6 +155,8 @@ async function seed() {
   await prisma.alert.create({
     data: {
       ...alert,
+      alertType: AlertType.alert,
+      details: '',
       affectedCrops: {
         connect: {
           name: crops[0].name
@@ -202,44 +180,27 @@ async function seed() {
       },
       alert: {
         connect: {
-          details: alert.details
+          details: ''
         }
       }
     }
   })
-
-  const createdPost = await prisma.post.create({
+  await prisma.issue.create({
     data: {
-      ...post,
+      type: issue.type,
+      content: issue.content,
       postedBy: {
         connect: {
           id: createdFarmer.id
         }
       },
-      tags: {
-        connectOrCreate: tags.map(tag => ({
-          create: { name: tag.name },
-          where: { name: tag.name }
-        }))
-      }
-    }
-  })
-  await prisma.comment.create({
-    data: {
-      ...comment,
-      commenter: {
+      belongs_to: {
         connect: {
-          id: createdExpert.id
-        }
-      },
-      postedFor: {
-        connect: {
-          id: createdPost.id
+          id: createdFarm.id
         }
       }
     }
   })
-
   console.log(`Database has been seeded. 🌱`);
 }
 
