@@ -5,6 +5,7 @@ const menu = [
   "Manuals",
   "Messages",
   "Farmer Issues",
+  "Knowledge Bank",
 ];
 
 export default function ExpertNavBar() {

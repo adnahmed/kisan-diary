@@ -68,13 +68,7 @@ export default function PostInput({ issue_fetcher }: PostInputProps) {
       </label>
       <div className="post__input input__editor">
         <ClientOnly fallback={<div>Loading...</div>}>
-          {() => (
-            <Editor
-              modules={postEditorModules}
-              ref={editorRef}
-              placeholder="Write your Post here"
-            />
-          )}
+          {() => <Editor ref={editorRef} placeholder="Write your Post here" />}
         </ClientOnly>
       </div>
       <button onClick={createPost} className="post__input post__send">

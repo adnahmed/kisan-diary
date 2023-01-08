@@ -1,9 +1,7 @@
 import type { Issue, Solution } from "@prisma/client";
 import type { LinksFunction } from "@remix-run/node";
 import { formatDistance } from "date-fns";
-import { ClientOnly } from "remix-utils";
 import styles from "~/styles/components/PostCard.css";
-import Editor from "../quill.client";
 import ReadOnlyEditor from "./ReadOnlyEditor";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
@@ -26,9 +24,7 @@ export default function IssueCard({ issue }: PostCardProps) {
         </div>
       )}
       <div>Issue Type: {issue.type.replace("_", " ")}</div>
-      <ClientOnly fallback={<div>Loading...</div>}>
-        {() => <Editor defaultValue={issue.content} readonly />}
-      </ClientOnly>
+      <ReadOnlyEditor value={issue.content} />
       <div>
         <span>Solution:</span>
         <div>

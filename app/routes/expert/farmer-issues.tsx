@@ -208,6 +208,7 @@ function IssuePost({ issue, withResponse = true }: IssuePostProps) {
   );
 }
 
+/*
 function FilterIssues() {
   const nameRef = React.useRef<HTMLSelectElement>(null);
   const regionRef = React.useRef<HTMLSelectElement>(null);
@@ -254,6 +255,7 @@ interface FilterProps {
   default?: string;
   onChange?: () => void;
 }
+*/
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
