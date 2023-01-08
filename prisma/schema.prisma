@@ -3,6 +3,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Season {
+  Rabbi
+  Kharif
+}
+
 enum IssueType {
   seed
   quality
@@ -97,7 +102,7 @@ model Farm {
   user              User               @relation(fields: [owner], references: [id], onDelete: Cascade, onUpdate: Cascade)
   owner             String             @unique
   total_land        Int
-  land_type         LandType
+  soil_type         SoilType
   machinery         Machinery[]
   crops             Crop[]
   irrigation_source IrrigationSource[]
@@ -139,9 +144,11 @@ enum Machinery {
   Leveler
 }
 
-enum LandType {
-  Nehri
-  Behri
+enum SoilType {
+  Sandy
+  Silt
+  Clay
+  Loamy
 }
 
 // @description: File Upload Data for farmer and expert

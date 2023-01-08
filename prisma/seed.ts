@@ -1,11 +1,13 @@
 import type { Role } from "@prisma/client";
 import { AlertType, IssueType, PrismaClient } from '@prisma/client';
 import bcrypt from "bcryptjs";
-import type CropCreateInput from "~/types/CropCreateInput";
 import type IssueCreateInput from "~/types/IssueCreateInput";
 import type { UserCreateInput } from "~/types/User";
+import type CropCreateInput from '../app/types/CropCreateInput';
 import type FarmCreateInput from '../app/types/FarmCreateInput';
-
+import CropsSeed from "./crops.seed";
+import RegionsSeed from "./regions.seed";
+const crops: CropCreateInput[] = CropsSeed.map(crop_seed => ({ name: crop_seed, picture: '', coveredLand: 0 }))
 const prisma = new PrismaClient();
 const alert = {}
 const expert: UserCreateInput = {
@@ -30,23 +32,11 @@ const farm: FarmCreateInput = {
   name: 'Kauser Agriculture Farm',
   region: 'Sialkot',
   total_land: 20,
-  land_type: 'Nehri',
+  soil_type: 'Sandy',
 
   machinery: ['Tractor', 'Leveler'],
   irrigation_source: ['Canal']
 }
-const crops: CropCreateInput[] = [
-  {
-    name: 'Potato',
-    picture: null,
-    coveredLand: 10
-  },
-  {
-    name: 'Maize',
-    picture: null,
-    coveredLand: 8
-  }
-]
 
 const issue: IssueCreateInput = {
   content: 'Hello Experts, I am looking at a bug namely `Akintas Papari`. Please provide protective measure for my wheat crop against this bug. Thanks',
@@ -55,29 +45,31 @@ const issue: IssueCreateInput = {
 
 async function seed() {
   // cleanup the existing database
-  await prisma.user.deleteMany({ where: { email: { in: [expert.email, farmer.email] } } }).catch(() => {
+  await prisma.user.deleteMany().catch(() => {
     // no worries if it doesn't exist yet
   });
-  await prisma.farm.deleteMany({ where: { name: farm.name } }).catch(() => {
-    // no worries if it doesn't exist yet
-  });
-
-  await prisma.crop.deleteMany({ where: { name: { in: crops.map(c => c.name) } } }).catch(() => {
+  await prisma.farm.deleteMany().catch(() => {
     // no worries if it doesn't exist yet
   });
 
-  await prisma.alert.deleteMany({ where: { details: '' } }).catch(() => {
+  await prisma.crop.deleteMany().catch(() => {
     // no worries if it doesn't exist yet
   });
 
-  await prisma.readReciept.deleteMany({ where: { alert: { details: '' } } }).catch(() => {
+  await prisma.alert.deleteMany().catch(() => {
+    // no worries if it doesn't exist yet
+  });
+
+  await prisma.readReciept.deleteMany().catch(() => {
     // no worries if it doesn't exist yet
   });
 
   await prisma.region.deleteMany().catch(() => {
     // no worries if it doesn't exist yet
   });
-
+  await prisma.region.createMany({
+    data: RegionsSeed.map(region_seed => ({ name: region_seed })),
+  })
   const hashedPassword = await bcrypt.hash("password", 10);
 
   const regionInput = (entity: { region: string }) => ({
@@ -185,6 +177,7 @@ async function seed() {
       }
     }
   })
+
   await prisma.issue.create({
     data: {
       type: issue.type,
