@@ -12,7 +12,7 @@
     "dev": "run-p dev:*:* dev:*",
     "dev:build:server": "cross-env NODE_ENV=development npm run build:server -- --watch",
     "dev:build:routes": "npm run build:routes -- --watch",
-    "dev:run:server": "cross-env NODE_ENV=development node --inspect --require ./node_modules/dotenv/config --require ./mocks ./build/expressServer.js",
+    "dev:run:server": "cross-env NODE_ENV=development remix dev",
     "dev:remix": "cross-env NODE_ENV=development remix watch",
     "docker": "docker-compose up -d",
     "format": "prettier --write .",
