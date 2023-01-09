@@ -31,6 +31,7 @@ declare module "routes-gen" {
     "/expert": Record<string, never>;
     "/expert/manage-alerts-recommendations/create_alert": Record<string, never>;
     "/expert/manage-alerts-recommendations": Record<string, never>;
+    "/expert/knowledge-bank": Record<string, never>;
     "/expert/farmer-issues": Record<string, never>;
     "/expert/messages": Record<string, never>;
     "/expert/farmers": Record<string, never>;
@@ -40,7 +41,6 @@ declare module "routes-gen" {
     "/farmer/farm_information": Record<string, never>;
     "/farmer/crops": Record<string, never>;
     "/farmer/crops/year_select": Record<string, never>;
-    "/farmer/crops/add_crop": Record<string, never>;
     "/farmer/crop": Record<string, never>;
     "/farmer/crop/land-preparation": Record<string, never>;
     "/farmer/help": Record<string, never>;
@@ -85,6 +85,7 @@ declare module "routes-gen" {
       | ["/expert"]
       | ["/expert/manage-alerts-recommendations/create_alert"]
       | ["/expert/manage-alerts-recommendations"]
+      | ["/expert/knowledge-bank"]
       | ["/expert/farmer-issues"]
       | ["/expert/messages"]
       | ["/expert/farmers"]
@@ -94,7 +95,6 @@ declare module "routes-gen" {
       | ["/farmer/farm_information"]
       | ["/farmer/crops"]
       | ["/farmer/crops/year_select"]
-      | ["/farmer/crops/add_crop"]
       | ["/farmer/crop"]
       | ["/farmer/crop/land-preparation"]
       | ["/farmer/help"]
