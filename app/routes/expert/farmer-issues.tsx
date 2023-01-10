@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderArgs) {
     include: {
       postedBy: true,
       belongs_to: true,
-      Solution: true,
+      solution: true,
     },
   });
 

@@ -58,7 +58,7 @@ export async function loader({ request }: LoaderArgs) {
         },
       },
       include: {
-        Solution: true,
+        solution: true,
       },
     }),
   });

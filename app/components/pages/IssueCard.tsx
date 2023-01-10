@@ -8,7 +8,7 @@ export const links: LinksFunction = () => {
 };
 
 interface PostCardProps {
-  issue: Issue & { Solution: Solution | null };
+  issue: Issue & { solution: Solution | null };
 }
 export default function IssueCard({ issue }: PostCardProps) {
   var issue_number = 0;
@@ -28,7 +28,7 @@ export default function IssueCard({ issue }: PostCardProps) {
       <div>
         <span>Solution:</span>
         <div>
-          {issue.Solution && <ReadOnlyEditor value={issue.Solution.content} />}
+          {issue.solution && <ReadOnlyEditor value={issue.solution.content} />}
         </div>
       </div>
     </div>

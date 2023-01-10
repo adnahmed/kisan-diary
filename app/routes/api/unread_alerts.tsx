@@ -28,8 +28,4 @@ export async function loader({ request }: LoaderArgs) {
       },
     }),
   });
-
-  // return json({
-
-  // });
 }
