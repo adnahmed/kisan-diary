@@ -45,7 +45,7 @@ export default function NotificationGroup() {
   );
   useEffect(() => {
     console.log("SuitableCrops: ", alert_fetcher.data?.suitableCrops);
-  }, [alert_fetcher.data]);
+  }, []);
   function getSuitableCropAlerts(suitableCrops: Crop[]): AlertOutput[] {
     return suitableCrops.map((suitableCrop) => ({
       id: suitableCrop.id,
