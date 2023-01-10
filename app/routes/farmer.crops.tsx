@@ -9,8 +9,7 @@ import {
   Center,
   IconButton,
 } from "@chakra-ui/react";
-import type { LoaderArgs } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import { useState } from "react";
 import NewCropModal from "~/components/pages/NewCrop";
 import type { Crop } from "~/models/Data/Crop";
@@ -20,32 +19,6 @@ export async function loader({ request }: LoaderArgs) {
 }
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
-};
-export const handle = {
-  title: (
-    <div className="flex w-full pl-2">
-      <span className="flex-1">Crops</span>
-      <Link to="crops/new">
-        <IconButton
-          aria-label="Add"
-          bg="cabi"
-          color="wheat"
-          border="1px"
-          borderColor="cabi"
-          icon={
-            <Center h="100%" w="100%">
-              <AddIcon />
-            </Center>
-          }
-          boxSize={8}
-          _hover={{
-            color: "cabi",
-            bg: "wheat",
-          }}
-        />
-      </Link>
-    </div>
-  ),
 };
 
 export default function Crops() {

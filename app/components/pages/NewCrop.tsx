@@ -1,11 +1,9 @@
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import { Select } from "@chakra-ui/react";
+import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { Center, IconButton, Select } from "@chakra-ui/react";
 import type { LoaderArgs } from "@remix-run/node";
 import type { ForwardedRef } from "react";
-import React from "react";
-import { getParams } from "remix-params-helper";
+import React, { useState } from "react";
 import { useTypedLoaderData } from "remix-typedjson";
-import { route } from "routes-gen";
 import { z } from "zod";
 import Heading from "~/components/form/heading";
 import WithModal from "~/components/pages/WithModal";
@@ -39,7 +37,7 @@ const ParamsSchema = z.object({
   type: z.string().min(-1).max(20),
 });
 export async function loader({ params }: LoaderArgs) {
-  const result = getParams(params, ParamsSchema);
+  // const result = getParams(params, ParamsSchema);
   // TODO: push result to page typed..
   return {};
 }
@@ -52,18 +50,42 @@ export function NewCrop() {
     if (!cropSelection) return;
     const crop = cropSelection.value;
   }
-  return !data ? (
+  return (
     <CropTypeSelection ref={cropSelectionRef} onSelection={showCropForm} />
-  ) : (
-    <></>
   );
 }
 
-const NewCropModal = () => (
-  <WithModal
-    Body={<NewCrop />}
-    Header={<Heading>New Crop</Heading>}
-    autoOpenUrl={route("/farmer/crops/add_crop")}
-  />
-);
+const NewCropModal = () => {
+  const [showNewCropModal, setShowNewCropModal] = useState(false);
+  return (
+    <div>
+      <div className="flex w-full pl-2">
+        <span className="flex-1">Crops</span>
+        <IconButton
+          onClick={() => setShowNewCropModal(!showNewCropModal)}
+          aria-label="Add"
+          bg="cabi"
+          color="wheat"
+          border="1px"
+          borderColor="cabi"
+          icon={
+            <Center h="100%" w="100%">
+              <AddIcon />
+            </Center>
+          }
+          boxSize={8}
+          _hover={{
+            color: "cabi",
+            bg: "wheat",
+          }}
+        />
+      </div>
+      <WithModal
+        onOpenWhen={showNewCropModal}
+        Body={<NewCrop />}
+        Header={<Heading>New Crop</Heading>}
+      />
+    </div>
+  );
+};
 export default NewCropModal;
