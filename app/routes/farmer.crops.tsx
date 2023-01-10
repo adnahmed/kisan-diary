@@ -1,4 +1,3 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
@@ -6,26 +5,41 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  Center,
-  IconButton,
 } from "@chakra-ui/react";
 import type { LinksFunction, LoaderArgs } from "@remix-run/node";
-import { useState } from "react";
+import { Link } from "@remix-run/react";
+import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { route } from "routes-gen";
 import NewCropModal from "~/components/pages/NewCrop";
-import type { Crop } from "~/models/Data/Crop";
+import { prisma } from "~/db.server";
+import fetchFarm from "~/models/farm.server";
+import { getUser } from "~/session.server";
 import styles from "~/styles/routes/farmer.crops.css";
-export async function loader({ request }: LoaderArgs) {
-  return {};
-}
+
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
-
+export async function loader({ request }: LoaderArgs) {
+  const user = await getUser(request);
+  if (!user) throw new Error("Unauthorized!");
+  const farm = await fetchFarm(user);
+  if (!farm) throw new Error("Please add farm information.");
+  return typedjson({
+    crops: await prisma.crop.findMany({
+      where: {
+        farms: {
+          every: {
+            id: farm.id,
+          },
+        },
+      },
+    }),
+  });
+}
 export default function Crops() {
-  const [cropList, setCropsList] = useState<Crop[]>([]);
-  const [showCropForm, setShowCropForm] = useState(false);
+  const data = useTypedLoaderData<typeof loader>();
   const deleteCrop = (id: string) => {
-    setCropsList(cropList.filter((c) => c.id !== id));
+    // setCropsList(cropList.filter((c) => c.id !== id));
   };
   return (
     <div className="crops__dashboard">
@@ -45,11 +59,12 @@ export default function Crops() {
             </Box>
           </AccordionButton>
           <AccordionPanel pb={4}>
-            {cropList.map((c) => (
-              <div key={c.fullName}>
-                <span>{c.fullName}</span>
+            {data.crops.map((c) => (
+              <div key={c.id}>
+                <Link to={route(`/farmer/crop/${crop.id}`)}>
+                  <span>{c.name}</span>
+                </Link>
                 <button onClick={() => deleteCrop(c.id)}>Delete</button>
-                <button onClick={() => setShowCropForm(true)}>View</button>{" "}
               </div>
             ))}
           </AccordionPanel>

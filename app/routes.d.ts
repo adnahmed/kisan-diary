@@ -1,10 +1,5 @@
 declare module "routes-gen" {
   export type RouteParams = {
-    "/api/fetch_replies": Record<string, never>;
-    "/api/unread_alerts": Record<string, never>;
-    "/forgot_password": Record<string, never>;
-    "/api/save_files": Record<string, never>;
-    "/farm_functions": Record<string, never>;
     "/farm_functions/:comments_and_recommendations": { "comments_and_recommendations": string };
     "/farm_functions/economic_analysis": Record<string, never>;
     "/farm_functions/land_preparation": Record<string, never>;
@@ -23,6 +18,10 @@ declare module "routes-gen" {
     "/farm_functions/all_costs": Record<string, never>;
     "/farm_functions/marketing": Record<string, never>;
     "/farm_functions/sowing": Record<string, never>;
+    "/api/fetch_replies": Record<string, never>;
+    "/api/unread_alerts": Record<string, never>;
+    "/forgot_password": Record<string, never>;
+    "/api/save_files": Record<string, never>;
     "/api/save_file": Record<string, never>;
     "/healthcheck": Record<string, never>;
     "/IndexPage": Record<string, never>;
@@ -38,11 +37,10 @@ declare module "routes-gen" {
     "/expert/manuals": Record<string, never>;
     "/expert/home": Record<string, never>;
     "/farmer": Record<string, never>;
-    "/farmer/farm_information": Record<string, never>;
+    "/farmer/farm-information": Record<string, never>;
+    "/farmer/crop/:cropId": { "cropId": string };
     "/farmer/crops": Record<string, never>;
     "/farmer/crops/year_select": Record<string, never>;
-    "/farmer/crop": Record<string, never>;
-    "/farmer/crop/land-preparation": Record<string, never>;
     "/farmer/help": Record<string, never>;
     "/farmer/help/post": Record<string, never>;
     "/farmer/home": Record<string, never>;
@@ -54,11 +52,6 @@ declare module "routes-gen" {
 
   export function route<
     T extends
-      | ["/api/fetch_replies"]
-      | ["/api/unread_alerts"]
-      | ["/forgot_password"]
-      | ["/api/save_files"]
-      | ["/farm_functions"]
       | ["/farm_functions/:comments_and_recommendations", RouteParams["/farm_functions/:comments_and_recommendations"]]
       | ["/farm_functions/economic_analysis"]
       | ["/farm_functions/land_preparation"]
@@ -77,6 +70,10 @@ declare module "routes-gen" {
       | ["/farm_functions/all_costs"]
       | ["/farm_functions/marketing"]
       | ["/farm_functions/sowing"]
+      | ["/api/fetch_replies"]
+      | ["/api/unread_alerts"]
+      | ["/forgot_password"]
+      | ["/api/save_files"]
       | ["/api/save_file"]
       | ["/healthcheck"]
       | ["/IndexPage"]
@@ -92,11 +89,10 @@ declare module "routes-gen" {
       | ["/expert/manuals"]
       | ["/expert/home"]
       | ["/farmer"]
-      | ["/farmer/farm_information"]
+      | ["/farmer/farm-information"]
+      | ["/farmer/crop/:cropId", RouteParams["/farmer/crop/:cropId"]]
       | ["/farmer/crops"]
       | ["/farmer/crops/year_select"]
-      | ["/farmer/crop"]
-      | ["/farmer/crop/land-preparation"]
       | ["/farmer/help"]
       | ["/farmer/help/post"]
       | ["/farmer/home"]
