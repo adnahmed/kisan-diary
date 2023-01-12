@@ -15,12 +15,8 @@
             ],
             "pathMappings": [
                 {
-                    "url": "http://localhost:3000/node_modules/.pnpm/object-assign@4.1.1/node_modules/object-assign",
-                    "path": "${workspaceFolder}/build"
-                },
-                {
-                    "url": "http://localhost:3000/app",
-                    "path": "${workspaceFolder}/app"
+                    "url": "http://localhost:3000/",
+                    "path": "${workspaceFolder}/public/build"
                 }
             ]
         },
@@ -29,6 +25,7 @@
             "request": "launch",
             "name": "Client_Edge",
             "url": "http://localhost:3000",
+            "sourceMaps": true,
             "webRoot": "${workspaceFolder}/public/build",
             "skipFiles": [
                 "<node_internals>/**"
@@ -50,7 +47,7 @@
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run",
-                "dev"
+                "vite:dev"
             ]
         }
     ],

@@ -19,7 +19,6 @@ declare module "routes-gen" {
     "/farm_functions/marketing": Record<string, never>;
     "/farm_functions/sowing": Record<string, never>;
     "/api/fetch_replies": Record<string, never>;
-    "/api/unread_alerts": Record<string, never>;
     "/forgot_password": Record<string, never>;
     "/api/save_files": Record<string, never>;
     "/api/save_file": Record<string, never>;
@@ -71,7 +70,6 @@ declare module "routes-gen" {
       | ["/farm_functions/marketing"]
       | ["/farm_functions/sowing"]
       | ["/api/fetch_replies"]
-      | ["/api/unread_alerts"]
       | ["/forgot_password"]
       | ["/api/save_files"]
       | ["/api/save_file"]

@@ -1,47 +1,54 @@
 import type { Role } from "@prisma/client";
-import { AlertType, IssueType, PrismaClient } from '@prisma/client';
+import { AlertType, IssueType, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import type IssueCreateInput from "~/types/IssueCreateInput";
 import type { UserCreateInput } from "~/types/User";
-import type CropCreateInput from '../app/types/CropCreateInput';
-import type FarmCreateInput from '../app/types/FarmCreateInput';
+import type CropCreateInput from "../app/types/CropCreateInput";
+import type FarmCreateInput from "../app/types/FarmCreateInput";
 import CropsSeed from "./crops.seed";
 import RegionsSeed from "./regions.seed";
-const crops: CropCreateInput[] = CropsSeed.map(crop_seed => ({ name: crop_seed, picture: '', coveredLand: 0, suitableSeasons: [], suitableSoilTypes: [] }))
+
+const crops: CropCreateInput[] = CropsSeed.map((crop_seed) => ({
+  name: crop_seed,
+  picture: "",
+  coveredLand: 0,
+  suitableSeasons: [],
+  suitableSoilTypes: [],
+}));
 const prisma = new PrismaClient();
-const alert = {}
+const alert = {};
 const expert: UserCreateInput = {
   email: "admin@kisan.diary",
-  firstName: 'Adnan',
-  lastName: 'Ahmed',
-  role: 'expert' as Role,
-  address: 'Wahdat Road Street No. 1, House No. 1',
-  region: 'Sargodha'
-}
+  firstName: "Adnan",
+  lastName: "Ahmed",
+  role: "expert" as Role,
+  address: "Wahdat Road Street No. 1, House No. 1",
+  region: "Sargodha",
+};
 
 const farmer: UserCreateInput = {
   email: "farmer@kisan.diary",
-  firstName: 'Adnan',
-  lastName: 'Ahmed',
-  role: 'farmer' as Role,
-  address: 'Wahdat Road Street No. 1, House No. 1',
-  region: 'Sargodha'
-}
+  firstName: "Adnan",
+  lastName: "Ahmed",
+  role: "farmer" as Role,
+  address: "Wahdat Road Street No. 1, House No. 1",
+  region: "Sargodha",
+};
 
 const farm: FarmCreateInput = {
-  name: 'Kauser Agriculture Farm',
-  region: 'Sialkot',
+  name: "Kauser Agriculture Farm",
   total_land: 20,
-  soil_type: 'Sandy',
-
-  machinery: ['Tractor', 'Leveler'],
-  irrigation_source: ['Canal']
-}
+  soil_type: "Sandy",
+  region: "Sargodha",
+  machinery: ["Tractor", "Leveler"],
+  irrigation_source: ["Canal"],
+};
 
 const issue: IssueCreateInput = {
-  content: 'Hello Experts, I am looking at a bug namely `Akintas Papari`. Please provide protective measure for my wheat crop against this bug. Thanks',
-  type: IssueType.disease_management
-}
+  content:
+    "Hello Experts, I am looking at a bug namely `Akintas Papari`. Please provide protective measure for my wheat crop against this bug. Thanks",
+  type: IssueType.disease_management,
+};
 
 async function seed() {
   // cleanup the existing database
@@ -68,16 +75,16 @@ async function seed() {
     // no worries if it doesn't exist yet
   });
   await prisma.region.createMany({
-    data: RegionsSeed.map(region_seed => ({ name: region_seed })),
-  })
+    data: RegionsSeed.map((region_seed) => ({ name: region_seed })),
+  });
   const hashedPassword = await bcrypt.hash("password", 10);
 
   const regionInput = (entity: { region: string }) => ({
     connectOrCreate: {
       create: { name: entity.region },
-      where: { name: entity.region }
-    }
-  })
+      where: { name: entity.region },
+    },
+  });
 
   const prismaUserData = (user: UserCreateInput) => ({
     ...user,
@@ -87,97 +94,99 @@ async function seed() {
         hash: hashedPassword,
       },
     },
-
-  })
+  });
 
   const prismaFarmData = {
     ...farm,
     user: {
       connectOrCreate: {
         create: prismaUserData(farmer),
-        where: { email: farmer.email }
-      }
+        where: { email: farmer.email },
+      },
     },
-    region: regionInput(farm)
-  }
+    region: regionInput(farm),
+  };
 
   const createdExpert = await prisma.user.create({
-    data: prismaUserData(expert)
+    data: prismaUserData(expert),
   });
 
   const createdFarmer = await prisma.user.create({
-    data: prismaUserData(farmer),
+    data: {
+      ...prismaUserData(farmer),
+    },
   });
 
   const createdFarm = await prisma.farm.create({
-    data: prismaFarmData
-  })
+    data: prismaFarmData,
+  });
 
   await prisma.crop.createMany({
-    data: crops
-
-  })
+    data: crops,
+  });
 
   // Add Potato To Farm
   await prisma.crop.update({
     where: {
-      name: crops[0].name
-    }, data: {
+      name: crops[0].name,
+    },
+    data: {
       farms: {
         connect: {
-          name: farm.name
-        }
+          name: farm.name,
+        },
       },
-    }
-  })
+    },
+  });
 
   // Add Maize To Farm
   await prisma.crop.update({
     where: {
-      name: crops[1].name
-    }, data: {
+      name: crops[1].name,
+    },
+    data: {
       farms: {
         connect: {
-          name: farm.name
-        }
-      }
-    }
-  })
+          name: farm.name,
+        },
+      },
+    },
+  });
 
   // Connect Alert to Potato
   await prisma.alert.create({
     data: {
       ...alert,
       alertType: AlertType.alert,
-      details: '',
+      details: "",
       affectedCrops: {
         connect: {
-          name: crops[0].name
-        }
+          name: crops[0].name,
+        },
       },
       affectedRegions: {
         connect: {
-          name: farmer.region
-        }
-      }
-    }
-  })
+          name: farmer.region,
+        },
+      },
+    },
+  });
 
   // farmer reads the alert
   await prisma.readReciept.create({
     data: {
       readBy: {
         connect: {
-          email: farmer.email
+          email: farmer.email,
         },
       },
       alert: {
         connect: {
-          details: ''
-        }
-      }
-    }
-  })
+          details: "",
+        },
+      },
+    },
+  });
 
   await prisma.issue.create({
     data: {
@@ -185,16 +194,16 @@ async function seed() {
       content: issue.content,
       postedBy: {
         connect: {
-          id: createdFarmer.id
-        }
+          id: createdFarmer.id,
+        },
       },
       belongs_to: {
         connect: {
-          id: createdFarm.id
-        }
-      }
-    }
-  })
+          id: createdFarm.id,
+        },
+      },
+    },
+  });
   console.log(`Database has been seeded. 🌱`);
 }
 

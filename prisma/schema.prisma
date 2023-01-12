@@ -211,17 +211,18 @@ model User {
   // TODO: use @db for value size limit
   // TODO: Make Country ENUM for validation
   address          String
-  region           Region    @relation(fields: [regionName], references: [name])
+  region           Region    @relation(fields: [fromRegion], references: [name])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  password      Password?
-  Farm          Farm[]
-  regionName    String
-  ReadReciept   ReadReciept[]
-  FileUpload    FileUpload[]
-  conversations Conversation[]
-  Issue         Issue[]
-  Solution      Solution[]
+  password         Password?
+  farm             Farm[]
+  fromRegion       String
+  ReadReciept      ReadReciept[]
+  files            FileUpload[]
+  // conversations Conversation[]
+  postedIssues     Issue[]
+  postedSolutions  Solution[]
+  participatedIn   Conversation[]
 }
