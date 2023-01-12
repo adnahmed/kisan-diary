@@ -22,7 +22,6 @@ import {
   useCatch,
   useLoaderData,
 } from "@remix-run/react";
-import leafletStyles from "node_modules/leaflet/dist/leaflet.css";
 import quillBubbleTheme from "quill/dist/quill.bubble.css";
 import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
@@ -36,6 +35,9 @@ import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import theme from "./styles/theme";
+import { DevSupport } from "@react-buddy/ide-toolbox";
+import ComponentPreviews from "../dev/previews";
+import { useInitial } from "../dev";
 
 export const links: LinksFunction = () => {
   return [
@@ -119,6 +121,7 @@ const Document = withEmotionCache(
         </head>
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+
           {children}
           <ScrollRestoration />
           <Scripts />
@@ -166,9 +169,14 @@ export default function App() {
               : localStorageManager
           }
         >
-          <Layout user={user}>
-            <Outlet />
-          </Layout>
+          <DevSupport
+            ComponentPreviews={<ComponentPreviews />}
+            useInitialHook={useInitial}
+          >
+            <Layout user={user}>
+              <Outlet />
+            </Layout>
+          </DevSupport>
         </ChakraProvider>
       </SocketProvider>
     </Document>

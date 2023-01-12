@@ -12,7 +12,7 @@
     "dev": "run-p dev:*:* dev:*",
     "dev:build:server": "cross-env NODE_ENV=development npm run build:server -- --watch",
     "dev:build:routes": "npm run build:routes -- --watch",
-    "dev:run:server": "cross-env NODE_ENV=development remix dev",
+    "dev:server": "cross-env NODE_ENV=development remix dev",
     "dev:remix": "cross-env NODE_ENV=development remix watch",
     "docker": "docker-compose up -d",
     "format": "prettier --write .",
@@ -28,7 +28,10 @@
     "cosmos": "cosmos",
     "cosmos:export": "cosmos-export",
     "uml:schema": "prisma-uml ./prisma/schema.prisma > ./prisma/schema.plantuml",
-    "routes-gen": "routes-gen -d @routes-gen/remix"
+    "routes-gen": "routes-gen -d @routes-gen/remix",
+    "vite:dev": "remix-kit dev --origin http://localhost:3000",
+    "vite:build": "remix-kit build",
+    "vite:preview": "remix-kit preview"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.14",
@@ -44,6 +47,8 @@
     "@floating-ui/react": "^0.15.1",
     "@fontsource/roboto": "^4.5.8",
     "@prisma/client": "^4.7.1",
+    "@react-buddy/ide-toolbox": "^2.3.1",
+    "@react-buddy/palette-chakra-ui": "^2.3.1",
     "@react-pdf/renderer": "^3.0.2",
     "@remix-run/express": "^1.9.0",
     "@remix-run/node": "^1.9.0",
@@ -104,6 +109,8 @@
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.2.1",
+    "@remix-kit/react": "^0.2.3",
+    "@remix-kit/vite": "^0.2.3",
     "@remix-run/dev": "^1.9.0",
     "@remix-run/eslint-config": "^1.9.0",
     "@remix-run/serve": "^1.9.0",
@@ -129,6 +136,7 @@
     "nodemon": "^2.0.20",
     "prisma": "^4.7.1",
     "remix-flat-routes": "^0.5.1",
+    "remix-kit": "^0.2.3",
     "rimraf": "^3.0.2",
     "stylelint": "^14.16.1",
     "stylelint-config-idiomatic-order": "^9.0.0",
