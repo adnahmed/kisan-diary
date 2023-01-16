@@ -1,3 +1,5 @@
+import { InfoIcon } from "@chakra-ui/icons";
+import { IconButton } from "@chakra-ui/react";
 import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import {
   Link,
@@ -33,7 +35,6 @@ const InputsMenu = [
   "Integrated Disease Management",
   "Integrated Weed Management",
   "Nutrient Management",
-  "Gross Inputs Cost",
 ];
 export const handle = {
   menu__item: "/farmer/crops",
@@ -84,13 +85,19 @@ export default function CropCard() {
   return (
     <div className="crop__card card__wrapper">
       <div style={{ color: "green" }} className="crop__card card__heading">
-        Farm Functions
+        <span className="card__heading heading__title">Farm Functions</span>
+        <div className="card__heading heading__info">
+          <IconButton id="info" aria-label="info" icon={<InfoIcon />} />
+          <label htmlFor="info">Info</label>
+        </div>
       </div>
-      <div className="crop__card card__menu">
-        <FunctionsSidebar />
-      </div>
-      <div className="crop__card card__content">
-        <Outlet />
+      <div className="crop__card content__wrapper">
+        <div className="crop__card card__menu">
+          <FunctionsSidebar />
+        </div>
+        <div className="crop__card card__content">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
