@@ -1,6 +1,7 @@
 import type { Role } from "@prisma/client";
 import { AlertType, IssueType, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { isError } from "lodash/fp";
 import type IssueCreateInput from "~/types/IssueCreateInput";
 import type { UserCreateInput } from "~/types/User";
 import type CropCreateInput from "../app/types/CropCreateInput";
@@ -53,28 +54,22 @@ const issue: IssueCreateInput = {
 
 async function seed() {
   // cleanup the existing database
-  await prisma.user.deleteMany().catch(() => {
-    // no worries if it doesn't exist yet
-  });
-  await prisma.farm.deleteMany().catch(() => {
-    // no worries if it doesn't exist yet
-  });
+  async function catchWithError(call: () => void) {
+    try {
+      await call()
+    } catch (err) {
+      if (isError(err))
+        console.error(err.message)
+    }
+  }
+  await catchWithError(async () => await prisma.issue.deleteMany())
+  await catchWithError(async () => await prisma.readReciept.deleteMany())
+  await catchWithError(async () => await prisma.user.deleteMany())
+  await catchWithError(async () => await prisma.farm.deleteMany())
+  await catchWithError(async () => await prisma.crop.deleteMany())
+  await catchWithError(async () => await prisma.alert.deleteMany())
+  await catchWithError(async () => await prisma.region.deleteMany())
 
-  await prisma.crop.deleteMany().catch(() => {
-    // no worries if it doesn't exist yet
-  });
-
-  await prisma.alert.deleteMany().catch(() => {
-    // no worries if it doesn't exist yet
-  });
-
-  await prisma.readReciept.deleteMany().catch(() => {
-    // no worries if it doesn't exist yet
-  });
-
-  await prisma.region.deleteMany().catch(() => {
-    // no worries if it doesn't exist yet
-  });
   await prisma.region.createMany({
     data: RegionsSeed.map((region_seed) => ({ name: region_seed })),
   });
