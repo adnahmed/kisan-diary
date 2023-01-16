@@ -216,13 +216,47 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  password         Password?
-  farm             Farm[]
-  fromRegion       String
-  ReadReciept      ReadReciept[]
-  files            FileUpload[]
+  password        Password?
+  farm            Farm[]
+  fromRegion      String
+  ReadReciept     ReadReciept[]
+  files           FileUpload[]
   // conversations Conversation[]
-  postedIssues     Issue[]
-  postedSolutions  Solution[]
-  participatedIn   Conversation[]
+  postedIssues    Issue[]
+  postedSolutions Solution[]
+  participatedIn  Conversation[]
+}
+
+enum ActivityType {
+  landPreparation
+  sowing
+  inputs_seed
+  inputs_irrigation
+  inputs_laborManagement
+  inputs_integratedPestManagement
+  inputs_integratedDiseaseManagement
+  inputs_integratedWeedManagement
+  inputs_nutrientManagement
+  harvesting
+  postHarvestingAndStorage
+  marketing
+  all
+}
+
+model Activity {
+  id          String        @id @default(uuid())
+  type        ActivityType
+  name        String
+  isOperation Boolean
+  quanity     Int?
+  cost        ActivityCost? @relation(fields: [costId], references: [id])
+  costId      String?
+}
+
+model ActivityCost {
+  id         String     @id @default(uuid())
+  isTotal    Boolean
+  cost       Int
+  activityId String
+  Activity   Activity[]
 }
