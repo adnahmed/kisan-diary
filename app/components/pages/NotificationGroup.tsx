@@ -16,10 +16,13 @@ export async function loader({ request }: LoaderArgs) {
   if (!farm) throw new Response("Crops Not Found");
   return;
 }
+
 export default function NotificationGroup() {
   const { refresh } = useDataRefresh();
   const alert_fetcher = useFetcher();
-  useEffect(() => alert_fetcher.load("/api/unread_alerts"));
+  useEffect(() => {
+    alert_fetcher.load("/api/unread_alerts");
+  });
   // useEffect(() => {
   //   if (alerts_fetcher.type === "init")
   //     alerts_fetcher.load(route("/api/unread_alerts"));
@@ -43,9 +46,6 @@ export default function NotificationGroup() {
       ),
     [alert_fetcher.data]
   );
-  useEffect(() => {
-    console.log("SuitableCrops: ", alert_fetcher.data?.suitableCrops);
-  }, []);
   function getSuitableCropAlerts(suitableCrops: Crop[]): AlertOutput[] {
     return suitableCrops.map((suitableCrop) => ({
       id: suitableCrop.id,

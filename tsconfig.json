@@ -8,6 +8,8 @@
     "build/**/*.{js,jsx}",
     "public/build/**/*.{js,jsx}"
   ],
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Remix",
   "compilerOptions": {
     "lib": [
       "DOM",

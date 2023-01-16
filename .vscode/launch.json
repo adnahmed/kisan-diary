@@ -15,6 +15,10 @@
             ],
             "pathMappings": [
                 {
+                    "url": "http://localhost:3000/app",
+                    "path": "${workspaceFolder}/build"
+                },
+                {
                     "url": "http://localhost:3000/",
                     "path": "${workspaceFolder}/public/build"
                 }
@@ -29,7 +33,7 @@
             "webRoot": "${workspaceFolder}/public/build",
             "skipFiles": [
                 "<node_internals>/**"
-            ],
+            ]
         },
         {
             "type": "node",
@@ -47,7 +51,7 @@
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run",
-                "vite:dev"
+                "dev"
             ]
         }
     ],

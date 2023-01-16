@@ -15,6 +15,7 @@ const crops: CropCreateInput[] = CropsSeed.map((crop_seed) => ({
   suitableSeasons: [],
   suitableSoilTypes: [],
 }));
+
 const prisma = new PrismaClient();
 const alert = {};
 const expert: UserCreateInput = {
