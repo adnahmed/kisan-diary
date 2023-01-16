@@ -19,7 +19,7 @@ export default function Footer() {
           </strong>
         </span>
       </div>
-      <div className="Copyright"> &copy; Copyright Reserved 2022</div>
+      <div className="Copyright"> &copy; Copyright Reserved 2023</div>
     </footer>
   );
 }
