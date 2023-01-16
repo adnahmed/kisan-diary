@@ -1,29 +1,54 @@
+import type { CellChange, Row } from "@silevis/reactgrid";
+import { ReactGrid } from "@silevis/reactgrid";
 import type { FC } from "react";
-import React from "react";
-import CellRow from "~/components/cell-row";
+import { Columns } from "~/components/spreadsheet/TitleColumn";
+import {
+  ROW_HEIGHT,
+  nonEditable,
+  numberCell,
+  textCell,
+} from "../../../components/spreadsheet/CellTypes";
+import { OperationRow } from "../../../components/spreadsheet/OperationRow";
 
 export interface IrrigationProps {}
 
-const irrigationTable = [
-  "Number of Irrigations",
-  "Total Cost of Irrigation",
-  "Cost of Irrigation (Rs. Per acre)",
+const Rows: Row[] = [
+  OperationRow,
+  {
+    rowId: "1",
+    height: ROW_HEIGHT,
+    cells: [
+      nonEditable(textCell("Irrigation")),
+      numberCell(0),
+      numberCell(0),
+      numberCell(0),
+    ],
+  },
 ];
-const Irrigation: FC<IrrigationProps> = () => (
-  <div className="Irrigation">
-    {irrigationTable.map((val) => {
-      return (
-        <CellRow
-          values={[
-            val,
-            <CellRow values={["", ""]} />,
-            <CellRow values={["", ""]} />,
-          ]}
-        />
-      );
-    })}
-  </div>
-);
+
+const Irrigation: FC<IrrigationProps> = () => {
+  const handleChanges = (changes: CellChange[]) => {
+    changes.forEach((change: CellChange) => {
+      if (change.type === "number") {
+        if (change.rowId === "" && change.columnId === 2) {
+          console.log("newvalue:", change.newCell.value);
+        }
+      }
+    });
+  };
+  return (
+    <div className="Irrigation">
+      <ReactGrid
+        rows={Rows}
+        columns={Columns}
+        onCellsChanged={handleChanges}
+        stickyTopRows={1}
+        enableFillHandle
+        enableRangeSelection
+      />
+    </div>
+  );
+};
 /*
 *
  'Labor cost',

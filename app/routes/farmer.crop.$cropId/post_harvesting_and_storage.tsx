@@ -4,26 +4,28 @@ import type { FC } from "react";
 import {
   HeaderRow,
   ROW_HEIGHT,
-  boldText,
-  emptyTextCell,
   nonEditable,
   numberCell,
   textCell,
 } from "~/components/spreadsheet/CellTypes";
 import { OperationRow } from "~/components/spreadsheet/OperationRow";
 import { Columns } from "~/components/spreadsheet/TitleColumn";
+import {
+  boldText,
+  emptyTextCell,
+} from "../../components/spreadsheet/CellTypes";
 export const handle = {
   menu__item: "/farmer/crops",
 };
-export interface MarketingProps {}
+export interface PostHarvestingProps {}
 const Rows: Row[] = [
   OperationRow,
-  HeaderRow("Marketing"),
+  HeaderRow("Post Harvesting"),
   {
     rowId: "1",
     height: ROW_HEIGHT,
     cells: [
-      nonEditable(textCell("Transport")),
+      nonEditable(textCell("Bags")),
       numberCell(0),
       numberCell(0),
       numberCell(0),
@@ -33,7 +35,7 @@ const Rows: Row[] = [
     rowId: "2",
     height: ROW_HEIGHT,
     cells: [
-      nonEditable(textCell("Loading and Unloading")),
+      nonEditable(textCell("Storage")),
       numberCell(0),
       numberCell(0),
       numberCell(0),
@@ -43,24 +45,14 @@ const Rows: Row[] = [
     rowId: "3",
     height: ROW_HEIGHT,
     cells: [
-      nonEditable(textCell("Sales commission and market fee")),
-      numberCell(0),
-      numberCell(0),
-      numberCell(0),
-    ],
-  },
-  {
-    rowId: "4",
-    height: ROW_HEIGHT,
-    cells: [
-      nonEditable(boldText(textCell("Total Marketing Cost"))),
+      nonEditable(boldText(textCell("Total Cost"))),
       nonEditable(emptyTextCell),
-      nonEditable(emptyTextCell),
+      numberCell(0),
       numberCell(0),
     ],
   },
 ];
-const Marketing: FC<MarketingProps> = () => {
+const PostHarvesting: FC<PostHarvestingProps> = () => {
   const handleChanges = (changes: CellChange[]) => {
     changes.forEach((change: CellChange) => {
       if (change.type === "number") {
@@ -71,7 +63,8 @@ const Marketing: FC<MarketingProps> = () => {
     });
   };
   return (
-    <div className="Marketing">
+    <div className="PostHarvesting">
+      {" "}
       <ReactGrid
         rows={Rows}
         columns={Columns}
@@ -84,4 +77,4 @@ const Marketing: FC<MarketingProps> = () => {
   );
 };
 
-export default Marketing;
+export default PostHarvesting;

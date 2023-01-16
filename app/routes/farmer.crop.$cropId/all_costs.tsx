@@ -11,7 +11,7 @@ import NutrientManagement from "./inputs/nutrient_management";
 import Seed from "./inputs/seed";
 import LandPreparation from "./land_preparation";
 import Marketing from "./marketing";
-import PostHarvesting from "./post_harvesting";
+import PostHarvesting from "./post_harvesting_and_storage";
 import Sowing from "./sowing";
 interface AllCostsProps {}
 export const handle = {
