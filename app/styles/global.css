@@ -26,11 +26,6 @@ body {
   font-size: clamp(10px, 1rem + 2vw, 24px);
 }
 
-html,
-body {
-  overflow-x: hidden;
-}
-
 .page {
   display: grid;
   grid-template-columns: repeat(1fr, 12);
@@ -75,9 +70,7 @@ footer {
   margin-block-start: 8em;
 }
 
-.layout__children {
-  grid-area: "outlet";
-}
+
 
 .layout>* {
   border: 2px black solid;
@@ -139,6 +132,7 @@ select:disabled {
 
 header:not(.chakra-modal__header) {
   position: sticky;
+  z-index: 999;
   display: grid;
   grid-area: "header";
   grid-template-columns: repeat(1fr, 12);

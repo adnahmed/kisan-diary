@@ -8,9 +8,5 @@ export async function loader({ request }: LoaderArgs) {
   return null;
 }
 export default function Home() {
-  return (
-    <div>
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 }
