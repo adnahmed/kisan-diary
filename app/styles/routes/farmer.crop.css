@@ -1,68 +1,84 @@
-  .crop__card.card__wrapper {
-    display: grid;
-    grid-auto-rows: max-content auto;
-    grid-template-columns: repeat(12, 1fr);
-    height: 100ch;
-  }
+.crop__card.card__wrapper {
+  display: grid;
+  grid-auto-rows: max-content auto;
+}
 
-  .crop__card.card__menu {
-    display: flex;
-    grid-column: span 2;
-    gap: 0.4em;
-  }
+.crop__card.card__menu {
+  display: flex;
+  max-width: max-content;
+}
 
-  .crop__card.card__content {
-    grid-column: 3 / span 10;
-  }
+.crop__card.content__wrapper {
+  display: flex;
+  gap: 0.4em;
+  min-width: 100vw;
+}
 
-  .card__sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1em;
-    max-width: max-content;
-    min-height: 100%;
-    padding: 0.2em;
-    text-align: start;
-    background-color: azure;
-    border-inline-end: 0.5em var(--color-cabi-100) solid;
-  }
+.crop__card.card__content {
+  flex: 1;
+  padding: 1em;
+}
 
-  .crop__card.card__sidebar.sidebar__key {
-    min-width: 100%;
-    color: black;
-    border-block-start: 1px solid lightblue;
-    border-inline-end: none;
-  }
+.card__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  max-width: max-content;
+  min-height: 100%;
+  padding: 0.2em;
+  text-align: start;
+  background-color: azure;
+  border-inline-end: 0.5em var(--color-cabi-100) solid;
+}
 
-  .crop__card.card__sidebar.sidebar__key--2 {
-    padding-inline-start: 1em;
-  }
+.crop__card.card__sidebar.sidebar__key {
+  min-width: 100%;
+  color: black;
+  border-block-start: 1px solid lightblue;
+  border-inline-end: none;
+}
 
-  .invisible {
-    display: none;
-  }
+.crop__card.card__sidebar.sidebar__key--2 {
+  padding-inline-start: 1em;
+}
 
-  .crop__card.card__sidebar.sidebar__key.key--selected {
-    color: wheat;
-    border-block-start: var(--color-cabi-100);
-    border-block-end: var(--color-cabi-100);
-    background-color: var(--color-cabi-100);
-  }
+.invisible {
+  display: none;
+}
 
-  .crop__card.card__menu>* {
-    flex: 1;
-    align-self: center;
-    max-width: max-content;
-    padding: 0.6em;
-    color: mediumblue;
-    text-align: center;
+.crop__card.card__sidebar.sidebar__key.key--selected {
+  color: wheat;
+  border-block-start: var(--color-cabi-100);
+  border-block-end: var(--color-cabi-100);
+  background-color: var(--color-cabi-100);
+}
 
-  }
+.crop__card.card__menu>* {
+  flex: 1;
+  align-self: center;
+  max-width: max-content;
+  padding: 0.6em;
+  color: mediumblue;
+  text-align: center;
 
-  .crop__card.card__heading {
-    grid-column: span 12;
-    font-weight: bold;
-    font-size: xx-large;
-    text-align: center;
-    border-block-end: 0.5em var(--color-cabi-100) solid;
-  }
+}
+
+.crop__card.card__heading {
+  display: flex;
+  grid-column: span 12;
+  align-items: center;
+  padding: 0.5% 2%;
+  font-weight: bold;
+  font-size: xx-large;
+  text-align: center;
+  border-block-end: 0.5em var(--color-cabi-100) solid;
+}
+
+.card__heading.heading__title {
+  flex: 1;
+}
+
+.card__heading.heading__info {
+  display: flex;
+  flex-direction: column;
+}

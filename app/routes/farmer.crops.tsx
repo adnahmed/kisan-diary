@@ -3,7 +3,7 @@ import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { route } from "routes-gen";
-import NewCropModal from "~/components/pages/NewCrop";
+import CropsHeader from "~/components/pages/CropsHeader";
 import { prisma } from "~/db.server";
 import fetchFarm from "~/models/farm.server";
 import { getUser } from "~/session.server";
@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderArgs) {
 export default function Crops() {
   return (
     <div className="crops__dashboard">
-      <NewCropModal />
+      <CropsHeader />
       <AllCropsList />
     </div>
   );
