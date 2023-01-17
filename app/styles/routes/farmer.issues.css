@@ -1,0 +1,63 @@
+.issues.farmer__issues {
+    display: grid;
+    grid-template-areas: "ip filter";
+    height: 100%;
+}
+
+.farmer__issues.issues__filter {
+    grid-area: filter;
+    grid-column: 8/span 13;
+}
+
+.farmer__issues.issues__list {
+    grid-area: ip
+}
+
+.farmer__issues.issues__filter {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    min-width: 30vw;
+    padding: 5% 5% 10% 10%;
+    border-inline-start: 1px solid var(--color-cabi-100);
+}
+
+.issues__filter.filter__heading {
+    grid-column: 1/span 6;
+    font-weight: bold;
+}
+
+.issues__filter.filter__value {
+    display: flex;
+    flex-flow: row;
+    grid-column: 1/span 6;
+    gap: 0.5em;
+    align-items: center;
+    justify-content: space-between;
+    height: max-content;
+}
+
+.filter__value.value__name {
+    min-width: max-content;
+}
+
+.filter__value.value__select {}
+
+.farmer__issues.issues__list {
+    display: flex;
+    flex-flow: column wrap;
+    padding: 2% 5%;
+}
+
+.issues__list.issues__count {
+    width: 100%;
+    font-weight: bold;
+}
+
+.issues__list.issues__post {
+    display: flex;
+    flex-flow: column wrap;
+}
+
+.issues__list.issue__post {
+    border-block-end: 1px solid var(--color-cabi-100);
+}

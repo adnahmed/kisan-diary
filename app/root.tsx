@@ -1,14 +1,17 @@
-import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
-import { withEmotionCache } from "@emotion/react";
+// TODO: Add routes-gen please!!
 import {
-  Accordion,
+  ChakraProvider,
   ColorModeScript,
   cookieStorageManagerSSR,
   localStorageManager,
 } from "@chakra-ui/react";
-import { unstable_useEnhancedEffect as useEnhancedEffect } from "@mui/material";
-import { extendTheme, ChakraProvider } from "@chakra-ui/react";
-import { ServerStyleContext, ClientStyleContext } from "./context";
+import { withEmotionCache } from "@emotion/react";
+import roboto300 from "@fontsource/roboto/300.css";
+import roboto400 from "@fontsource/roboto/400.css";
+import roboto500 from "@fontsource/roboto/500.css";
+import roboto700 from "@fontsource/roboto/700.css";
+import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -16,25 +19,31 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useCatch,
   useLoaderData,
 } from "@remix-run/react";
-
-import remixImageStyles from "remix-image/remix-image.css";
-import tailwindStylesheetUrl from "./styles/tailwind.css";
-import globalStyles from "./styles/global.css";
-import gridStyles from "react-grid-layout/css/styles.css";
-import resizableStyles from "react-resizable/css/styles.css";
-import { useContext } from "react";
-import roboto300 from "@fontsource/roboto/300.css";
-import roboto400 from "@fontsource/roboto/400.css";
-import roboto500 from "@fontsource/roboto/500.css";
-import roboto700 from "@fontsource/roboto/700.css";
-import theme from "./styles/theme";
+import quillBubbleTheme from "quill/dist/quill.bubble.css";
+import quillSnowTheme from "quill/dist/quill.snow.css";
+import { useContext, useEffect } from "react";
+import { route } from "routes-gen";
+import { SocketProvider } from "./components/SocketProvider";
+import Layout from "./components/pages/Layout";
+import { ClientStyleContext, ServerStyleContext } from "./context";
+import fetchFarm from "./models/farm.server";
+import client_socket from "./services/chat.client";
 import { getUser } from "./session.server";
+import globalStyles from "./styles/global.css";
+import tailwindStylesheetUrl from "./styles/tailwind.css";
+import theme from "./styles/theme";
+import { DevSupport } from "@react-buddy/ide-toolbox";
+import ComponentPreviews from "../dev/previews";
+import { useInitial } from "../dev";
+
 export const links: LinksFunction = () => {
   return [
+    { rel: "stylesheet", href: quillSnowTheme },
+    { rel: "stylesheet", href: quillBubbleTheme },
     { rel: "stylesheet", href: tailwindStylesheetUrl },
-
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
     { rel: "preconnect", href: "https://fonts.gstatic.com" },
     {
@@ -44,10 +53,6 @@ export const links: LinksFunction = () => {
     {
       rel: "stylesheet",
       href: globalStyles,
-    },
-    {
-      rel: "stylesheet",
-      href: remixImageStyles,
     },
     {
       rel: "stylesheet",
@@ -65,14 +70,8 @@ export const links: LinksFunction = () => {
       rel: "stylesheet",
       href: roboto700,
     },
-    {
-      rel: "stylesheet",
-      href: gridStyles,
-    },
-    {
-      rel: "stylesheet",
-      href: resizableStyles,
-    },
+    { rel: "preload", href: "/assets/dashboard.jpeg", as: "image" },
+    { rel: "preload", href: "/assets/expert.jpeg", as: "image" },
   ];
 };
 
@@ -80,16 +79,9 @@ export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Kisan Diary",
   viewport: "width=device-width,initial-scale=1",
+  httpEquiv: "Content-Security-Policy",
+  content: "default-src 'self'",
 });
-
-export async function loader({ request }: LoaderArgs) {
-  const cookies = request.headers.get("cookie") ?? "";
-  const user = await getUser(request);
-  return {
-    user,
-    cookies,
-  };
-}
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -101,7 +93,7 @@ const Document = withEmotionCache(
     const clientStyleData = useContext(ClientStyleContext);
 
     // Only executed on client
-    useEnhancedEffect(() => {
+    useEffect(() => {
       // re-link sheet container
       emotionCache.sheet.container = document.head;
       // re-inject tags
@@ -129,6 +121,7 @@ const Document = withEmotionCache(
         </head>
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+
           {children}
           <ScrollRestoration />
           <Scripts />
@@ -139,21 +132,78 @@ const Document = withEmotionCache(
   }
 );
 
-export default function App() {
-  const { cookies } = useLoaderData<typeof loader>();
+export async function loader({ request }: LoaderArgs) {
+  const user = await getUser(request);
+  if (user && new URL(request.url).pathname === route("/"))
+    return redirect(route(`/${user.role}`));
+  return json({
+    user: await getUser(request),
+    cookies: request.headers.get("cookie"),
+    farm: user?.role === "farmer" && (await fetchFarm(user)),
+  });
+}
 
+export default function App() {
+  const { cookies, user } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    return () => {
+      client_socket.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!client_socket) return;
+    client_socket.on("confirmation", (data) => {
+      console.log(data);
+    });
+  }, []);
   return (
     <Document>
-      <ChakraProvider
-        theme={theme}
-        colorModeManager={
-          typeof cookies === "string"
-            ? cookieStorageManagerSSR(cookies)
-            : localStorageManager
-        }
-      >
-        <Outlet />
-      </ChakraProvider>
+      <SocketProvider socket={client_socket}>
+        <ChakraProvider
+          theme={theme}
+          colorModeManager={
+            typeof cookies === "string"
+              ? cookieStorageManagerSSR(cookies)
+              : localStorageManager
+          }
+        >
+          <DevSupport
+            ComponentPreviews={<ComponentPreviews />}
+            useInitialHook={useInitial}
+          >
+            <Layout user={user}>
+              <Outlet />
+            </Layout>
+          </DevSupport>
+        </ChakraProvider>
+      </SocketProvider>
     </Document>
+  );
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <div>
+      <h1>Error</h1>
+      <p>{error.message}</p>
+      <p>The stack trace is:</p>
+      <pre>{error.stack}</pre>
+    </div>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  return (
+    <div>
+      <h1>Caught</h1>
+      <p>Status: {caught.status}</p>
+      <pre>
+        <code>{JSON.stringify(caught.data, null, 2)}</code>
+      </pre>
+    </div>
   );
 }

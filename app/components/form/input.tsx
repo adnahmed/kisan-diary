@@ -1,5 +1,5 @@
-import { cx } from "helpers";
 import * as React from "react";
+import { cx } from "~/helpers/form";
 
 const Input = React.forwardRef<
   HTMLInputElement,
@@ -16,5 +16,5 @@ const Input = React.forwardRef<
     {...props}
   />
 ));
-
+Input.displayName = "Input";
 export default Input;

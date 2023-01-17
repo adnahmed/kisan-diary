@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "@prisma/client";
 import invariant from "tiny-invariant";
 let prisma: PrismaClient;
 
@@ -58,4 +58,15 @@ function getClient() {
   return client;
 }
 
-export { prisma };
+const xprisma = prisma.$extends({
+  result: {
+    activity: {
+      totalCost: {
+        needs: { unitCost: true, quanity: true },
+        compute: (data) => (data.quanity && data.unitCost) ? data.unitCost * data.quanity : undefined
+      }
+    }
+  }
+})
+export { xprisma as prisma };
+

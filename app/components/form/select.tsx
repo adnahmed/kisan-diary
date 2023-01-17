@@ -1,5 +1,5 @@
-import { cx } from "helpers";
 import * as React from "react";
+import { cx } from "~/helpers/form";
 
 const Select = React.forwardRef<
   HTMLSelectElement,
@@ -15,5 +15,5 @@ const Select = React.forwardRef<
     {...props}
   />
 ));
-
+Select.displayName = "Select";
 export default Select;

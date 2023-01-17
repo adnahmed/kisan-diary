@@ -1,22 +1,16 @@
-# We don't want lockfiles in stacks, as people could use a different package manager
-# This part will be removed by `remix.init`
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-pnpm-lock.yml
-
 node_modules
 
-/build
-/public/build
+.cache
 .env
+.vercel
+.output
 
-/cypress/screenshots
-/cypress/videos
-/postgres-data
+/build/
+/public/build
+/api/index.js
+/api/index.js.map
 
-# netlify dot dir
-.netlify
-
-# typescript build files
-dist/
+.vercel
+# may contain sensitive data like api keys etc.
+.vscode/settings.json
+/public/uploaded

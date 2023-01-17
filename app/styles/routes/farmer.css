@@ -1,7 +1,7 @@
 .home {
+  height: 100vh;
   background: url("/assets/kisan_day.jpeg");
+  background-repeat: no-repeat;
   background-size: cover;
   background-size: 100vw;
-  height: 100vh;
-  background-repeat: no-repeat;
 }

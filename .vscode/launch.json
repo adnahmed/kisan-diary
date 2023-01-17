@@ -5,28 +5,72 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "command": "npm run dev",
-            "name": "Run npm run dev",
+            "type": "firefox",
             "request": "launch",
-            "type": "node-terminal",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js",
-                "!**/node_modules/**"
-            ],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "Attach by Process ID",
-            "processId": "${command:PickProcess}",
-            "request": "attach",
+            "name": "Client_Firefox",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/public/build",
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "pathMappings": [
+                {
+                    "url": "http://localhost:3000/app",
+                    "path": "${workspaceFolder}/build"
+                },
+                {
+                    "url": "http://localhost:3000/",
+                    "path": "${workspaceFolder}/public/build"
+                }
+            ]
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Client_Edge",
+            "url": "http://localhost:3000",
+            "sourceMaps": true,
+            "webRoot": "${workspaceFolder}/public/build",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Server",
+            "cwd": "${workspaceFolder}/build",
             "outFiles": [
-                "${workspaceFolder}/**/*.js",
+                "${workspaceFolder}/build/**",
                 "!**/node_modules/**"
             ],
-            "type": "node"
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "sourceMaps": true,
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Server/ClientE",
+            "configurations": [
+                "Server",
+                "Client_Edge",
+            ],
+            "stopAll": true
+        },
+        {
+            "name": "Server/ClientF",
+            "configurations": [
+                "Server",
+                "Client_Firefox",
+            ],
+            "stopAll": true
         }
     ]
 }

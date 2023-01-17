@@ -1,5 +1,5 @@
-import { cx } from "helpers";
 import * as React from "react";
+import { cx } from "~/helpers/form";
 
 const DisabledSelect = React.forwardRef<
   HTMLSelectElement,
@@ -9,11 +9,11 @@ const DisabledSelect = React.forwardRef<
     ref={ref}
     disabled
     className={cx(
-      "block w-full border-none appearance-none rounded-md py-2 pl-3  pr-10 text-base text-[rgb(54,135,41)] focus:outline-none sm:text-sm",
+      "appearance-none rounded-md py-2 pl-3 bg-none border-none  pr-10 text-base focus:outline-none sm:text-sm",
       className
     )}
     {...props}
   />
 ));
-
+DisabledSelect.displayName = "Disabled Select";
 export default DisabledSelect;

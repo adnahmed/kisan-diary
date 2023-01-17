@@ -1,0 +1,5 @@
+.crop__card.card__harvesting {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}

@@ -1,5 +1,5 @@
-import { cx } from "helpers";
 import * as React from "react";
+import { cx } from "~/helpers/form";
 
 const Checkbox = React.forwardRef<
   HTMLInputElement,
@@ -16,5 +16,6 @@ const Checkbox = React.forwardRef<
     {...props}
   />
 ));
+Checkbox.displayName = "Checkbox";
 
 export default Checkbox;

@@ -1,0 +1,8 @@
+.crops__dashboard {}
+
+.allCrops__crops.crops__crop {
+    display: flex;
+    gap: 1em;
+}
+
+.allCrops__crops.crops__cction--delete {}

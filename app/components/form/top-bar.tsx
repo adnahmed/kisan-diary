@@ -1,18 +1,18 @@
-import { Popover } from '@headlessui/react'
-import { MenuIcon, XIcon } from '@heroicons/react/outline'
-import { Link, NavLink } from '@remix-run/react'
-import { cx } from '~/helpers'
-import logo from '~/logo.png'
-import ButtonLink from './button-link'
-import ExternalLink from './external-link'
-import GitHub from './icons/github'
-import SecondaryButtonLink from './secondary-button-link'
+import { Popover } from "@headlessui/react";
+import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Link, NavLink } from "@remix-run/react";
+import { cx } from "~/helpers/form";
+import logo from "~/logo.png";
+import ButtonLink from "./button-link";
+import ExternalLink from "./external-link";
+import GitHub from "./icons/github";
+import SecondaryButtonLink from "./secondary-button-link";
 
 const navigation = [
-  { name: 'Home', to: '/' },
-  { name: 'Get Started', to: '/get-started' },
-  { name: 'Examples', to: '/examples' },
-]
+  { name: "Home", to: "/" },
+  { name: "Get Started", to: "/get-started" },
+  { name: "Examples", to: "/examples" },
+];
 
 export default function TopBar() {
   return (
@@ -26,7 +26,7 @@ export default function TopBar() {
             <div className="flex items-center gap-2 sm:gap-4">
               <div className="flex-1">
                 <div className="flex shrink-0 items-center">
-                  <Link to={'/'} className="block h-10 w-10">
+                  <Link to={"/"} className="block h-10 w-10">
                     <img
                       src={logo}
                       alt="Remix Forms"
@@ -36,9 +36,9 @@ export default function TopBar() {
                   </Link>
                 </div>
               </div>
-              <ButtonLink to={'/get-started'}>Get Started</ButtonLink>
+              <ButtonLink to={"/get-started"}>Get Started</ButtonLink>
               <SecondaryButtonLink
-                to={'/examples'}
+                to={"/examples"}
                 className="hidden sm:inline"
               >
                 Examples
@@ -71,9 +71,9 @@ export default function TopBar() {
                   className={({ isActive }) =>
                     cx(
                       isActive
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'block rounded-md px-3 py-2 text-base font-medium',
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "block rounded-md px-3 py-2 text-base font-medium"
                     )
                   }
                   onClick={() => close()}
@@ -86,5 +86,5 @@ export default function TopBar() {
         </>
       )}
     </Popover>
-  )
+  );
 }
