@@ -13,7 +13,7 @@ export default function Layout({ user, children }: LayoutProps) {
   return (
     <div className={`layout ${isPublic}`}>
       <Header isAuthenticated={!!user} />
-      {children}
+      <div>{children}</div>
       <Footer />
     </div>
   );
