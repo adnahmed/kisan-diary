@@ -1,13 +1,20 @@
 import type { Role } from "@prisma/client";
-import { AlertType, IssueType, PrismaClient } from "@prisma/client";
+import { AlertType, IssueType, PrismaClient } from '@prisma/client';
 import bcrypt from "bcryptjs";
 import { isError } from "lodash/fp";
+import type ActivityCreateInput from "~/types/ActivityCreateInput";
 import type IssueCreateInput from "~/types/IssueCreateInput";
 import type { UserCreateInput } from "~/types/User";
 import type CropCreateInput from "../app/types/CropCreateInput";
 import type FarmCreateInput from "../app/types/FarmCreateInput";
+import { SeedToActivity } from "./activities";
+import LandPreparationSeed from './activities/land_preparation';
 import CropsSeed from "./crops.seed";
 import RegionsSeed from "./regions.seed";
+
+const activities: ActivityCreateInput[] = [
+  ...SeedToActivity(LandPreparationSeed)
+]
 
 const crops: CropCreateInput[] = CropsSeed.map((crop_seed) => ({
   name: crop_seed,
@@ -69,6 +76,7 @@ async function seed() {
   await catchWithError(async () => await prisma.crop.deleteMany())
   await catchWithError(async () => await prisma.alert.deleteMany())
   await catchWithError(async () => await prisma.region.deleteMany())
+  await catchWithError(async () => await prisma.activity.deleteMany())
 
   await prisma.region.createMany({
     data: RegionsSeed.map((region_seed) => ({ name: region_seed })),
@@ -103,7 +111,7 @@ async function seed() {
     region: regionInput(farm),
   };
 
-  const createdExpert = await prisma.user.create({
+  await prisma.user.create({
     data: prismaUserData(expert),
   });
 
@@ -200,6 +208,11 @@ async function seed() {
       },
     },
   });
+
+  await prisma.activity.createMany({
+    data: activities
+  })
+
   console.log(`Database has been seeded. 🌱`);
 }
 
