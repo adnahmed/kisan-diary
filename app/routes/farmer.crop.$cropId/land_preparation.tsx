@@ -1,15 +1,16 @@
+import { ActivityType } from "@prisma/client";
+import type { LoaderArgs } from "@remix-run/node";
 import { useCatch } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/server-runtime";
 import type { CellChange, Row } from "@silevis/reactgrid";
 import { ReactGrid } from "@silevis/reactgrid";
-import { HeaderRow, emptyNumberCell } from "~/components/spreadsheet/CellTypes";
+import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { HeaderRow } from "~/components/spreadsheet/CellTypes";
 import { OperationRow } from "~/components/spreadsheet/OperationRow";
 import { Columns } from "~/components/spreadsheet/TitleColumn";
-import styles from "~/styles/routes/farmer.crop.land_preparation.css";
-import type { LoaderArgs } from "@remix-run/node";
 import { prisma } from "~/db.server";
-import { ActivityType } from "@prisma/client";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import ActivitiyWithCostRows from "~/helpers/activity";
+import styles from "~/styles/routes/farmer.crop.land_preparation.css";
 export const handle = {
   menu__item: "/farmer/crops",
 };
@@ -18,7 +19,7 @@ export const links: LinksFunction = () => {
 };
 export async function loader({ request }: LoaderArgs) {
   return typedjson({
-    activity: await prisma.activity.findMany({
+    activities: await prisma.activity.findMany({
       where: {
         type: ActivityType.landPreparation,
       },
@@ -28,63 +29,15 @@ export async function loader({ request }: LoaderArgs) {
 export interface LandPreparationProps {}
 
 export default function LandPreparation(props: LandPreparationProps) {
-  const data = useTypedLoaderData<typeof loader>();
-
+  const { activities } = useTypedLoaderData<typeof loader>();
   const Rows: Row[] = [
     OperationRow,
     HeaderRow("Land Preparation"),
-    {
-      rowId: "1",
-      height: 100,
-      cells: [
-        {
-          type: "text",
-          text: "Land preparation (disk plough, cultivator, suhaga, chesil, rotavator)",
-          nonEditable: true,
-        },
-        emptyNumberCell,
-        emptyNumberCell,
-        emptyNumberCell,
-      ],
-    },
-    {
-      rowId: "2",
-      height: 50,
-      cells: [
-        {
-          type: "text",
-          text: "Planter",
-          nonEditable: true,
-        },
-        emptyNumberCell,
-        emptyNumberCell,
-        emptyNumberCell,
-      ],
-    },
-    {
-      rowId: "3",
-      height: 50,
-      cells: [
-        {
-          type: "text",
-          text: "Gross Land Preparation Cost",
-          nonEditable: true,
-          renderer: (text) => <div style={{ fontWeight: "bold" }}>{text}</div>,
-        },
-        emptyNumberCell,
-        emptyNumberCell,
-        emptyNumberCell,
-      ],
-    },
+    ...ActivitiyWithCostRows(activities),
   ];
+
   const handleChanges = (changes: CellChange[]) => {
-    changes.forEach((change: CellChange) => {
-      if (change.type === "number") {
-        if (change.rowId === "1") {
-          console.log("newvalue:", change.newCell.value);
-        }
-      }
-    });
+    changes.forEach((change: CellChange) => {});
   };
 
   return (
