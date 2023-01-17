@@ -39,10 +39,11 @@ body {
 
 footer {
   position: sticky;
-  grid-area: 'footer';
+  max-height: max-content;
   color: white;
   font-size: 0.6em;
   background-color: rgb(54 135 41);
+  inset-block-start: 100%;
 }
 
 .content-row {
@@ -71,10 +72,6 @@ footer {
 }
 
 
-
-.layout>* {
-  border: 2px black solid;
-}
 
 .layout {
   display: grid;
