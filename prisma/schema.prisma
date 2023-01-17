@@ -244,19 +244,13 @@ enum ActivityType {
 }
 
 model Activity {
-  id          String        @id @default(uuid())
+  id          String       @id @default(uuid())
   type        ActivityType
-  name        String
+  name        String       @unique
   isOperation Boolean
   quanity     Int?
-  cost        ActivityCost? @relation(fields: [costId], references: [id])
-  costId      String?
-}
+  unitCost    Int?
 
-model ActivityCost {
-  id         String     @id @default(uuid())
-  isTotal    Boolean
-  cost       Int
-  activityId String
-  Activity   Activity[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 }
