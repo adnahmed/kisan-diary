@@ -245,12 +245,11 @@ enum ActivityType {
 }
 
 model Activity {
-  id          String       @id @default(uuid())
-  type        ActivityType
-  name        String       @unique
-  isOperation Boolean
-  quanity     Int?
-  unitCost    Int?
+  id       String       @id @default(uuid())
+  type     ActivityType
+  name     String       @unique
+  quantity Int?
+  unitCost Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
