@@ -1,13 +1,4 @@
-import type { ActivityType } from "@prisma/client"
-
-type ActivityCreateInput = {
-    id?: string
-    type: ActivityType
-    name: string
-    isOperation: boolean
-    quanity?: number | null
-    unitCost?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-}
+import type { Activity } from "@prisma/client";
+import type { SetOptional } from 'type-fest';
+type ActivityCreateInput = SetOptional<Omit<Activity, "id" | "createdAt" | "updatedAt">, "quanity" | "unitCost">
 export default ActivityCreateInput;
