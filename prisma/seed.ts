@@ -7,13 +7,12 @@ import type IssueCreateInput from "~/types/IssueCreateInput";
 import type { UserCreateInput } from "~/types/User";
 import type CropCreateInput from "../app/types/CropCreateInput";
 import type FarmCreateInput from "../app/types/FarmCreateInput";
-import { SeedToActivity } from "./activities";
 import LandPreparationSeed from './activities/land_preparation';
 import CropsSeed from "./crops.seed";
 import RegionsSeed from "./regions.seed";
 
 const activities: ActivityCreateInput[] = [
-  ...SeedToActivity(LandPreparationSeed)
+  ...LandPreparationSeed
 ]
 
 const crops: CropCreateInput[] = CropsSeed.map((crop_seed) => ({
