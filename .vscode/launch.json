@@ -15,10 +15,6 @@
             ],
             "pathMappings": [
                 {
-                    "url": "http://localhost:3000/app",
-                    "path": "${workspaceFolder}/build"
-                },
-                {
                     "url": "http://localhost:3000/",
                     "path": "${workspaceFolder}/public/build"
                 }

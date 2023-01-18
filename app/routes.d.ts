@@ -21,9 +21,9 @@ declare module "routes-gen" {
     "/farmer/farm-information": Record<string, never>;
     "/farmer/crop/:cropId": { "cropId": string };
     "/farmer/crop/:cropId/:comments_and_recommendations": { "cropId": string, "comments_and_recommendations": string };
+    "/farmer/crop/:cropId/post_harvesting_and_storage": { "cropId": string };
     "/farmer/crop/:cropId/economic_analysis": { "cropId": string };
     "/farmer/crop/:cropId/land_preparation": { "cropId": string };
-    "/farmer/crop/:cropId/post_harvesting": { "cropId": string };
     "/farmer/crop/:cropId/:Information": { "cropId": string, "Information": string };
     "/farmer/crop/:cropId/harvesting": { "cropId": string };
     "/farmer/crop/:cropId/all_costs": { "cropId": string };
@@ -71,9 +71,9 @@ declare module "routes-gen" {
       | ["/farmer/farm-information"]
       | ["/farmer/crop/:cropId", RouteParams["/farmer/crop/:cropId"]]
       | ["/farmer/crop/:cropId/:comments_and_recommendations", RouteParams["/farmer/crop/:cropId/:comments_and_recommendations"]]
+      | ["/farmer/crop/:cropId/post_harvesting_and_storage", RouteParams["/farmer/crop/:cropId/post_harvesting_and_storage"]]
       | ["/farmer/crop/:cropId/economic_analysis", RouteParams["/farmer/crop/:cropId/economic_analysis"]]
       | ["/farmer/crop/:cropId/land_preparation", RouteParams["/farmer/crop/:cropId/land_preparation"]]
-      | ["/farmer/crop/:cropId/post_harvesting", RouteParams["/farmer/crop/:cropId/post_harvesting"]]
       | ["/farmer/crop/:cropId/:Information", RouteParams["/farmer/crop/:cropId/:Information"]]
       | ["/farmer/crop/:cropId/harvesting", RouteParams["/farmer/crop/:cropId/harvesting"]]
       | ["/farmer/crop/:cropId/all_costs", RouteParams["/farmer/crop/:cropId/all_costs"]]

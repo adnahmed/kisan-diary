@@ -14,13 +14,13 @@ export const OperationRow: Row = {
     boldText(
       nonEditable({
         type: "text",
-        text: "Unit Cost",
+        text: "Quantity",
       }) as TextCell
     ),
     boldText(
       nonEditable({
         type: "text",
-        text: "Quantity",
+        text: "Unit Cost",
       }) as TextCell
     ),
     boldText(

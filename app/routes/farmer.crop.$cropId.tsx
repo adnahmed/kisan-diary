@@ -8,7 +8,6 @@ import {
   useLocation,
   useParams,
 } from "@remix-run/react";
-import { useEffect } from "react";
 import { redirect } from "remix-typedjson";
 import type { RouteParams } from "routes-gen";
 import { route } from "routes-gen";
@@ -117,7 +116,6 @@ function FunctionsSidebar() {
   const InputRoute =
     route("/farmer/crop/:cropId", { cropId: cropId || "" }) + "/inputs";
   const highlight = useHighlight();
-  useEffect(() => console.log(`input_route: ${InputRoute}`));
   return (
     <div className="card__sidebar">
       {menu.map((menu__item: string) =>
@@ -125,7 +123,7 @@ function FunctionsSidebar() {
           <>
             <Link
               to={toUrl(menu__item)}
-              key={"input"}
+              key={menu__item}
               className={`crop__card card__sidebar sidebar__key ${
                 highlight(menu__item) ? "key--selected" : ""
               }`}

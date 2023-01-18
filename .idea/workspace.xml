@@ -2,11 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="27cd1f98-902b-41ef-a119-eb9d625b5dcb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/tasks.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/pages/Expert/AlertCreateEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/pages/Expert/AlertCreateEditor.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/routes/app.admin.alerts.create_alert.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes/app.admin.alerts.create_alert.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/styles/tailwind.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/styles/tailwind.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/components/spreadsheet/CellTypes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/spreadsheet/CellTypes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/components/spreadsheet/TitleColumn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/spreadsheet/TitleColumn.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/root.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/root.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routes.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routes/expert/messages.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes/expert/messages.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routes/farmer.crop.$cropId.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes/farmer.crop.$cropId.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routes/farmer.crop.$cropId/land_preparation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes/farmer.crop.$cropId/land_preparation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/chat.client.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expressServer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/expressServer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,19 +33,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "pnpm",
-    "ts.external.directory.path": "D:\\projects\\kisan-diary\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\projects\\kisan-diary\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager">
+}</component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.rcb.reactComponents" value="false" />
+        <entry key="com.haulmont.rcb.reactInspector" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.">
+    <configuration type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:3000">
+      <method v="2" />
+    </configuration>
     <configuration name="dev" type="js.build_tools.npm" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -48,6 +67,11 @@
       <envs />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug." />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -58,10 +82,23 @@
       <option name="presentableId" value="Default" />
       <updated>1672206353218</updated>
       <workItem from="1672206358894" duration="307000" />
+      <workItem from="1673962738032" duration="950000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/app/routes/farmer.crop.$cropId/land_preparation.tsx</url>
+          <line>47</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

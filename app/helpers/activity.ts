@@ -9,16 +9,16 @@ const ActivitiyWithCostRows = (activities: ActivityWithTotalCost[]) => {
             nonEditable(boldText(textCell(activity.name), activity.isOperation)),
             {
                 type: "number" as "number",
-                value: activity.quanity || 0,
+                value: activity.quantity || 0,
             },
             {
                 type: "number" as "number",
                 value: activity.unitCost || 0,
             },
-            {
+            nonEditable({
                 type: "number" as "number",
                 value: activity.totalCost || 0,
-            },
+            }),
         ],
     }));
 };

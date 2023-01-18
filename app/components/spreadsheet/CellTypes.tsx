@@ -12,9 +12,13 @@ export const nonEditable = (cell: DefaultCellTypes): DefaultCellTypes => ({
   ...cell,
   nonEditable: true,
 });
-export const boldText = (cell: TextCell): DefaultCellTypes => ({
+export const boldText = (
+  cell: TextCell,
+  condition?: boolean
+): DefaultCellTypes => ({
   ...cell,
-  renderer: (text) => <b>{text}</b>,
+  renderer: (text) =>
+    condition !== undefined ? condition ? <b>{text}</b> : text : text,
 });
 
 export const HeadingCell: (text: string) => HeaderCell = (text) => ({
