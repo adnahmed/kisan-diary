@@ -4,7 +4,9 @@ import {
   unstable_parseMultipartFormData,
 } from "@remix-run/server-runtime";
 import { prisma } from "~/db.server";
-import uploadHandler, { directory } from "~/helpers/uploadHandler";
+import uploadHandler, {
+  DefaultDownloadDirectory,
+} from "~/helpers/uploadHandler";
 import { getUser } from "~/session.server";
 
 export async function action({ request }: ActionArgs) {
@@ -16,7 +18,7 @@ export async function action({ request }: ActionArgs) {
       );
     const formData = await unstable_parseMultipartFormData(
       request,
-      uploadHandler
+      uploadHandler()
     );
     const filenames = formData.getAll("filename");
     const files = formData.getAll("file");
@@ -24,7 +26,7 @@ export async function action({ request }: ActionArgs) {
     let prismaData = [];
     for (const file of files) {
       let filename = file?.filepath.split("\\").pop();
-      let path = `/${directory.split("/").pop()}/${filename}`;
+      let path = `/${DefaultDownloadDirectory.split("/").pop()}/${filename}`;
       uploadedUrls.push({ url: path });
       if (user?.id)
         prismaData.push({
