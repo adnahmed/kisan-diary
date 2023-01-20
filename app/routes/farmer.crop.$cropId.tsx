@@ -16,25 +16,7 @@ import styles from "~/styles/routes/farmer.crop.css";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
-const menu = [
-  "Land Preparation",
-  "Sowing",
-  "Inputs",
-  "Harvesting",
-  "Post Harvesting and Storage",
-  "Marketing",
-  "All Costs",
-  "Economic Analysis",
-];
-const InputsMenu = [
-  "Seed",
-  "Irrigation",
-  "Labor Management",
-  "Integrated Pest Management",
-  "Integrated Disease Management",
-  "Integrated Weed Management",
-  "Nutrient Management",
-];
+const menu = ["Financial Data", "Economic Analysis"];
 export const handle = {
   menu__item: "/farmer/crops",
 };
@@ -111,41 +93,12 @@ const useHighlight = () => {
     location.pathname.split("/").at(-1) === toUrl(menu__item);
 };
 function FunctionsSidebar() {
-  const location = useLocation();
   const { cropId } = useParams<RouteParams["/farmer/crop/:cropId"]>();
-  const InputRoute =
-    route("/farmer/crop/:cropId", { cropId: cropId || "" }) + "/inputs";
-  const highlight = useHighlight();
   return (
     <div className="card__sidebar">
-      {menu.map((menu__item: string) =>
-        menu__item === "Inputs" ? (
-          <>
-            <Link
-              to={toUrl(menu__item)}
-              key={menu__item}
-              className={`crop__card card__sidebar sidebar__key ${
-                highlight(menu__item) ? "key--selected" : ""
-              }`}
-            >
-              Inputs
-            </Link>
-            {location.pathname.startsWith(InputRoute) && (
-              <div className="crop__card card__sidebar sidebar__key--2">
-                {InputsMenu.map((menu__item: string) => (
-                  <MenuLink
-                    key={menu__item}
-                    menu__item={menu__item}
-                    sub="inputs/"
-                  />
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <MenuLink key={menu__item} menu__item={menu__item} />
-        )
-      )}
+      {menu.map((menu__item: string) => (
+        <MenuLink key={menu__item} menu__item={menu__item} />
+      ))}
     </div>
   );
 }

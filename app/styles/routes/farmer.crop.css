@@ -16,6 +16,7 @@
 
 .crop__card.card__content {
   flex: 1;
+  height: clamp(10ch, 40vh, 100ch);
   padding: 1em;
 }
 
@@ -81,4 +82,9 @@
 .card__heading.heading__info {
   display: flex;
   flex-direction: column;
+}
+
+.card__content.content__spreadsheet {
+  display: flex;
+  justify-content: space-around;
 }

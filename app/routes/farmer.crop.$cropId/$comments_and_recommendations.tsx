@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
+import type { FC } from "react";
+import { useEffect, useState } from "react";
 import CommentOrRecommendationBox from "~/components/comments/comment_box";
 import GlowyButton from "~/components/glowy_button";
 import useCommentsOrRecommendationsStore from "~/models/Data/StoreHooks/useCommentsOrRecommendationsStore";
