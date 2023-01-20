@@ -43,8 +43,6 @@ declare module "routes-gen" {
     "/farmer/help/post": Record<string, never>;
     "/farmer/home": Record<string, never>;
     "/": Record<string, never>;
-    "/logout": Record<string, never>;
-    "/join": Record<string, never>;
     "/login": Record<string, never>;
   };
 
@@ -93,8 +91,6 @@ declare module "routes-gen" {
       | ["/farmer/help/post"]
       | ["/farmer/home"]
       | ["/"]
-      | ["/logout"]
-      | ["/join"]
       | ["/login"]
   >(...args: T): typeof args[0];
 }

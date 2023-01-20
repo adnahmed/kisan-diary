@@ -5,11 +5,11 @@ import {
   cookieStorageManagerSSR,
   localStorageManager,
 } from "@chakra-ui/react";
-import { withEmotionCache } from "@emotion/react";
 import roboto300 from "@fontsource/roboto/300.css";
 import roboto400 from "@fontsource/roboto/400.css";
 import roboto500 from "@fontsource/roboto/500.css";
 import roboto700 from "@fontsource/roboto/700.css";
+import { DevSupport } from "@react-buddy/ide-toolbox";
 import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
@@ -22,22 +22,24 @@ import {
   useCatch,
   useLoaderData,
 } from "@remix-run/react";
+import gridStyles from "@silevis/reactgrid/styles.css";
 import quillBubbleTheme from "quill/dist/quill.bubble.css";
 import quillSnowTheme from "quill/dist/quill.snow.css";
 import { useContext, useEffect } from "react";
 import { route } from "routes-gen";
-import { SocketProvider } from "./components/SocketProvider";
+import xSpreadSheetStyles from "x-data-spreadsheet/dist/xspreadsheet.css";
+import spreadSheetStyles from "~/styles/components/spreadsheet.css";
+import { useInitial } from "../dev";
+import ComponentPreviews from "../dev/previews";
+// import { SocketProvider } from "./components/SocketProvider";
 import Layout from "./components/pages/Layout";
 import { ClientStyleContext, ServerStyleContext } from "./context";
 import fetchFarm from "./models/farm.server";
-import client_socket from "./services/chat.client";
+// import client_socket from "./services/chat.client";
 import { getUser } from "./session.server";
 import globalStyles from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import theme from "./styles/theme";
-import { DevSupport } from "@react-buddy/ide-toolbox";
-import ComponentPreviews from "../dev/previews";
-import { useInitial } from "../dev";
 
 export const links: LinksFunction = () => {
   return [
@@ -70,6 +72,18 @@ export const links: LinksFunction = () => {
       rel: "stylesheet",
       href: roboto700,
     },
+    {
+      rel: "stylesheet",
+      href: gridStyles,
+    },
+    {
+      rel: "stylesheet",
+      href: spreadSheetStyles,
+    },
+    {
+      rel: "stylesheet",
+      href: xSpreadSheetStyles,
+    },
     { rel: "preload", href: "/assets/dashboard.jpeg", as: "image" },
     { rel: "preload", href: "/assets/expert.jpeg", as: "image" },
   ];
@@ -87,50 +101,48 @@ interface DocumentProps {
   children: React.ReactNode;
 }
 
-const Document = withEmotionCache(
-  ({ children }: DocumentProps, emotionCache) => {
-    const serverStyleData = useContext(ServerStyleContext);
-    const clientStyleData = useContext(ClientStyleContext);
+const Document = ({ children }: DocumentProps) => {
+  const serverStyleData = useContext(ServerStyleContext);
+  const clientStyleData = useContext(ClientStyleContext);
 
-    // Only executed on client
-    useEffect(() => {
-      // re-link sheet container
-      emotionCache.sheet.container = document.head;
-      // re-inject tags
-      const tags = emotionCache.sheet.tags;
-      emotionCache.sheet.flush();
-      tags.forEach((tag) => {
-        (emotionCache.sheet as any)._insertTag(tag);
-      });
-      // reset cache to reapply global styles
-      clientStyleData?.reset();
-    }, []);
+  // Only executed on client
+  useEffect(() => {
+    // re-link sheet container
+    // emotionCache.sheet.container = document.head;
+    // re-inject tags
+    // const tags = emotionCache.sheet.tags;
+    // emotionCache.sheet.flush();
+    // tags.forEach((tag) => {
+    // (emotionCache.sheet as any)._insertTag(tag);
+    // });
+    // reset cache to reapply global styles
+    clientStyleData?.reset();
+  }, []);
 
-    return (
-      <html lang="en">
-        <head>
-          <Meta />
-          <Links />
-          {serverStyleData?.map(({ key, ids, css }) => (
-            <style
-              key={key}
-              data-emotion={`${key} ${ids.join(" ")}`}
-              dangerouslySetInnerHTML={{ __html: css }}
-            />
-          ))}
-        </head>
-        <body>
-          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+  return (
+    <html lang="en">
+      <head>
+        <Meta />
+        <Links />
+        {serverStyleData?.map(({ key, ids, css }) => (
+          <style
+            key={key}
+            data-emotion={`${key} ${ids.join(" ")}`}
+            dangerouslySetInnerHTML={{ __html: css }}
+          />
+        ))}
+      </head>
+      <body>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
 
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload port={Number(process.env.REMIX_DEV_SERVER_WS_PORT)} />
-        </body>
-      </html>
-    );
-  }
-);
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload port={Number(process.env.REMIX_DEV_SERVER_WS_PORT)} />
+      </body>
+    </html>
+  );
+};
 
 export async function loader({ request }: LoaderArgs) {
   const user = await getUser(request);
@@ -146,39 +158,39 @@ export async function loader({ request }: LoaderArgs) {
 export default function App() {
   const { cookies, user } = useLoaderData<typeof loader>();
 
-  useEffect(() => {
-    return () => {
-      client_socket.close();
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     client_socket.close();
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    if (!client_socket) return;
-    client_socket.on("confirmation", (data) => {
-      console.log(data);
-    });
-  }, []);
+  // useEffect(() => {
+  // if (!client_socket) return;
+  // client_socket.on("confirmation", (data) => {
+  // console.log(data);
+  // });
+  // }, []);
   return (
     <Document>
-      <SocketProvider socket={client_socket}>
-        <ChakraProvider
-          theme={theme}
-          colorModeManager={
-            typeof cookies === "string"
-              ? cookieStorageManagerSSR(cookies)
-              : localStorageManager
-          }
+      {/* <SocketProvider socket={client_socket}> */}
+      <ChakraProvider
+        theme={theme}
+        colorModeManager={
+          typeof cookies === "string"
+            ? cookieStorageManagerSSR(cookies)
+            : localStorageManager
+        }
+      >
+        <DevSupport
+          ComponentPreviews={<ComponentPreviews />}
+          useInitialHook={useInitial}
         >
-          <DevSupport
-            ComponentPreviews={<ComponentPreviews />}
-            useInitialHook={useInitial}
-          >
-            <Layout user={user}>
-              <Outlet />
-            </Layout>
-          </DevSupport>
-        </ChakraProvider>
-      </SocketProvider>
+          <Layout user={user}>
+            <Outlet />
+          </Layout>
+        </DevSupport>
+      </ChakraProvider>
+      {/* </SocketProvider> */}
     </Document>
   );
 }

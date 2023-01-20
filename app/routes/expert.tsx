@@ -1,8 +1,7 @@
-import { Heading, useDisclosure } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import { Outlet, useCatch, useMatches } from "@remix-run/react";
 import type { LinksFunction, LoaderArgs } from "@remix-run/server-runtime";
 import type { FC } from "react";
-import { useRef } from "react";
 import { getUser } from "~/session.server";
 import styles from "~/styles/routes/expert.css";
 export const links: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
@@ -16,16 +15,9 @@ export async function loader({ request }: LoaderArgs) {
 }
 //  - Administrator adds recommended crops based on Land Description and Season.
 const ExpertDashboard: FC<ExpertDashboardProps> = () => {
-  const {
-    isOpen: isOpenDrawer,
-    onOpen: onOpenDrawer,
-    onClose: onCloseDrawer,
-  } = useDisclosure();
-
   const matches = useMatches();
   const lastMatch = matches.slice(-1)[0];
   const title = lastMatch && lastMatch.handle && lastMatch.handle.title;
-  const btnRef = useRef(null);
   return (
     <div className="home">
       <div className="heading flex items-center p-4">

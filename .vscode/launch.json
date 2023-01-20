@@ -14,10 +14,14 @@
                 "<node_internals>/**"
             ],
             "pathMappings": [
+                // {
+                //     "url": "http://localhost:3000/",
+                //     "path": "${workspaceFolder}/public/build"
+                // },
                 {
                     "url": "http://localhost:3000/",
-                    "path": "${workspaceFolder}/public/build"
-                }
+                    "path": "${workspaceFolder}/build"
+                },
             ]
         },
         {
