@@ -1,12 +1,10 @@
-import { InfoIcon } from "@chakra-ui/icons";
-import { IconButton } from "@chakra-ui/react";
 import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import {
   Link,
   Outlet,
   useCatch,
   useLocation,
-  useParams,
+  useSearchParams,
 } from "@remix-run/react";
 import { redirect } from "remix-typedjson";
 import type { RouteParams } from "routes-gen";
@@ -16,7 +14,7 @@ import styles from "~/styles/routes/farmer.crop.css";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
-const menu = ["Financial Data", "Economic Analysis"];
+const menu = ["Financial Data", "Information"];
 export const handle = {
   menu__item: "/farmer/crops",
 };
@@ -51,15 +49,16 @@ export async function loader({ request, params }: LoaderArgs) {
   // TODO: convert to callback style functions
   const url = new URL(request.url);
   const pathname = url.pathname;
+  const fdata = url.searchParams.get("fdata");
   const last = pathname.split("/").at(-1);
   const firstMenu = menu.at(0);
-  if (!firstMenu) return {};
-  if (!last) return {};
+  if (!firstMenu || !last || !fdata) return {};
   const redirectUrl =
-    route(`/farmer/crop/:cropId`, { cropId: cropId }) + `/${toUrl(menu[0])}`;
+    route(`/farmer/crop/:cropId`, { cropId: cropId }) +
+    `/${toUrl(menu[0])}?fdata=${fdata}`;
   if (!menu.map((menu__item) => toUrl(menu__item)).includes(last))
     return redirect(redirectUrl);
-  else return {};
+  return {};
 }
 
 export default function CropCard() {
@@ -67,10 +66,6 @@ export default function CropCard() {
     <div className="crop__card card__wrapper">
       <div style={{ color: "green" }} className="crop__card card__heading">
         <span className="card__heading heading__title">Farm Functions</span>
-        <div className="card__heading heading__info">
-          <IconButton id="info" aria-label="info" icon={<InfoIcon />} />
-          <label htmlFor="info">Info</label>
-        </div>
       </div>
       <div className="crop__card content__wrapper">
         <div className="crop__card card__menu">
@@ -93,7 +88,6 @@ const useHighlight = () => {
     location.pathname.split("/").at(-1) === toUrl(menu__item);
 };
 function FunctionsSidebar() {
-  const { cropId } = useParams<RouteParams["/farmer/crop/:cropId"]>();
   return (
     <div className="card__sidebar">
       {menu.map((menu__item: string) => (
@@ -107,6 +101,7 @@ interface Props {
   sub?: string;
 }
 function MenuLink({ menu__item, sub }: Props) {
+  const [searchParams] = useSearchParams();
   const highlight = useHighlight();
   return (
     <Link
@@ -114,7 +109,9 @@ function MenuLink({ menu__item, sub }: Props) {
         highlight(menu__item) ? "key--selected" : ""
       }`}
       key={menu__item}
-      to={(sub ?? "") + toUrl(menu__item)}
+      to={
+        (sub ?? "") + toUrl(menu__item) + `?fdata=${searchParams.get("fdata")}`
+      }
     >
       {menu__item}
     </Link>

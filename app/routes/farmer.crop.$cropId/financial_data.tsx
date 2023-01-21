@@ -1,11 +1,10 @@
-import { unstable_parseMultipartFormData } from "@remix-run/node";
-import { useCatch, useParams } from "@remix-run/react";
-import type { ActionArgs, LinksFunction } from "@remix-run/server-runtime";
-import { json } from "@remix-run/server-runtime";
+import type { LoaderArgs } from "@remix-run/node";
+import { useCatch } from "@remix-run/react";
+import type { LinksFunction } from "@remix-run/server-runtime";
+import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly } from "remix-utils";
 import SpreadSheet from "~/components/pages/SpreadSheet.client";
-import uploadHandler from "~/helpers/uploadHandler";
-import { getUser } from "~/session.server";
+import { prisma } from "~/db.server";
 import styles from "~/styles/routes/farmer.crop.land_preparation.css";
 export const handle = {
   menu__item: "/farmer/crops",
@@ -13,33 +12,30 @@ export const handle = {
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
-export const SPREADSHEET_ROOT = "public/sheets/";
-export async function action({ request }: ActionArgs) {
-  try {
-    const user = await getUser(request);
-    if (!user) throw new Error("Unauthenticated");
-    const form = await unstable_parseMultipartFormData(
-      request,
-      uploadHandler(true, SPREADSHEET_ROOT)
-    );
-    const file = form.get("file");
-    return {
-      path: file?.filepath,
-    };
-  } catch (err) {
-    if (err instanceof Error) return json({ error: err.message });
-    else return json({ error: err });
-  }
+
+export async function loader({ request }: LoaderArgs) {
+  const url = new URL(request.url);
+  const fdata = url.searchParams.get("fdata");
+  if (!fdata) throw new Error("No Spreadsheet Specified");
+  const fd = await prisma.financialData.findUnique({
+    where: {
+      id: fdata,
+    },
+  });
+  if (!fd) throw new Error("No Spreadsheet found");
+  return typedjson({
+    path: fd.path,
+  });
 }
 
 export default function FinancialData() {
-  const params = useParams();
+  const { path } = useTypedLoaderData<typeof loader>();
   return (
     <div>
       <ClientOnly>
         {() => (
           <SpreadSheet
-            file={`/api/fetch_document?cropId=${params.cropId}`}
+            file={`/api/fetch_document?fdata=${path}`}
             target=".spreadsheet__landPreparation"
           />
         )}

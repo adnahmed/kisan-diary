@@ -1,16 +1,17 @@
 import type { LoaderArgs } from "@remix-run/server-runtime";
+import { isError } from "lodash/fp";
 import * as XLSX from "xlsx";
-import { SPREADSHEET_ROOT } from "../farmer.crop.$cropId/financial_data";
+import { SPREADSHEET_ROOT } from "~/helpers/FDSheet";
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
-  const cropId = url.searchParams.get("cropId");
+  const fdpath = url.searchParams.get("fdata");
   try {
-    const workbook = XLSX.readFile(SPREADSHEET_ROOT + `${cropId}.xlsx`);
-    return {
-      workbook,
-    };
+    return XLSX.read(SPREADSHEET_ROOT + `${fdpath}.xlsx`, {
+      type: "file",
+    });
   } catch (error) {
+    if (isError(error)) console.log(error.message);
     return {
       error,
     };
