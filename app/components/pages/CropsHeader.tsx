@@ -20,7 +20,7 @@ export function AddCrop() {
       <form>
         <label>
           Type
-          <select multiple name="type">
+          <select name="type">
             {data &&
               data.crops.map((crop) => (
                 <option key={crop.id} value={crop.name}>
