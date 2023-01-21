@@ -1,4 +1,4 @@
 const CropsSeed = [
-    'rice', 'wheat', 'maize', 'sorghum', 'ragi', 'pulses', 'legumes', 'potato', 'tomato'
+    'rice', 'wheat', 'maize', 'potato', 'tomato'
 ]
 export default CropsSeed;
