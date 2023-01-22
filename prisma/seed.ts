@@ -1,26 +1,20 @@
 import type { Role } from "@prisma/client";
-import { AlertType, IssueType, PrismaClient } from '@prisma/client';
+import { AlertType, IssueType, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { isError } from "lodash/fp";
-import type ActivityCreateInput from "~/types/ActivityCreateInput";
+import { nanoid } from "nanoid";
+import { createNewSheet } from "~/helpers/FDSheet";
 import type IssueCreateInput from "~/types/IssueCreateInput";
 import type { UserCreateInput } from "~/types/User";
+import { deleteSheet } from '../app/helpers/FDSheet';
 import type CropCreateInput from "../app/types/CropCreateInput";
 import type FarmCreateInput from "../app/types/FarmCreateInput";
-import LandPreparationSeed from './activities/land_preparation';
 import CropsSeed from "./crops.seed";
 import RegionsSeed from "./regions.seed";
 
-const activities: ActivityCreateInput[] = [
-  ...LandPreparationSeed
-]
 
 const crops: CropCreateInput[] = CropsSeed.map((crop_seed) => ({
   name: crop_seed,
-  picture: "",
-  coveredLand: 0,
-  suitableSeasons: [],
-  suitableSoilTypes: [],
 }));
 
 const prisma = new PrismaClient();
@@ -72,10 +66,13 @@ async function seed() {
   await catchWithError(async () => await prisma.readReciept.deleteMany())
   await catchWithError(async () => await prisma.user.deleteMany())
   await catchWithError(async () => await prisma.farm.deleteMany())
+  // cleanup financial sheets
+  const sheets = await prisma.financialData.findMany();
+  for (const sheet of sheets) deleteSheet(sheet.path)
+  await catchWithError(async () => await prisma.financialData.deleteMany())
   await catchWithError(async () => await prisma.crop.deleteMany())
   await catchWithError(async () => await prisma.alert.deleteMany())
   await catchWithError(async () => await prisma.region.deleteMany())
-  await catchWithError(async () => await prisma.activity.deleteMany())
 
   await prisma.region.createMany({
     data: RegionsSeed.map((region_seed) => ({ name: region_seed })),
@@ -121,41 +118,43 @@ async function seed() {
   });
 
   const createdFarm = await prisma.farm.create({
-    data: prismaFarmData,
+    data: {
+      ...prismaFarmData,
+    },
   });
 
   await prisma.crop.createMany({
     data: crops,
   });
 
-  // Add Potato To Farm
-  await prisma.crop.update({
+  await prisma.farm.update({
     where: {
-      name: crops[0].name,
+      name: farm.name,
     },
     data: {
-      farms: {
-        connect: {
-          name: farm.name,
-        },
-      },
     },
   });
-
-  // Add Maize To Farm
-  await prisma.crop.update({
-    where: {
-      name: crops[1].name,
-    },
-    data: {
-      farms: {
-        connect: {
-          name: farm.name,
+  const sheetIds = [nanoid(), nanoid()]
+  for (let i = 0; i < 2; i++) {
+    createNewSheet(sheetIds[i])
+    await prisma.financialData.create({
+      data: {
+        path: sheetIds[i],
+        year_start: 2021,
+        year_end: 2022,
+        Farm: {
+          connect: {
+            name: farm.name
+          }
         },
-      },
-    },
-  });
-
+        crop: {
+          connect: {
+            name: crops[i].name
+          },
+        },
+      }
+    })
+  }
   // Connect Alert to Potato
   await prisma.alert.create({
     data: {
@@ -207,10 +206,6 @@ async function seed() {
       },
     },
   });
-
-  await prisma.activity.createMany({
-    data: activities
-  })
 
   console.log(`Database has been seeded. 🌱`);
 }
