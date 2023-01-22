@@ -14,3 +14,4 @@ node_modules
 # may contain sensitive data like api keys etc.
 .vscode/settings.json
 /public/uploaded
+/public/sheets
