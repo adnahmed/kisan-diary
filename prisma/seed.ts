@@ -142,7 +142,7 @@ async function seed() {
         path: sheetIds[i],
         year_start: 2021,
         year_end: 2022,
-        Farm: {
+        farm: {
           connect: {
             name: farm.name
           }

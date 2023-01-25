@@ -1,7 +1,9 @@
 declare module "routes-gen" {
   export type RouteParams = {
+    "/api/new_financial_data": Record<string, never>;
     "/api/fetch_document": Record<string, never>;
     "/api/fetch_replies": Record<string, never>;
+    "/api/save_document": Record<string, never>;
     "/forgot_password": Record<string, never>;
     "/api/save_files": Record<string, never>;
     "/api/save_file": Record<string, never>;
@@ -37,8 +39,10 @@ declare module "routes-gen" {
 
   export function route<
     T extends
+      | ["/api/new_financial_data"]
       | ["/api/fetch_document"]
       | ["/api/fetch_replies"]
+      | ["/api/save_document"]
       | ["/forgot_password"]
       | ["/api/save_files"]
       | ["/api/save_file"]
