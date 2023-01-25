@@ -4,7 +4,7 @@ import {
   Outlet,
   useCatch,
   useLocation,
-  useSearchParams,
+  useParams,
 } from "@remix-run/react";
 import { redirect } from "remix-typedjson";
 import type { RouteParams } from "routes-gen";
@@ -85,7 +85,7 @@ const toUrl = (menu__item: string) =>
 const useHighlight = () => {
   const location = useLocation();
   return (menu__item: string) =>
-    location.pathname.split("/").at(-1) === toUrl(menu__item);
+    location.pathname.split("/").at(-2) === toUrl(menu__item);
 };
 function FunctionsSidebar() {
   return (
@@ -101,17 +101,17 @@ interface Props {
   sub?: string;
 }
 function MenuLink({ menu__item, sub }: Props) {
-  const [searchParams] = useSearchParams();
   const highlight = useHighlight();
+  const params = useParams();
+  const fdId =
+    params.fdId as RouteParams["/farmer/crop/:cropId/financial_data/:fdId"];
   return (
     <Link
       className={`crop__card card__sidebar sidebar__key ${
         highlight(menu__item) ? "key--selected" : ""
       }`}
       key={menu__item}
-      to={
-        (sub ?? "") + toUrl(menu__item) + `?fdata=${searchParams.get("fdata")}`
-      }
+      to={(sub ?? "") + toUrl(menu__item) + `/${fdId}`}
     >
       {menu__item}
     </Link>
