@@ -1,27 +1,31 @@
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Center, IconButton } from "@chakra-ui/react";
-import type { LoaderArgs } from "@remix-run/node";
-import { useState } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { useCatch, useFetcher } from "@remix-run/react";
+import { useEffect, useRef, useState } from "react";
+import { YearPicker } from "react-dropdown-date";
+import { useTypedLoaderData } from "remix-typedjson";
 import Heading from "~/components/form/heading";
 import WithModal from "~/components/pages/WithModal";
-import { prisma } from "~/db.server";
+import type { loader } from "~/routes/farmer.crops";
 import CABIButton from "../cabi-button";
-export async function loader({ params }: LoaderArgs) {
-  return typedjson({
-    crops: await prisma.crop.findMany(),
-  });
-}
 
 export function AddCrop() {
   const data = useTypedLoaderData<typeof loader>();
+  const addCrop = useFetcher();
+  const [year, setYear] = useState(new Date().getFullYear());
+  const ref = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (addCrop.type === "done" && addCrop.data?.ok) ref.current?.reset();
+  }, [addCrop]);
+
   return (
     <div>
-      <form>
+      <addCrop.Form ref={ref} method="post" action="/api/new_financial_data">
         <label>
           Type
-          <select name="type">
+          <select name="type" disabled={addCrop.state === "submitting"}>
             {data &&
+              data.crops &&
               data.crops.map((crop) => (
                 <option key={crop.id} value={crop.name}>
                   {crop.name}
@@ -30,13 +34,28 @@ export function AddCrop() {
           </select>
         </label>
         <label>
-          Year
-          <select name="year"></select>
+          Growing Year
+          <YearPicker
+            defaultValue={"Select Year"}
+            disabled={addCrop.state === "submitting"}
+            start={1990}
+            value={year}
+            name="growingYear"
+            onChange={(y) => setYear(y)}
+            end={new Date().getFullYear()}
+            reverse
+            required={true}
+          />
         </label>
         <CABIButton type="submit" rightIcon={<ChevronRightIcon />}>
-          Next
+          Add
         </CABIButton>
-      </form>
+      </addCrop.Form>
+      {addCrop.type === "done" && addCrop.data && addCrop.data?.ok ? (
+        <p>Crop has been successfully added.</p>
+      ) : addCrop.data?.error ? (
+        <p data-error>{addCrop.data.error}</p>
+      ) : null}
     </div>
   );
 }
