@@ -125,17 +125,19 @@ model Crop {
 }
 
 model FinancialData {
-  id         String  @id @default(uuid())
+  id         String @id @default(uuid())
   path       String
-  crop       Crop    @relation(fields: [cropId], references: [id])
+  crop       Crop   @relation(fields: [cropId], references: [id])
   year_start Int
   year_end   Int
-  Farm       Farm?   @relation(fields: [farmId], references: [id])
-  farmId     String?
+  farm       Farm   @relation(fields: [farmId], references: [id])
+  farmId     String
   cropId     String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
+
+  @@unique([cropId, year_start, year_end, farmId])
 }
 
 enum IrrigationSource {
