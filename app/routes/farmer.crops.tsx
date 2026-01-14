@@ -6,7 +6,7 @@ import CropsHeader from "~/components/pages/CropsHeader";
 import { prisma } from "~/db.server";
 import fetchFarm from "~/models/farm.server";
 import { getUser } from "~/session.server";
-import { GlassCard } from "~/components/ui/GlassCard";
+import { GlassCard } from "~/components/GlassCard";
 import Button from "~/components/form/button";
 
 export async function loader({ request }: LoaderArgs) {

@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
-import { cx } from "~/helpers/form";
+import { cx } from "~/utils/class-names";
 
 interface GlowyButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   glowColor?: string;

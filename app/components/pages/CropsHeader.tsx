@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaPlus, FaChevronRight } from "react-icons/fa";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { prisma } from "~/db.server";
-import { GlassCard } from "~/components/ui/GlassCard";
+import { GlassCard } from "~/components/GlassCard";
 import Button from "~/components/form/button";
 import Select from "~/components/form/select";
 import Heading from "~/components/form/heading";

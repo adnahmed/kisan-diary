@@ -14,7 +14,7 @@ import DisabledSelect from "~/components/form/disabled-select";
 import Form from "~/components/form/form";
 import Input from "~/components/form/input";
 import Select from "~/components/form/select";
-import { GlassCard } from "~/components/ui/GlassCard";
+import { GlassCard } from "~/components/GlassCard";
 import { prisma } from "~/db.server";
 import { getUser } from "~/session.server";
 import type FarmCreateInput from "~/types/FarmCreateInput";

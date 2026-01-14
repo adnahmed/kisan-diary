@@ -10,7 +10,7 @@ import WithModal from "~/components/pages/WithModal";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/session.server";
 import { safeRedirect, validateEmail } from "~/utils";
-import { GlassCard } from "~/components/ui/GlassCard";
+import { GlassCard } from "~/components/GlassCard";
 
 export async function loader({ request }: LoaderArgs) {
   const user = await getUserId(request);

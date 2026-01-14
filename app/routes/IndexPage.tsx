@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { GlassCard } from "~/components/ui/GlassCard";
+import { GlassCard } from "~/components/GlassCard";
 import { route } from "routes-gen";
 
 export default function IndexPage() {
