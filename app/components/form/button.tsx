@@ -8,7 +8,7 @@ export default function Button({
   return (
     <BaseButton
       className={cx(
-        "bg-pink-600 text-white hover:bg-pink-700 focus:ring-pink-500 focus:ring-offset-white",
+        "bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 focus:ring-offset-white shadow-sm hover:shadow transition-all duration-200 font-medium rounded-lg px-4 py-2",
         className
       )}
       {...props}

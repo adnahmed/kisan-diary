@@ -1,9 +1,9 @@
-import CABIButton from "../cabi-button";
+import Button from "./button";
 
 export default function SaveButton(props: JSX.IntrinsicElements["button"]) {
   return (
-    <CABIButton {...props} type="submit">
+    <Button {...props} type="submit">
       Save
-    </CABIButton>
+    </Button>
   );
 }

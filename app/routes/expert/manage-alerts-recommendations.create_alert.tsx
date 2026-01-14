@@ -11,7 +11,7 @@ import { ClientOnly } from "remix-utils";
 import Editor from "~/components/quill.client";
 import { prisma } from "~/db.server";
 import styles from "~/styles/routes/alerts.create_alert.css";
-import CABIButton from "../../components/cabi-button";
+import Button from "~/components/form/button";
 export const link: LinksFunction = () => [{ href: styles, rel: "stylesheet" }];
 export async function loader({ request }: LoaderArgs) {
   return {
@@ -142,7 +142,7 @@ const CreateAlert: FC<CreateAlertProps> = (props) => {
                 ))}
               </select>
             </label>
-            <CABIButton onClick={handleSubmit}>Send</CABIButton>
+            <Button onClick={handleSubmit}>Send</Button>
           </main>
         )}
       </ClientOnly>

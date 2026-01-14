@@ -6,7 +6,7 @@ export default function Label({
 }: JSX.IntrinsicElements["label"]) {
   return (
     <label
-      className={cx("block font-medium", className, !className && "text-rb")}
+      className={cx("block text-sm font-medium text-surface-700 mb-1", className)}
       {...props}
     />
   );

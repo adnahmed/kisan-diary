@@ -11,7 +11,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import Emoji from "react-emojis";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import CABIButton from "../../components/cabi-button";
+import Button from "~/components/form/button";
 export const handle = {
   title: (
     <div className="">
@@ -37,9 +37,9 @@ const ManageAlerts: FC<ManageAlertsProps> = () => {
     <div className="col-start-1 col-span-12">
       <main>
         <Filter />
-        <CABIButton>
+        <Button>
           <Link to="create_alert">Create</Link>
-        </CABIButton>
+        </Button>
       </main>
     </div>
   );
@@ -55,9 +55,9 @@ function Filter() {
   const submit = useSubmit();
   return (
     <div>
-      <CABIButton onClick={() => setShowFilterTabs(!showFilterTabs)}>
+      <Button onClick={() => setShowFilterTabs(!showFilterTabs)}>
         Filter
-      </CABIButton>
+      </Button>
 
       {showFilterTabs && (
         <Tabs>

@@ -6,7 +6,7 @@ const TextArea = React.forwardRef<
 >((props, ref) => (
   <textarea
     ref={ref}
-    className="block w-full rounded-md border-gray-300 text-gray-800 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm"
+    className="block w-full rounded-lg border-surface-300 bg-white/50 backdrop-blur-sm text-surface-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm transition-colors duration-200 outline-none p-3"
     rows={5}
     {...props}
   />

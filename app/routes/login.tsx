@@ -10,6 +10,7 @@ import WithModal from "~/components/pages/WithModal";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/session.server";
 import { safeRedirect, validateEmail } from "~/utils";
+import { GlassCard } from "~/components/ui/GlassCard";
 
 export async function loader({ request }: LoaderArgs) {
   const user = await getUserId(request);
@@ -68,23 +69,33 @@ export function LoginPage() {
       passwordRef.current?.focus();
     }
   }, [actionData]);
+
   return (
-    <div className="flex min-h-full flex-col justify-center from-blue-400 ">
-      <div className="mx-auto w-full max-w-md px-8 m-4 p-6 bg-green-200 backdrop-blur rounded-md">
-        <Form
-          method="post"
-          className="space-y-6"
-          noValidate
-          data-netlify="true"
-        >
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email address
-            </label>
-            <div className="mt-1">
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] py-12">
+      <div className="w-full max-w-md">
+        <GlassCard className="border-t-4 border-primary-500">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-heading font-bold text-gray-900">
+              Welcome Back
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Sign in to manage your farm and crops
+            </p>
+          </div>
+
+          <Form
+            method="post"
+            className="space-y-6"
+            noValidate
+            data-netlify="true"
+          >
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Email address
+              </label>
               <input
                 ref={emailRef}
                 id="email"
@@ -95,73 +106,78 @@ export function LoginPage() {
                 autoComplete="email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none bg-white/50 backdrop-blur-sm"
+                placeholder="you@example.com"
               />
               {actionData?.errors?.email && (
-                <div className="pt-1 text-red-700" id="email-error">
+                <div className="pt-1 text-red-600 text-sm" id="email-error">
                   {actionData.errors.email}
                 </div>
               )}
             </div>
-          </div>
 
-          <div className="grid">
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  ref={passwordRef}
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  aria-invalid={actionData?.errors?.password ? true : undefined}
-                  aria-describedby="password-error"
-                  className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                />
-
-                {actionData?.errors?.password && (
-                  <div className="pt-1 text-red-700" id="password-error">
-                    {actionData.errors.password}
-                  </div>
-                )}
+              <div className="flex items-center justify-between mb-1">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+              </div>
+              <input
+                id="password"
+                ref={passwordRef}
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                aria-invalid={actionData?.errors?.password ? true : undefined}
+                aria-describedby="password-error"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none bg-white/50 backdrop-blur-sm"
+              />
+              {actionData?.errors?.password && (
+                <div className="pt-1 text-red-600 text-sm" id="password-error">
+                  {actionData.errors.password}
+                </div>
+              )}
+              <div className="flex justify-end mt-1">
+                <ChakraLink 
+                  className="text-sm font-medium text-primary-600 hover:text-primary-500" 
+                  href="forgot_password"
+                >
+                  Forgot Password?
+                </ChakraLink>
               </div>
             </div>
-            <ChakraLink className="justify-self-end" href="forgot_password">
-              Forgot Password?
-            </ChakraLink>
-          </div>
-          <input type="hidden" name="redirectTo" value={redirectTo} />
-          <button
-            type="submit"
-            className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
-          >
-            Log in
-          </button>
-          <div className="flex items-center justify-between">
+
             <div className="flex items-center justify-between">
-              <input
-                id="remember"
-                name="remember"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label
-                htmlFor="remember"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Remember me
-              </label>
+              <div className="flex items-center">
+                <input
+                  id="remember"
+                  name="remember"
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                />
+                <label
+                  htmlFor="remember"
+                  className="ml-2 block text-sm text-gray-900"
+                >
+                  Remember me
+                </label>
+              </div>
             </div>
-            <div className="text-center text-sm text-gray-500">
-              Don't have an account?{" "}
+
+            <button
+              type="submit"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transform transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Sign in
+            </button>
+
+            <div className="text-center text-sm">
+              <span className="text-gray-600">Don't have an account? </span>
               <Link
-                className="text-blue-500 underline"
+                className="font-medium text-primary-600 hover:text-primary-500 hover:underline transition-colors"
                 to={{
                   pathname: route("/join"),
                   search: searchParams.toString(),
@@ -170,8 +186,8 @@ export function LoginPage() {
                 Sign up
               </Link>
             </div>
-          </div>
-        </Form>
+          </Form>
+        </GlassCard>
       </div>
     </div>
   );

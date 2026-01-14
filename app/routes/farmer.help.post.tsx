@@ -1,20 +1,10 @@
-import type { LinksFunction, LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
 import { formatDistance } from "date-fns";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
-import CommentInput, {
-  links as CommentInputLinks,
-} from "~/components/pages/CommentInput";
-import { links as CommentListLinks } from "~/components/pages/CommentList";
+import { GlassCard } from "~/components/GlassCard";
+import CommentInput from "~/components/pages/CommentInput";
 
 import { prisma } from "~/db.server";
-import styles from "~/styles/routes/farmer.help.post.css";
-export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: styles },
-    ...CommentInputLinks(),
-    ...CommentListLinks(),
-  ];
-};
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);
@@ -32,17 +22,28 @@ export default function Post() {
   const { post } = useTypedLoaderData<typeof loader>();
   return (
     post && (
-      <div className="post">
-        <div className="post post__created">
-          {formatDistance(post.postedOn, new Date())}
-        </div>
-        {post.postedOn.getDate() !== post.updatedOn.getDate() && (
-          <div className="post post__edited">
-            {formatDistance(post.updatedOn, new Date())}
-          </div>
-        )}
-        <div className="post post__details">{post.content}</div>
-        <CommentInput to={post.id} />
+      <div className="p-4 w-full flex justify-center">
+        <GlassCard className="max-w-4xl w-full p-6 flex flex-col gap-4">
+            <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                <div className="font-semibold">
+                    Posted {formatDistance(new Date(post.postedOn), new Date(), { addSuffix: true })}
+                </div>
+                {new Date(post.postedOn).getDate() !== new Date(post.updatedOn).getDate() && (
+                    <div className="italic">
+                        Edited {formatDistance(new Date(post.updatedOn), new Date(), { addSuffix: true })}
+                    </div>
+                )}
+            </div>
+            
+            <div className="prose dark:prose-invert max-w-none border-b border-gray-200 dark:border-gray-700 pb-4">
+                {post.content}
+            </div>
+            
+            <div className="mt-2">
+                 <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">Add a Comment</h3>
+                <CommentInput to={post.id} />
+            </div>
+        </GlassCard>
       </div>
     )
   );

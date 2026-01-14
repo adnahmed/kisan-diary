@@ -9,9 +9,8 @@ const Input = React.forwardRef<
     ref={ref}
     type={type}
     className={cx(
-      "block w-full rounded-md outline-none text-gray-800 border-[rgb(54,135,41)] border-2 focus:border-[rgb(135,171,111)] shadow-sm sm:text-sm",
-      className,
-      !className && "border-gray-300 focus:border-pink-500 focus:ring-pink-500"
+      "block w-full rounded-lg border-surface-300 bg-white/50 backdrop-blur-sm text-surface-900 placeholder-surface-400 focus:border-primary-500 focus:ring-primary-500 shadow-sm sm:text-sm transition-colors duration-200 outline-none px-3 py-2",
+      className
     )}
     {...props}
   />

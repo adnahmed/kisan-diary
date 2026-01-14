@@ -2,7 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import React, { useState } from "react";
 import { route } from "routes-gen";
-import CABIButton from "~/components/cabi-button";
+import Button from "~/components/form/button";
 export const handle = {
   title: "Manuals",
 };
@@ -45,13 +45,13 @@ export default function Manuals() {
         accept="audio/*,video/*,image/*,application/msword,application/pdf,application/vnd.ms-excel"
         type="file"
       />
-      <CABIButton
+      <Button
         className="manuals__upload upload__button"
         onClick={() => setAskDocumentNaming(true)}
         type="submit"
       >
         Upload
-      </CABIButton>
+      </Button>
       {askDocumentNaming && (
         <div ref={namingFormRef}>
           {Array.from(documentRef.current?.files || []).map((file) => {
@@ -64,9 +64,9 @@ export default function Manuals() {
               />
             );
           })}
-          <CABIButton type="submit" onClick={uploadDocument}>
+          <Button type="submit" onClick={uploadDocument}>
             Save Changes
-          </CABIButton>
+          </Button>
         </div>
       )}
       {fetcher.data && <p>{JSON.stringify(fetcher.data)}</p>}

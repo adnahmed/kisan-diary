@@ -1,90 +1,89 @@
 import { IssueType } from "@prisma/client";
-import type { LinksFunction } from "@remix-run/node";
 import type { FetcherWithComponents } from "@remix-run/react";
 import { useCatch } from "@remix-run/react";
 import React from "react";
 import type ReactQuill from "react-quill";
 import { ClientOnly } from "remix-utils";
+import Button from "~/components/form/button";
+import Select from "~/components/form/select";
+import { GlassCard } from "~/components/GlassCard";
 import uploadFile from "~/helpers/uploadFile";
 import type action from "~/routes/farmer.help.post";
-import styles from "~/styles/components/PostInput.css";
 import Editor from "../quill.client";
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: styles }];
-};
 
 interface PostInputProps {
   issue_fetcher: FetcherWithComponents<typeof action>;
 }
 
-const postEditorModules = {
-  toolbar: [
-    [{ size: [] }],
-    ["bold", "italic", "underline", "strike"],
-    ["image", "video"],
-  ],
-  clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
-    matchVisual: false,
-  },
-  magicUrl: true,
-  imageResize: {},
-  imageUploader: { upload: uploadFile },
-  imageDrop: true,
-};
-/*
-land_management
-The ph of the soil is 8.5, please advice which measure to adopt to reduce it.
-*/
 export default function PostInput({ issue_fetcher }: PostInputProps) {
   const editorRef = React.useRef<ReactQuill>(null);
   const typeRef = React.useRef<HTMLSelectElement>(null);
+
   function createPost() {
     const editor = editorRef?.current?.editor;
     const type = typeRef?.current?.value;
     const issue = JSON.stringify(editor?.getContents());
-    editor?.setText("");
+    
     if (!issue || !type) return;
+    
     const formData = new FormData();
     formData.set("issue", issue);
     formData.set("type", type);
+    
     issue_fetcher.submit(formData, {
       method: "post",
     });
+    
+    // Clear editor after submit
+     editor?.setText("");
   }
 
   return (
-    <div className={`post post__input`}>
-      <label className="post__input input__type">
-        <span className="input__type type__heading">Issue Type</span>
-        <select placeholder="Select a value" ref={typeRef}>
+    <GlassCard className="p-6 flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          Issue Type
+        </label>
+        <Select 
+            ref={typeRef}
+            placeholder="Select Issue Type"
+            name="type"
+        >
           {Object.keys(IssueType).map((issue_type) => (
             <option key={issue_type} value={issue_type}>
               {issue_type.replace("_", " ")}
             </option>
           ))}
-        </select>
-      </label>
-      <div className="post__input input__editor">
-        <ClientOnly fallback={<div>Loading...</div>}>
-          {() => <Editor ref={editorRef} placeholder="Write your Post here" />}
-        </ClientOnly>
+        </Select>
       </div>
-      <button onClick={createPost} className="post__input post__send">
-        Send
-      </button>
-    </div>
+      
+      <div className="flex flex-col gap-2 h-64 mb-12">
+         <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          Description
+        </label>
+        <div className="h-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+            <ClientOnly fallback={<div>Loading...</div>}>
+            {() => <Editor ref={editorRef} placeholder="Describe your issue detailed..." />}
+            </ClientOnly>
+        </div>
+      </div>
+      
+      <div className="flex justify-end mt-4">
+        <Button onClick={createPost} disabled={issue_fetcher.state !== "idle"}>
+          {issue_fetcher.state === "submitting" ? "Posting..." : "Post Issue"}
+        </Button>
+      </div>
+    </GlassCard>
   );
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <div>
-      <h1>Error</h1>
+    <div className="p-4 bg-red-50 text-red-600 rounded-lg border border-red-200">
+      <h1 className="text-lg font-bold">Error</h1>
       <p>{error.message}</p>
-      <p>The stack trace is:</p>
-      <pre>{error.stack}</pre>
+      <p className="mt-2 text-sm font-semibold">Stack trace:</p>
+      <pre className="text-xs mt-1 p-2 bg-red-100 rounded overflow-auto">{error.stack}</pre>
     </div>
   );
 }
@@ -93,10 +92,10 @@ export function CatchBoundary() {
   const caught = useCatch();
 
   return (
-    <div>
-      <h1>Caught</h1>
+    <div className="p-4 bg-orange-50 text-orange-600 rounded-lg border border-orange-200">
+      <h1 className="text-lg font-bold">Caught Error</h1>
       <p>Status: {caught.status}</p>
-      <pre>
+      <pre className="text-xs mt-1 p-2 bg-orange-100 rounded overflow-auto">
         <code>{JSON.stringify(caught.data, null, 2)}</code>
       </pre>
     </div>

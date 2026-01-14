@@ -11,7 +11,7 @@ import {
 import { prisma } from "~/db.server";
 import { getUser } from "~/session.server";
 import styles from "~/styles/routes/expert.knowledgebank.css";
-import CABIButton from "../../components/cabi-button";
+import Button from "~/components/form/button";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
@@ -100,9 +100,9 @@ const CropForm: FC<CropFormProps> = ({ cropId }) => {
             <option value="Kharif">Kharif</option>
           </select>
         </div>
-        <CABIButton type="submit" className="dashboard__form form__submit">
+        <Button type="submit" className="dashboard__form form__submit">
           Save
-        </CABIButton>
+        </Button>
       </Form>
     </div>
   );

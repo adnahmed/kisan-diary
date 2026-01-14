@@ -9,9 +9,9 @@ const Checkbox = React.forwardRef<
     ref={ref}
     type={type}
     className={cx(
-      "h-4 w-4 rounded",
+      "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 transition-colors duration-200 cursor-pointer",
       className,
-      !className && "border-gray-300 text-pink-600 focus:ring-pink-500"
+      !className && "border-gray-300 text-primary-600 focus:ring-primary-500"
     )}
     {...props}
   />

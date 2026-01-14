@@ -56,7 +56,7 @@ export default function NotificationGroup() {
     }));
   }
   return (
-    <div className="header__notification">
+    <div className="flex items-center gap-4 relative">
       <NotificationButton
         type={AlertType.alert}
         label={"Alerts"}

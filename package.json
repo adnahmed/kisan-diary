@@ -46,6 +46,8 @@
     "@emotion/styled": "^11.10.5",
     "@floating-ui/react": "^0.15.1",
     "@fontsource/roboto": "^4.5.8",
+    "@headlessui/react": "^2.2.9",
+    "@heroicons/react": "^2.2.0",
     "@prisma/client": "^4.7.1",
     "@react-buddy/ide-toolbox": "^2.3.1",
     "@react-buddy/palette-chakra-ui": "^2.3.1",

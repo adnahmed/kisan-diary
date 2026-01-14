@@ -6,7 +6,7 @@ import { formatDistance } from "date-fns";
 import React, { useContext, useState } from "react";
 import type ReactQuill from "react-quill";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
-import CABIButton from "~/components/cabi-button";
+import Button from "~/components/form/button";
 import ReadOnlyEditor from "~/components/pages/ReadOnlyEditor";
 import Editor from "~/components/quill.client";
 import { prisma } from "~/db.server";
@@ -121,7 +121,7 @@ function ResponseModal() {
           </div>
           <span>Solution/Recommendation:</span>
           <Editor ref={ref} />
-          <CABIButton onClick={SendResponse}>Send</CABIButton>
+          <Button onClick={SendResponse}>Send</Button>
         </div>
       )}
     </div>
@@ -201,7 +201,7 @@ function IssuePost({ issue, withResponse = true }: IssuePostProps) {
         </>
       ) : (
         withResponse && (
-          <CABIButton onClick={showResponseModal}>Response</CABIButton>
+          <Button onClick={showResponseModal}>Response</Button>
         )
       )}
     </div>
