@@ -12,7 +12,7 @@ import type { User } from "@prisma/client";
 import React from "react";
 import SaveButton from "~/components/form/SaveButton";
 import { performMutation } from "remix-forms";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { Prisma } from "@prisma/client";
 import type { LoaderArgs, ActionFunction, MetaFunction } from "@remix-run/node";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import type FarmCreateInput from "../../types/FarmCreateInput";
@@ -80,7 +80,7 @@ const farmInformationMutation = makeDomainFunction(
     });
     return farm;
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2002" && error.message.includes("owner"))
         throw new Error("Farm Name already taken");
     }
